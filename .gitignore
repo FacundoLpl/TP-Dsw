@@ -1,0 +1,13 @@
+#node modules
+node_modules
+/node_modules/
+/package-lock.json
+
+#dist
+.dist
+.dist/
+/dist/
+./dist
+
+./settings.json
+settings.json
