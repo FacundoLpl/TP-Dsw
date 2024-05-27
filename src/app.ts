@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { User } from './user/user.entity.js'
-import { UserRepository } from './user/user.repository.js'
+import { UserRepository } from './user/User.repository.js'
 import { userRouter } from './user/user.routes.js'
 
 const app = express()
