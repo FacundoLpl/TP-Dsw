@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/users/663e83c8356ea1ef7492feff
+PUT http://localhost:3000/api/users/6654f6355489707b63870a31
 Content-Type: application/json
 
 {
