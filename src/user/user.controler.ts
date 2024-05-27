@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { UserRepository } from "./User.repository.js"
 import { User } from "./user.entity.js"
 const repository = new UserRepository()
-
+//TODO Cambiar esto por la libreria zod
 function sanitizeUserInput(req: Request, res: Response, next:NextFunction){
     req.body.sanitizedInput = {
         dni: req.body.dni,
