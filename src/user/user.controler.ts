@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { UserRepository } from "./User.repository.js"
+import { UserRepository } from "./user.repository.js"
 import { User } from "./user.entity.js"
 const repository = new UserRepository()
 //TODO Cambiar esto por la libreria zod
