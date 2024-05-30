@@ -1,0 +1,37 @@
+### obtener todos los users
+GET http://localhost:3000/api/users
+### obtengo un user especifico
+GET http://localhost:3000/api/users/663e82da356ea1ef7492fefe
+
+### crear un nuevo user
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "dni": "12345678",
+    "firstName": "Bautista",
+    "lastName": "Alfaro",
+    "userType": "Admin"
+}
+
+### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
+PUT http://localhost:3000/api/users/6654f6355489707b63870a31
+Content-Type: application/json
+
+{
+    "firstName": "Bautista",
+    "lastName": "Alfaro",
+    "userType": "Waiter"
+}
+
+### modificar un usuario (PATCH - modificacion parcial)
+PATCH http://localhost:3000/api/users/663e83c8356ea1ef7492feff
+Content-Type: application/json
+
+{
+    "userType": "Waiter"
+}
+
+### borrar un user
+DELETE http://localhost:3000/api/users/6643f28c02148942188e335d
+
