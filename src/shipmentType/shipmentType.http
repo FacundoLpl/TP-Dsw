@@ -1,37 +1,36 @@
-### obtener todos los users
-GET http://localhost:3000/api/users
-### obtengo un user especifico
-GET http://localhost:3000/api/users/663e82da356ea1ef7492fefe
+### obtener todos los shipmentTypes
+GET http://localhost:3000/api/shipmentTypes
+### obtengo un shipmentType especifico
+GET http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
 
-### crear un nuevo user
-POST http://localhost:3000/api/users
+### crear un nuevo shipmentType
+POST http://localhost:3000/api/shipmentTypes
 Content-Type: application/json
 
 {
-    "dni": "12345678",
-    "firstName": "Bautista",
-    "lastName": "Alfaro",
-    "userType": "Admin"
+    "typeId": "12345678",
+    "estimatedTime": 15,
+    "type": "Alfaro"
 }
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/users/6654f6355489707b63870a31
+PUT http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
 Content-Type: application/json
 
 {
-    "firstName": "Bautista",
-    "lastName": "Alfaro",
-    "userType": "Waiter"
+   "typeId": "12345678",
+    "estimatedTime": 15,
+    "type": "Alfaro"
 }
 
-### modificar un usuario (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/users/663e83c8356ea1ef7492feff
+### modificar un shipmentTypes (PATCH - modificacion parcial)
+PATCH http://localhost:3000/api/shipmentTypes/666a34ff9adfcb64127e11bd
 Content-Type: application/json
 
 {
-    "userType": "Waiter"
+    "type": "Waiter"
 }
 
-### borrar un user
-DELETE http://localhost:3000/api/users/6643f28c02148942188e335d
+### borrar un shipmentTypes
+DELETE http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
 

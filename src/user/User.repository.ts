@@ -10,8 +10,8 @@ export class UserRepository implements Repository<User>{
         return await users.find().toArray()
     }
     
-    public async findOne(item: {dni: string; }): Promise<User | undefined> {
-        const _id = new ObjectId(item.dni)
+    public async findOne(item: {identificador: string; }): Promise<User | undefined> {
+        const _id = new ObjectId(item.identificador)
         return (await users.findOne({_id})) || undefined
     }
 
@@ -27,8 +27,8 @@ export class UserRepository implements Repository<User>{
             (await users.findOneAndUpdate({_id}, { $set: userInput},{returnDocument: 'after'}) || undefined)
         )}
 
-    public async delete(item: { dni: string; }): Promise< User | undefined > {
-        const _id = new ObjectId(item.dni)
+    public async delete(item: { identificador: string; }): Promise< User | undefined > {
+        const _id = new ObjectId(item.identificador)
         return (await users.findOneAndDelete({_id})) || undefined
 }
 }

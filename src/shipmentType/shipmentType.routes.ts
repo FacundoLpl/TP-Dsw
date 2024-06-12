@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { sanitizeUserInput, findAll, findOne, add, update, remove} from "./user.controler.js";
+import { sanitizeshipmentTypeInput, findAll, findOne, add, update, remove} from "./shipmentType.controler.js";
 
-export const userRouter = Router()
+export const shipmentTypeRouter = Router()
 
-userRouter.get('/', findAll)
-userRouter.get('/:dni', findOne)
-userRouter.post('/', sanitizeUserInput, add)
-userRouter.put('/:dni', sanitizeUserInput, update)
-userRouter.patch('/:dni', sanitizeUserInput, update)
-userRouter.delete('/:dni', sanitizeUserInput, remove)
+shipmentTypeRouter.get('/', findAll)
+shipmentTypeRouter.get('/:typeId', findOne)
+shipmentTypeRouter.post('/', sanitizeshipmentTypeInput, add)
+shipmentTypeRouter.put('/:typeId', sanitizeshipmentTypeInput, update)
+shipmentTypeRouter.patch('/:typeId', sanitizeshipmentTypeInput, update)
+shipmentTypeRouter.delete('/:typeId', sanitizeshipmentTypeInput, remove)

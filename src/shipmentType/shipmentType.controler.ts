@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from "express"
-import { UserRepository } from "./user.repository.js"
-import { User } from "./user.entity.js"
-const repository = new UserRepository()
+import { shipmentTypeRepository } from "./shipmentType.repository.js"
+import { ShipmentType } from "./shipmentType.entity.js"
+const repository = new shipmentTypeRepository()
 //TODO Cambiar esto por la libreria zod
-function sanitizeUserInput(req: Request, res: Response, next:NextFunction){
+
+
+function sanitizeshipmentTypeInput(req: Request, res: Response, next:NextFunction){
     req.body.sanitizedInput = {
-        dni: req.body.dni,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        userType: req.body.userType,
+        typeId: req.body.typeId,
+        estimatedTime: req.body.estimatedTime,
+        type: req.body.type,
     }
 
     Object.keys(req.body.sanitizedInput).forEach(key=>{
@@ -18,46 +19,46 @@ function sanitizeUserInput(req: Request, res: Response, next:NextFunction){
     next()
 }
 
+
 async function findAll(req: Request,res: Response) { 
     res.json({data: await repository.findAll()})
 }
 
 async function findOne (req: Request, res: Response){
-    const user = await repository.findOne({dni:req.params.dni})
-    if (!user){
-        return res.status(404).send({message: 'character not found'})
+    const shipmentType = await repository.findOne({identificador:req.params.typeId})
+    if (!shipmentType){
+        return res.status(404).send({message: ' not found'})
     }
-    res.json(user)}
+    res.json(shipmentType)}
 
 async function add (req: Request,res: Response) {
     const input = req.body.sanitizedInput
-    const userInput = new User ( 
-            input.dni, 
-            input.firstName, 
-            input.lastName, 
-            input.userType)
+    const shipmentTypeInput = new ShipmentType ( 
+            input.typeId, 
+            input.estimatedTime, 
+            input.type, )
     
-    const user = await repository.add(userInput)
-    return res.status(201).send({message: 'User created', data: user})
+    const shipmentType = await repository.add(shipmentTypeInput)
+    return res.status(201).send({message: 'shipmentType created', data: shipmentType})
     }
 
 async function update(req: Request,res: Response){
-        req.body.sanitizedInput.dni = req.params.dni
-        const user= await repository.update(req.body.sanitizedInput)
-        if(!user){
-            return res.status(404).send({message: 'character not found'})
+        req.body.sanitizedInput.typeId = req.params.typeId
+        const shipmentType= await repository.update(req.body.sanitizedInput)
+        if(!shipmentType){
+            return res.status(404).send({message: ' not found'})
         } 
-        return res.status(200).send({message: 'user updated successfully.', data: user})
+        return res.status(200).send({message: 'shipmentType updated successfully.', data: shipmentType})
     } 
     
 async function remove(req: Request,res: Response){
-        const dni=req.params.dni
-        const user = await repository.delete({dni})       
-        if(!user){
-            res.status(404).send({message: 'User not found.'})
+        const identificador = req.params.typeId
+        const shipmentType = await repository.delete({identificador})       
+        if(!shipmentType){
+            res.status(404).send({message: 'shipmentType not found.'})
         } else {
-        res.status(200).send({message: 'User deleted succesfully'})}
+        res.status(200).send({message: 'shipmentType deleted succesfully'})}
     }
 
 
-export {sanitizeUserInput, findAll, findOne, add, update, remove}
+export {sanitizeshipmentTypeInput, findAll, findOne, add, update, remove}

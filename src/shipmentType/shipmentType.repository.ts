@@ -10,8 +10,8 @@ export class shipmentTypeRepository implements Repository<ShipmentType>{
         return await shipmentTypes.find().toArray()
     }
     
-    public async findOne(item: {dni: string; }): Promise<ShipmentType | undefined> {
-        const _id = new ObjectId(item.dni)
+    public async findOne(item: {identificador: string }): Promise<ShipmentType | undefined> {
+        const _id = new ObjectId(item.identificador)
         return (await shipmentTypes.findOne({_id})) || undefined
     }
 
@@ -27,8 +27,8 @@ export class shipmentTypeRepository implements Repository<ShipmentType>{
             (await shipmentTypes.findOneAndUpdate({_id}, { $set: shipmentTypeInput},{returnDocument: 'after'}) || undefined)
         )}
 // no funciona el delete
-    public async delete(item: { typeId: number; }): Promise< ShipmentType | undefined > {
-        const _id = new ObjectId(item.typeId)
-        return (await shipmentTypes.findOneAndDelete({_id})) || undefined
+    public async delete(item: { identificador: string ; }): Promise< ShipmentType | undefined > {
+        const _id = new ObjectId(item.identificador)
+        return (await shipmentTypes.findOneAndDelete({_id})) || undefined;
 }
 }

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { UserRepository } from "./user.repository.js"
+import { UserRepository } from "./User.repository.js"
 import { User } from "./user.entity.js"
 const repository = new UserRepository()
 //TODO Cambiar esto por la libreria zod
@@ -23,7 +23,7 @@ async function findAll(req: Request,res: Response) {
 }
 
 async function findOne (req: Request, res: Response){
-    const user = await repository.findOne({dni:req.params.dni})
+    const user = await repository.findOne({identificador:req.params.dni})
     if (!user){
         return res.status(404).send({message: 'character not found'})
     }
@@ -51,8 +51,8 @@ async function update(req: Request,res: Response){
     } 
     
 async function remove(req: Request,res: Response){
-        const dni=req.params.dni
-        const user = await repository.delete({dni})       
+        const identificador=req.params.dni
+        const user = await repository.delete({identificador})       
         if(!user){
             res.status(404).send({message: 'User not found.'})
         } else {
