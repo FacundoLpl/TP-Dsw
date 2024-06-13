@@ -5,6 +5,7 @@ import { userRouter } from './user/user.routes.js'
 
 import { shipmentTypeRepository } from './shipmentType/shipmentType.repository.js'
 import { shipmentTypeRouter } from './shipmentType/shipmentType.routes.js'
+import { categoriaRouter } from './Categoria/categoria.routes.js'
 
 const app = express()
 app.use(express.json()) 
@@ -15,6 +16,7 @@ const repository = new UserRepository()
 
 app.use('/api/users', userRouter)
 app.use('/api/shipmentTypes', shipmentTypeRouter)
+app.use('/api/categorias', categoriaRouter)
 
 app.use((req, res)=>{
     res.status(404).send({message:'Resource not found'})

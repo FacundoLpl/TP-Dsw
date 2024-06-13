@@ -1,0 +1,34 @@
+### obtener todos los categorias
+GET http://localhost:3000/api/categorias
+### obtengo un categoria especifico
+GET http://localhost:3000/api/categorias/666a586cd7b6358de3e0edd7
+
+### crear un nuevo categoria
+POST http://localhost:3000/api/categorias
+Content-Type: application/json
+
+{
+    "name": "Bebidas",
+    "catId": "001"
+}
+
+### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
+PUT http://localhost:3000/api/categorias/666a586cd7b6358de3e0edd7
+Content-Type: application/json
+
+{
+    "name": "BebidasUpdated",
+    "catId": "001"
+}
+
+### modificar un categorias (PATCH - modificacion parcial)
+PATCH http://localhost:3000/api/categorias/666a586cd7b6358de3e0edd7
+Content-Type: application/json
+
+{
+    "name": "BebidasUpdated2"
+}
+
+### borrar un categorias
+DELETE http://localhost:3000/api/categorias/666a586cd7b6358de3e0edd7
+
