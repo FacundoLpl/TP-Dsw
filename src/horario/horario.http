@@ -1,0 +1,38 @@
+### obtener todos los horarios
+GET http://localhost:3000/api/horarios
+### obtengo un horario especifico
+GET http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+
+### crear un nuevo horario
+POST http://localhost:3000/api/horarios
+Content-Type: application/json
+
+{
+    "idHorario": "12345asdasd678",
+    "horaDesde": 155,
+    "tiempoEstimado": "1hs",
+    "tiempoTolerancia": "30min"
+}
+
+### modificar un horario (PUT - idempotente, se modifican TODOS los elementos posibles)
+PUT http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+Content-Type: application/json
+
+{
+   "idHorario": "12345asdasd678",
+    "horaDesde": 155,
+    "tiempoEstimado": "2hs",
+    "tiempoTolerancia": "30min"
+}
+
+### modificar un horario (PATCH - modificacion parcial)
+PATCH http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+Content-Type: application/json
+
+{
+    "tiempoTolerancia": "45min"
+}
+
+### borrar un horario
+DELETE http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+
