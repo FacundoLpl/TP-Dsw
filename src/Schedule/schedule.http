@@ -1,10 +1,10 @@
-### obtener todos los horarios
-GET http://localhost:3000/api/horarios
+### obtener todos los schedules
+GET http://localhost:3000/api/schedules
 ### obtengo un horario especifico
-GET http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+GET http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
 
 ### crear un nuevo horario
-POST http://localhost:3000/api/horarios
+POST http://localhost:3000/api/schedules
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### modificar un horario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+PUT http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
 Content-Type: application/json
 
 {
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### modificar un horario (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+PATCH http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
 Content-Type: application/json
 
 {
@@ -34,5 +34,5 @@ Content-Type: application/json
 }
 
 ### borrar un horario
-DELETE http://localhost:3000/api/horarios/666a5b31be5a5be40dcbeb18
+DELETE http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
 

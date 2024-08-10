@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export class Categoria {
+export class Category {
     constructor(
         public catId: string,
         public name: string,

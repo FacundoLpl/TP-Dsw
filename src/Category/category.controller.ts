@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express"
-import { categoriaRepository } from "./categoria.repository.js"
-import { Categoria } from "./categoria.entity.js"
-const repository = new categoriaRepository()
+import { categoryRepository } from "./category.repository.js"
+import { Category } from "./category.entity.js"
+const repository = new categoryRepository()
 
-function sanitizecategoriaInput(req: Request, res: Response, next:NextFunction){
+function sanitizecategoryInput(req: Request, res: Response, next:NextFunction){
     req.body.sanitizedInput = {
         catId: req.body.catId,
         name: req.body.name,
@@ -22,40 +22,40 @@ async function findAll(req: Request,res: Response) {
 }
 
 async function findOne (req: Request, res: Response){
-    const categoria = await repository.findOne({identificador:req.params.catId})
-    if (!categoria){
+    const category = await repository.findOne({identificador:req.params.catId})
+    if (!category){
         return res.status(404).send({message: ' not found'})
     }
-    res.json(categoria)}
+    res.json(category)}
 
 async function add (req: Request,res: Response) {
     const input = req.body.sanitizedInput
-    const categoriaInput = new Categoria ( 
+    const categoryInput = new Category ( 
             input.catId,
             input.name, 
           )
     
-    const categoria = await repository.add(categoriaInput)
-    return res.status(201).send({message: 'categoria created', data: categoria})
+    const category = await repository.add(categoryInput)
+    return res.status(201).send({message: 'category created', data: category})
     }
 
 async function update(req: Request,res: Response){
     req.body.sanitizedInput.catId = req.params.catId
-    const categoria= await repository.update(req.body.sanitizedInput)
-    if(!categoria){
+    const category= await repository.update(req.body.sanitizedInput)
+    if(!category){
         return res.status(404).send({message: ' not found'})
      } 
-    return res.status(200).send({message: 'categoria successfully.', data: categoria})
+    return res.status(200).send({message: 'category successfully.', data: category})
     } 
     
 async function remove(req: Request,res: Response){
         const identificador = req.params.catId
-        const categoria = await repository.delete({identificador})       
-        if(!categoria){
-            res.status(404).send({message: 'categoria not found.'})
+        const category = await repository.delete({identificador})       
+        if(!category){
+            res.status(404).send({message: 'category not found.'})
         } else {
-        res.status(200).send({message: 'categoria deleted succesfully'})}
+        res.status(200).send({message: 'category deleted succesfully'})}
     }
 
 
-export {sanitizecategoriaInput, findAll, findOne, add, update, remove}
+export {sanitizecategoryInput, findAll, findOne, add, update, remove}
