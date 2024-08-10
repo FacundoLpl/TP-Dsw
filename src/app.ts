@@ -2,13 +2,14 @@ import express, { NextFunction, Request, Response } from 'express'
 import { User } from './user/user.entity.js'
 import { UserRepository } from './user/User.repository.js'
 import { userRouter } from './user/user.routes.js'
-
 import { shipmentTypeRepository } from './shipmentType/shipmentType.repository.js'
 import { shipmentTypeRouter } from './shipmentType/shipmentType.routes.js'
 import { categoriaRouter } from './Categoria/categoria.routes.js'
+import cors from 'cors'
 
 const app = express()
 app.use(express.json()) 
+app.use(cors())
 
 
 const repository = new UserRepository()
