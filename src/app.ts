@@ -7,6 +7,10 @@ import { shipmentTypeRouter } from './shipmentType/shipmentType.routes.js'
 import { categoriaRouter } from './Categoria/categoria.routes.js'
 import cors from 'cors'
 
+import { horarioRouter } from './horario/horario.routes.js'
+
+
+
 const app = express()
 app.use(express.json()) 
 app.use(cors())
@@ -17,6 +21,7 @@ const repository = new UserRepository()
 
 app.use('/api/users', userRouter)
 app.use('/api/shipmentTypes', shipmentTypeRouter)
+app.use('/api/horarios', horarioRouter)
 app.use('/api/categorias', categoriaRouter)
 
 app.use((req, res)=>{
