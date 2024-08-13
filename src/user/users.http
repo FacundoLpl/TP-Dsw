@@ -1,5 +1,5 @@
 ### obtener todos los users
-GET http://localhost:3000/api/users
+##GET http://localhost:3000/api/users
 ### obtengo un user especifico
 GET http://localhost:3000/api/users/6654f6355489707b63870a31
 
