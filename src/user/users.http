@@ -1,5 +1,5 @@
 ### obtener todos los users
-##GET http://localhost:3000/api/users
+GET http://localhost:3000/api/users
 ### obtengo un user especifico
 GET http://localhost:3000/api/users/6654f6355489707b63870a31
 
@@ -33,5 +33,5 @@ Content-Type: application/json
 }
 
 ### borrar un user
-DELETE http://localhost:3000/api/users/6654f6355489707b63870a31
+DELETE http://localhost:3000/api/users/66c7cd5c985a9608286e8a5e
 

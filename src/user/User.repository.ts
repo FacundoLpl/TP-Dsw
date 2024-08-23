@@ -27,8 +27,9 @@ export class UserRepository implements Repository<User>{
             (await users.findOneAndUpdate({_id}, { $set: userInput},{returnDocument: 'after'}) || undefined)
         )}
 
-    public async delete(item: { identificador: string; }): Promise< User | undefined > {
-        const _id = new ObjectId(item.identificador)
-        return (await users.findOneAndDelete({_id})) || undefined
-}
+    public async delete(item: { identificador: string; }): Promise<User | undefined> {
+            const _id = new ObjectId(item.identificador);
+            const result = await users.findOneAndDelete({ _id });
+            return result || undefined;  // Devolver los datos del usuario eliminado
+        }
 }
