@@ -1,19 +1,23 @@
 ### obtener todos los categorias
 GET http://localhost:3000/api/categories
-### obtengo un categoria especifico
-GET http://localhost:3000/api/categories/666a586cd7b6358de3e0edd7
+
 
 ### crear un nuevo categoria
+# @name createCategory
 POST http://localhost:3000/api/categories
 Content-Type: application/json
 
 {
-    "name": "Bebidas",
-    "catId": "001"
+    "name": "Comidas",
+    "catId": "002"
 }
+### obtengo un categoria especifico
+### ID 
+@id = {{createCategory.response.body.data.id}}
+GET http://localhost:3000/api/categories/{{id}}
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/categories/666a586cd7b6358de3e0edd7
+PUT http://localhost:3000/api/categories/66da39eed3173d2a2c1944d9
 Content-Type: application/json
 
 {
@@ -21,14 +25,7 @@ Content-Type: application/json
     "catId": "001"
 }
 
-### modificar un categorias (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/categories/666a586cd7b6358de3e0edd7
-Content-Type: application/json
-
-{
-    "name": "BebidasUpdated2"
-}
 
 ### borrar un categorias
-DELETE http://localhost:3000/api/categories/666a586cd7b6358de3e0edd7
+DELETE http://localhost:3000/api/categories/66da39eed3173d2a2c1944d9
 

@@ -1,36 +1,26 @@
 ### obtener todos los shipmentTypes
 GET http://localhost:3000/api/shipmentTypes
 ### obtengo un shipmentType especifico
-GET http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
-
+GET http://localhost:3000/api/shipmentTypes/66db908dfd8f25c9cfba771e
 ### crear un nuevo shipmentType
 POST http://localhost:3000/api/shipmentTypes
 Content-Type: application/json
 
 {
-    "typeId": "12345678",
     "estimatedTime": 15,
     "type": "Alfaro"
 }
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
+PUT http://localhost:3000/api/shipmentTypes/66db908dfd8f25c9cfba771e
 Content-Type: application/json
 
 {
-   "typeId": "12345678",
-    "estimatedTime": 15,
-    "type": "Alfaro"
+    "estimatedTime": 30,
+    "type": "Cantaberta"
 }
 
-### modificar un shipmentTypes (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/shipmentTypes/666a34ff9adfcb64127e11bd
-Content-Type: application/json
-
-{
-    "type": "Waiter"
-}
 
 ### borrar un shipmentTypes
-DELETE http://localhost:3000/api/shipmentTypes/666a34449adfcb64127e11bc
+DELETE http://localhost:3000/api/shipmentTypes/66db908dfd8f25c9cfba771e
 

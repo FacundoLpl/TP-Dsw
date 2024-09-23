@@ -1,38 +1,30 @@
 ### obtener todos los schedules
 GET http://localhost:3000/api/schedules
 ### obtengo un horario especifico
-GET http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
+GET http://localhost:3000/api/schedules/66db8f86a7eb78c6c7d8904e
 
 ### crear un nuevo horario
 POST http://localhost:3000/api/schedules
 Content-Type: application/json
 
 {
-    "idHorario": "12345asdasd678",
-    "horaDesde": 155,
-    "tiempoEstimado": "1hs",
-    "tiempoTolerancia": "30min"
+    "timeFrom": "2024-09-10T10:00:00Z",
+    "estimatedTime": 50,
+    "toleranceTime": 30
 }
 
 ### modificar un horario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
+PUT http://localhost:3000/api/schedules/66db8f86a7eb78c6c7d8904e
 Content-Type: application/json
 
 {
-   "idHorario": "12345asdasd678",
-    "horaDesde": 155,
-    "tiempoEstimado": "2hs",
-    "tiempoTolerancia": "30min"
+    "timeFrom": "2024-09-10T10:00:00Z",
+    "estimatedTime": 90,
+    "toleranceTime": 15
 }
 
-### modificar un horario (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
-Content-Type: application/json
 
-{
-    "tiempoTolerancia": "45min"
-}
 
 ### borrar un horario
-DELETE http://localhost:3000/api/schedules/666a5b31be5a5be40dcbeb18
+DELETE http://localhost:3000/api/schedules/66db8f86a7eb78c6c7d8904e
 

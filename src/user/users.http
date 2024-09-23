@@ -1,37 +1,34 @@
 ### obtener todos los users
 GET http://localhost:3000/api/users
-### obtengo un user especifico
-GET http://localhost:3000/api/users/6654f6355489707b63870a31
+
 
 ### crear un nuevo user
+# @name createUser
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
     "dni": "12345678",
-    "firstName": "Bautista",
+    "firstName": "Facundo",
     "lastName": "Alfaro",
     "userType": "Admin"
 }
+### ID 
+@id = {{createUser.response.body.data.id}}
+### obtengo un user especifico
+GET http://localhost:3000/api/users/{{id}}
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/users/6654f6355489707b63870a31
+PUT http://localhost:3000/api/users/66d8efd9f97ea117d363ce7c
 Content-Type: application/json
 
 {
-    "firstName": "Bautista",
-    "lastName": "Alfaro",
+    "firstName": "Abril",
+    "lastName": "Carballo",
     "userType": "Waiter"
 }
 
-### modificar un usuario (PATCH - modificacion parcial)
-PATCH http://localhost:3000/api/users/6654f6355489707b63870a31
-Content-Type: application/json
-
-{
-    "userType": "Waiter"
-}
 
 ### borrar un user
-DELETE http://localhost:3000/api/users/66c7cd5c985a9608286e8a5e
+DELETE http://localhost:3000/api/users/66d8f1c17eba8336de03d857
 

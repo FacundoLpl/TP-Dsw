@@ -1,16 +1,16 @@
 import { Request, Response} from "express"
-import { Category } from "./category.entity.js"
 import { orm } from "../shared/db/orm.js"
+import { ShipmentType } from "./shipmentType.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+
 
 const em = orm.em
 
 
-
 async function findAll(req: Request,res: Response) { 
     try{
-        const categories = await em.find('Category', {})
-        res.status(200).json({message: 'finded all categories', data: categories})
+        const shipmentTypes = await em.find('ShipmentType', {})
+        res.status(200).json({message: 'finded all shipmentTypes', data: shipmentTypes})
     } catch (error: any){
         res.status(500).json({message: error.message})
     }
@@ -19,21 +19,21 @@ async function findAll(req: Request,res: Response) {
 async function findOne (req: Request, res: Response){
     try{
         const _id = new ObjectId(req.params.id)
-        const category = await em.findOneOrFail(Category, { _id }) // primer parametro la clase, 2do el filtro
+        const shipmentType = await em.findOneOrFail(ShipmentType, { _id }) // primer parametro la clase, 2do el filtro
         res
             .status(200)
-            .json({message: 'found category', data: category})
+            .json({message: 'found shipmentType', data: shipmentType})
     }catch (error: any){
         res.status(500).json({message: error.message})}
     }
 
 async function add (req: Request,res: Response) {
     try{
-        const category = em.create(Category, req.body)
+        const shipmentType = em.create(ShipmentType, req.body)
         await em.flush()
         res
             .status(201)
-            .json({message: 'category created', data: category})
+            .json({message: 'shipmentType created', data: shipmentType})
     }catch (error: any){
         res.status(500).json({message: error.message})
     }}
@@ -41,10 +41,10 @@ async function add (req: Request,res: Response) {
 async function update(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
-        const categoryToUpdate = em.getReference(Category,  _id )
-        em.assign(categoryToUpdate, req.body);
+        const shipmentTypeToUpdate = em.getReference(ShipmentType,  _id )
+        em.assign(shipmentTypeToUpdate, req.body);
         await em.flush();
-        res.status(200).json({ message: "Category updated", data: categoryToUpdate })
+        res.status(200).json({ message: "ShipmentType updated", data: shipmentTypeToUpdate })
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -53,13 +53,12 @@ async function update(req: Request,res: Response){
 async function remove(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
-        const category = em.getReference(Category, _id )
-        await em.removeAndFlush(category)
-        res.status(200).json({ message: "Category removed", data: category })
+        const shipmentType = em.getReference(ShipmentType, _id )
+        await em.removeAndFlush(shipmentType)
+        res.status(200).json({ message: "ShipmentType removed", data: shipmentType })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }}
-
 
 
 export {findAll, findOne, add, update, remove}

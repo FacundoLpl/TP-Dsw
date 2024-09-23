@@ -1,12 +1,15 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb"
+import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import {Entity, Property, ManyToOne, Rel } from '@mikro-orm/core'
 
-//import crypto from 'node:crypto'
-export class User {
-    constructor(
-        public dni: string,
-        public firstName: string,
-        public lastName: string,
-        public userType: string,
-        public _id?: ObjectId
-    ) {}
+@Entity()
+export class User extends BaseEntity{
+        @Property()
+        dni!: string
+        @Property()
+        firstName!: string
+        @Property()
+        lastName!: string
+        @Property()
+        userType!: string
 }

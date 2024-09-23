@@ -1,0 +1,30 @@
+### obtener todos los products
+GET http://localhost:3000/api/products
+
+
+### crear un nuevo user
+# @name createUser
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+    "name": "Fanta 1.5l",
+    "category": "66da39eed3173d2a2c1944d9"
+}
+### ID 
+@id = {{createUser.response.body.data.id}}
+### obtengo un user especifico
+GET http://localhost:3000/api/products/{{id}}
+
+### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
+PUT http://localhost:3000/api/products/66da391b8631e6c45c915b3f
+Content-Type: application/json
+
+{
+    "name": "Juguito Tang"
+}
+
+
+### borrar un user
+DELETE http://localhost:3000/api/products/66da3a0dd3173d2a2c1944da
+

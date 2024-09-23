@@ -1,14 +1,14 @@
-
+import {Entity, Property, ManyToOne, Rel } from '@mikro-orm/core'
 import { ObjectId } from "mongodb";
-//import crypto from 'node:crypto'
+import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 
-
-export class Schedule {
-    constructor(
-        public idSchedule: string,
-        public timeFrom: Date, // verificar el tipo de dato
-        public estimatedTime: string, 
-        public toleranceTime: string,
-        public _id?: ObjectId
-    ) {}
+@Entity()
+export class Schedule extends BaseEntity {
+    @Property()
+    timeFrom!: Date 
+    @Property()
+    estimatedTime!: number
+    @Property()
+    toleranceTime!: number
+    
 }

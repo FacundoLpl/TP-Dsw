@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
+import {Entity, Property, ManyToOne, Rel } from '@mikro-orm/core'
+import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 
-//import crypto from 'node:crypto'
-export class ShipmentType {
-    constructor(
-        public typeId: string,
-        public estimatedTime: string, // verificar el tipo de dato
-        public type: string,
-        public _id?: ObjectId
-    ) {}
+@Entity()
+export class ShipmentType extends BaseEntity {
+        @Property()
+        estimatedTime!: number // verificar el tipo de dato
+        @Property()
+        type!: string
 }

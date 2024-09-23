@@ -1,4 +1,4 @@
-import { Repository } from "../shared/repository.js"
+/*import { Repository } from "../shared/repository.js"
 import { User } from "./user.entity.js"
 import { db } from "../shared/db/conn.js"
 import { ObjectId } from "mongodb"
@@ -32,4 +32,4 @@ export class UserRepository implements Repository<User>{
             const result = await users.findOneAndDelete({ _id });
             return result || undefined;  // Devolver los datos del usuario eliminado
         }
-}
+}*/
