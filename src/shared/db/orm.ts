@@ -14,7 +14,7 @@ export const orm = await MikroORM.init({
     highlighter: new MongoHighlighter(),
     debug: true,
     allowGlobalContext: true,
-    driver: MongoDriver,
+    type:"mongo",
 })
 
 export const syncSchema = async () => {
