@@ -2,6 +2,8 @@ import { Request, Response} from "express"
 import { Category } from "./category.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+import { validate } from 'class-validator'
+//no entiendo pq no estan todos separados por ;
 
 const em = orm.em
 
@@ -43,6 +45,12 @@ async function update(req: Request,res: Response){
         const _id = new ObjectId(req.params.id)
         const categoryToUpdate = em.getReference(Category,  _id )
         em.assign(categoryToUpdate, req.body);
+        //evita errores
+        const errors = await validate(categoryToUpdate);
+
+        if (errors.length > 0) {
+            return res.status(400).json({ message: 'Errores de validación', errors });
+        }
         await em.flush();
         res.status(200).json({ message: "Category updated", data: categoryToUpdate })
     } catch (error: any) {
