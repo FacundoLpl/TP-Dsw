@@ -34,3 +34,4 @@ app.use('/api/products', productRouter)
 app.use((req, res)=>{res.status(404).send({message:'Resource not found'})})
 
 app.listen(3000, () => {console.log('server running on http://localhost:3000')})
+app.use('/menu', require('./src/product/menu.controller'));
