@@ -6,9 +6,6 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 @Entity()
 export class Product extends BaseEntity{ //faltan los atributos; como lo relaciono con categoria? avisar si no quedo bien, intente resolverlo
 
-    @PrimaryKey()
-    _id!: ObjectId;
-
     @Property({ nullable: false, unique: true })
     name!: string;
 

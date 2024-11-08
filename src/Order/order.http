@@ -1,0 +1,16 @@
+### obtener todos las orders
+GET http://localhost:3000/api/carts/672d512f0a8a17ab8640da45/orders
+
+### crear un nuevo order
+@id = 672ce1aee1cd5a14177f1bb0
+POST http://localhost:3000/api/carts/672d512f0a8a17ab8640da45/orders
+Content-Type: application/json
+
+{
+  "quantity": 3,
+  "product": "672d4ec04a0fac5888ae18fd",
+  "cart": "672d512f0a8a17ab8640da45"
+}
+
+### delete
+DELETE http://localhost:3000/api/carts/672d512f0a8a17ab8640da45/orders/672ce415e1cd5a14177f1bb4

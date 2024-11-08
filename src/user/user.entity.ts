@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb"
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import {Entity, Property, ManyToOne, Rel } from '@mikro-orm/core'
+import {Entity, Property, OneToMany, Rel, Cascade, Collection} from '@mikro-orm/core'
+import {Cart} from '../Cart/cart.entity.js'
 
 @Entity()
 export class User extends BaseEntity{
@@ -12,4 +13,8 @@ export class User extends BaseEntity{
         lastName!: string
         @Property()
         userType!: string
+        @OneToMany(() => Cart, (cart: Cart) => cart.user, {
+                cascade: [Cascade.ALL],
+        })
+        carts = new Collection<Cart>(this);
 }

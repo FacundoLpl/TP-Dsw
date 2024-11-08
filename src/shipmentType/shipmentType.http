@@ -7,8 +7,8 @@ POST http://localhost:3000/api/shipmentTypes
 Content-Type: application/json
 
 {
-    "estimatedTime": 15,
-    "type": "Alfaro"
+    "estimatedTime": 0,
+    "type": "Other"
 }
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
@@ -22,5 +22,5 @@ Content-Type: application/json
 
 
 ### borrar un shipmentTypes
-DELETE http://localhost:3000/api/shipmentTypes/66db908dfd8f25c9cfba771e
+DELETE http://localhost:3000/api/shipmentTypes/66db9094fd8f25c9cfba771f
 

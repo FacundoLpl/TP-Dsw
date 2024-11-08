@@ -8,8 +8,7 @@ POST http://localhost:3000/api/categories
 Content-Type: application/json
 
 {
-    "name": "Comidas",
-    "catId": "002"
+    "name": "Postres"
 }
 ### obtengo un categoria especifico
 ### ID 
@@ -27,5 +26,5 @@ Content-Type: application/json
 
 
 ### borrar un categorias
-DELETE http://localhost:3000/api/categories/66da39eed3173d2a2c1944d9
+DELETE http://localhost:3000/api/categories/672d4aa6dda5ebf5cf0b7e6a
 
