@@ -1,0 +1,19 @@
+### crear cart
+POST http://localhost:3000/api/carts
+Content-Type: application/json
+
+{
+  "state": "Pending",
+  "user": "672d4f6cb48ca087afa73e84",
+  "shipmentType": "672d505b6cc08034b5813221"
+}
+
+
+### crear cart
+GET http://localhost:3000/api/carts
+
+### delete
+DELETE http://localhost:3000/api/carts/672d426919efbf40f2a658a1
+
+
+

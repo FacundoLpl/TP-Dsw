@@ -8,9 +8,9 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-    "dni": "12345678",
-    "firstName": "Facundo",
-    "lastName": "Alfaro",
+    "dni": "27316617",
+    "firstName": "German",
+    "lastName": "Baro",
     "userType": "Admin"
 }
 ### ID 
@@ -30,5 +30,4 @@ Content-Type: application/json
 
 
 ### borrar un user
-DELETE http://localhost:3000/api/users/66d8f1c17eba8336de03d857
-
+DELETE http://localhost:3000/api/users/66d9093d13851e7f75dccac8

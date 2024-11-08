@@ -2,8 +2,6 @@ import { Request, Response} from "express"
 import { Category } from "./category.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
-import { validate } from 'class-validator'
-//no entiendo pq no estan todos separados por ;
 
 const em = orm.em
 
@@ -12,7 +10,7 @@ const em = orm.em
 async function findAll(req: Request,res: Response) { 
     try{
         const categories = await em.find('Category', {})
-        res.status(200).json({message: 'finded all categories', data: categories})
+        res.status(200).json({message: 'found all categories', data: categories})
     } catch (error: any){
         res.status(500).json({message: error.message})
     }
@@ -35,28 +33,23 @@ async function add (req: Request,res: Response) {
         await em.flush()
         res
             .status(201)
-            .json({message: 'category created', data: category})
+            .json({message: 'Category created', data: category})
     }catch (error: any){
         res.status(500).json({message: error.message})
     }}
 
-async function update(req: Request,res: Response){
-    try {
-        const _id = new ObjectId(req.params.id)
-        const categoryToUpdate = em.getReference(Category,  _id )
-        em.assign(categoryToUpdate, req.body);
-        //evita errores
-        const errors = await validate(categoryToUpdate);
-
-        if (errors.length > 0) {
-            return res.status(400).json({ message: 'Errores de validación', errors });
+    async function update(req: Request,res: Response){
+        try {
+            const _id = new ObjectId(req.params.id)
+            const categoryToUpdate = em.getReference(Category,  _id )
+            em.assign(categoryToUpdate, req.body);
+            await em.flush();
+            res.status(200).json({ message: "Category updated", data: categoryToUpdate })
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
         }
-        await em.flush();
-        res.status(200).json({ message: "Category updated", data: categoryToUpdate })
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-    }
+        }
+
     
 async function remove(req: Request,res: Response){
     try {

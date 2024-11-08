@@ -7,9 +7,11 @@ GET http://localhost:3000/api/products
 POST http://localhost:3000/api/products
 Content-Type: application/json
 
-{
-    "name": "Fanta 1.5l",
-    "category": "66da39eed3173d2a2c1944d9"
+{ 
+"name": "Helado",
+"price": 4000,
+"description": "Tres bolas de helado, servidas en tu sabor favorito, la manera perfecta de refrescarte.", 
+"category": "672d4b4cdda5ebf5cf0b7e6e"
 }
 ### ID 
 @id = {{createUser.response.body.data.id}}
@@ -17,14 +19,14 @@ Content-Type: application/json
 GET http://localhost:3000/api/products/{{id}}
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/products/66da391b8631e6c45c915b3f
+PUT http://localhost:3000/api/products/672d4c554a0fac5888ae18ed
 Content-Type: application/json
 
 {
-    "name": "Juguito Tang"
+    "imageUrl": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29jYWNvbGF8ZW58MHx8MHx8fDA%3D"
 }
 
 
 ### borrar un user
-DELETE http://localhost:3000/api/products/66da3a0dd3173d2a2c1944da
+DELETE http://localhost:3000/api/products/66da3a6f4b62e2f444142282
 

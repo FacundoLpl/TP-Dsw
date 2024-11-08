@@ -6,7 +6,7 @@ import { CartFilter } from "./cart.filter.js"
 
 const em = orm.em // entity manager funciona como un repository de todas las clases
 
-// el 3er parametro indicamos que relaciones queremos que cargue
+
 async function findAll(req: Request,res: Response) { 
     try{
         const filter: CartFilter = req.query
@@ -25,7 +25,9 @@ async function findAll(req: Request,res: Response) {
 async function findOne (req: Request, res: Response){
     try{
         const _id = new ObjectId(req.params.id)
-        const cart = await em.findOneOrFail(Cart, { _id },{populate: ['orders']} ) // primer parametro la clase, 2do el filtro
+        const cart = await em.findOneOrFail(Cart, { _id },
+            {populate: ['orders']} 
+            ) // primer parametro la clase, 2do el filtro
         res
             .status(200)
             .json({message: 'found cart', data: cart})
