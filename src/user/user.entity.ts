@@ -16,16 +16,18 @@ export class User extends BaseEntity{
 
         @Property()
         userType!: string
-        
-        @Property()
-        email!: string
-        @Property()
-        password!: string
-        @Property()
-        address!: string
 
         @OneToMany(() => Cart, (cart: Cart) => cart.user, {
                 cascade: [Cascade.ALL],
         })
         carts = new Collection<Cart>(this);
+
+        @Property({ nullable: true, unique: true })
+        email!: string;
+
+        @Property({ nullable: true })
+        password!: string;
+
+        @Property({ nullable: true })
+        address!: string;
 }

@@ -12,6 +12,9 @@ export class Product extends BaseEntity{ //faltan los atributos; como lo relacio
     @Property({ nullable: false }) 
     price!: number;
 
+    @Property({ nullable: false })
+    stock!: number;
+
     @Property({ nullable: true }) 
     description?: string;
 
@@ -20,4 +23,7 @@ export class Product extends BaseEntity{ //faltan los atributos; como lo relacio
 
     @Property({ nullable: true }) 
     imageUrl?: string;
+
+    @Property({ nullable: false })
+    state!: "Active" | "Archived";
 }

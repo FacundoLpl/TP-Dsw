@@ -6,10 +6,13 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 export class Schedule extends BaseEntity {
     @Property()
     timeFrom!: Date 
+
     @Property()
     estimatedTime!: number
+
     @Property()
     toleranceTime!: number
+
     @Property()
-    capacity!: number
+    capacityLeft!: number
 }
