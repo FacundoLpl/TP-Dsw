@@ -10,5 +10,6 @@ export class Schedule extends BaseEntity {
     estimatedTime!: number
     @Property()
     toleranceTime!: number
-    
+    @Property()
+    capacity!: number
 }
