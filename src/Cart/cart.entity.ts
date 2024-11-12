@@ -12,7 +12,7 @@ import { ShipmentType } from "../ShipmentType/shipmentType.entity.js"
   
     @ManyToOne(() => User, { nullable: false })
     user!: Rel<User>;
-
+  
   
     @Property({ nullable: true })
     total!: number;

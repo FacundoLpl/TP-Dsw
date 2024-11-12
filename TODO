@@ -1,0 +1,13 @@
+/*
+sanitize input --- FACU
+order: verificar que exista carrito pendiente, verificar que exista el producto, q haya stock, 
+actualizar stock, verificar que no exista la misma orden y si existe sumar la cantidad
+para borrar la order verificar q sea de un carrito pendiente
+cuando creo cart verificar q no hay un pendiente
+verificar el stock
+verificar que existen las cosas
+politica de cancelacion de orden
+politica de creacion de reserva
+cupo por horario en schedule --- FACU
+verificar que haya cupo
+*/
