@@ -8,7 +8,6 @@ Content-Type: application/json
   "shipmentType": "672d505b6cc08034b5813221"
 }
 
-
 ### crear cart
 GET http://localhost:3000/api/carts
 

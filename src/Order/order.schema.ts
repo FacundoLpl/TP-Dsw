@@ -8,5 +8,9 @@ const orderSchema = zod.object({
 });
 
 export function validateOrder(data: any) {
-  return orderSchema.safeParse(data);
+  const result = orderSchema.safeParse(data);
+  if (!result.success) {
+    console.error("Validation error:", result.error.format());
+  }
+  return result;
 }
