@@ -22,12 +22,12 @@ export class User extends BaseEntity{
         })
         carts = new Collection<Cart>(this);
 
-        @Property({ nullable: false, unique: true })
+        @Property({ nullable: true })
         email!: string;
 
-        @Property({ nullable: false })
+        @Property({ nullable: true })
         password!: string;
 
-        @Property({ nullable: false })
+        @Property({ nullable: true })
         address!: string;
 }
