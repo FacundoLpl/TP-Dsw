@@ -8,10 +8,10 @@ Content-Type: application/json
 
 {
   "subtotal": 150.0,
-  "quantity": 3,
-  "product": "672d4ec04a0fac5888ae18fd",
+  "quantity": 1,
+  "product": "672d4c554a0fac5888ae18ed",
   "user": "672d4f8bb48ca087afa73e85"
 }
 
 ### delete
-DELETE http://localhost:3000/api/carts/672d512f0a8a17ab8640da45/orders/672ce415e1cd5a14177f1bb4
+DELETE http://localhost:3000/api/orders/6737939273824d9f647fc9b4
