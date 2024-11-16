@@ -33,38 +33,38 @@ El sitio estará diseñado para admitir diferentes niveles de usuarios, entre el
 title: Class Diagram
 ---
 classDiagram
-TipoPago "*"--"1" Pedido
-Envio "0..1"--"1" Pedido
-LineaPedido "1"--*"1..*" Pedido
-Producto "*"--"1" LineaPedido
-Usuario "1"--"1" Horario
-Usuario "*"--"0..1" Pedido
-Usuario "*"--"1" Pedido
-Usuario "*"--"1" Reserva
-Horario "*"--"1" Reserva
-class Envio{
-+String horaEntrega
-+String direccion
-}
-class Pedido{
-+Integer nroPedido
-+Integer total
-+String fecha
-+Integer nroMesa
+TipoPago "*"--"1" Cart
+Envio "0..1"--"1" Cart
+LineaPedido "1"--*"1..*" Cart
+Producto "*"--"1" Order
+Usuario "1"--"1" Schedule
+Usuario "*"--"0..1" Cart
+Usuario "*"--"1" Cart
+Usuario "*"--"1" Reserve
+Horario "*"--"1" Reserve
+
+class Cart{
+  state
+  user
+ shipmentType
+ total
+ orders
 }
 class TipoPago{
 +String tipo_Pago
 }
 class Usuario{
 +Integer dni
-+String nombre
-+String apellido
-+String tipoUsuario
++String firstName
++String lastName
++String userType
 }
 
-class LineaPedido{
-+Integer cantidad
+class Order{
++Integer quantity
+product
 +Number subtotal
+cart
 }
 class Producto{
 +String nombre
@@ -78,7 +78,7 @@ class Horario{
 +String dia
 +Integer cupo
 }
-class Reserva{
+class Reserve{
 +String nroReserva
 +Integer cantPersona}
 ```
