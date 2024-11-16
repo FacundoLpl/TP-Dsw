@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {"state": "Completed"}
 ### crear cart
-GET http://localhost:3000/api/carts
+GET http://localhost:3000/api/carts/6737b23291fff672e31cf7f4
 
 ### delete
 DELETE http://localhost:3000/api/carts/673798510c172ff74e983363
