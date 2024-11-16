@@ -7,14 +7,27 @@ import {Cart} from '../Cart/cart.entity.js'
 export class User extends BaseEntity{
         @Property()
         dni!: string
+
         @Property()
         firstName!: string
+
         @Property()
         lastName!: string
+
         @Property()
         userType!: string
+
         @OneToMany(() => Cart, (cart: Cart) => cart.user, {
                 cascade: [Cascade.ALL],
         })
         carts = new Collection<Cart>(this);
+
+        @Property({ nullable: true })
+        email!: string;
+
+        @Property({ nullable: true })
+        password!: string;
+
+        @Property({ nullable: true })
+        address!: string;
 }

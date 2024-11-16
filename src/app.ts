@@ -9,6 +9,7 @@ import { categoryRouter } from './Category/category.routes.js'
 import { scheduleRouter } from './Schedule/schedule.routes.js'
 import { productRouter } from './Product/product.routes.js'
 import { cartRouter } from './Cart/cart.routes.js'
+import { orderRouter } from './Order/order.routes.js'
 
 
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api/schedules', scheduleRouter)
 app.use('/api/categories', categoryRouter)
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
+app.use('/api/orders', orderRouter)
 
 app.use((req, res)=>{res.status(404).send({message:'Resource not found'})})
 

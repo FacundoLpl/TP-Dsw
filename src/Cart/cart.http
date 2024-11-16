@@ -3,17 +3,19 @@ POST http://localhost:3000/api/carts
 Content-Type: application/json
 
 {
-  "state": "Pending",
-  "user": "672d4f6cb48ca087afa73e84",
-  "shipmentType": "672d505b6cc08034b5813221"
+  "user": "672d4f8bb48ca087afa73e85",
+  "total": 0
 }
+### update
+PUT http://localhost:3000/api/carts/67378e33d8157f5b27bc0560
+Content-Type: application/json
 
-
+{"state": "Completed"}
 ### crear cart
 GET http://localhost:3000/api/carts
 
 ### delete
-DELETE http://localhost:3000/api/carts/672d426919efbf40f2a658a1
+DELETE http://localhost:3000/api/carts/673798510c172ff74e983363
 
 
 

@@ -1,0 +1,22 @@
+/*
+PENDIENTES:
+
+si elimino un carrito no se eliminan las ordenes
+le pasamos subtotal al crear order
+verificar el stock
+verificar que existen las cosas
+politica de cancelacion de orden
+politica de creacion de reserva
+verificar que haya cupo
+
+
+TERMINADAS:
+
+sanitize input 
+cupo por horario en schedule 
+add Order: verificar estado y stock del producto. Verificar que haya cart o crear. Si ya hay orden sumar cantidad.
+order:  actualizar stock
+para borrar la order verificar q sea de un carrito pendiente
+cuando creo cart verificar q no hay un pendiente
+cuando creo una orden de un carrito q no existe tira error
+*/

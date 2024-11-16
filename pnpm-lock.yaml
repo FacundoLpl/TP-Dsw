@@ -34,10 +34,13 @@ importers:
         version: 9.0.2
       mongodb:
         specifier: 6.8.0
-        version: 6.8.0
+        version: 6.8.0(socks@2.8.3)
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@types/cors':
         specifier: ^2.8.17
@@ -792,11 +795,13 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
 snapshots:
 
   '@mikro-orm/core@5.8.10(@mikro-orm/mongodb@5.8.10)':
     dependencies:
-      '@mikro-orm/mongodb': 5.8.10(@mikro-orm/core@5.8.10)
       acorn-loose: 8.3.0
       acorn-walk: 8.2.0
       dotenv: 16.3.1
@@ -804,6 +809,8 @@ snapshots:
       globby: 11.1.0
       mikro-orm: 5.8.10
       reflect-metadata: 0.1.13
+    optionalDependencies:
+      '@mikro-orm/mongodb': 5.8.10(@mikro-orm/core@5.8.10)
 
   '@mikro-orm/mongo-highlighter@1.0.0':
     dependencies:
@@ -1272,11 +1279,13 @@ snapshots:
     optionalDependencies:
       '@mongodb-js/saslprep': 1.1.7
 
-  mongodb@6.8.0:
+  mongodb@6.8.0(socks@2.8.3):
     dependencies:
       '@mongodb-js/saslprep': 1.1.7
       bson: 6.8.0
       mongodb-connection-string-url: 3.0.1
+    optionalDependencies:
+      socks: 2.8.3
 
   ms@2.0.0: {}
 
@@ -1484,3 +1493,5 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
+
+  zod@3.23.8: {}

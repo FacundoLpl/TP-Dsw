@@ -23,7 +23,7 @@ PUT http://localhost:3000/api/products/672d4c554a0fac5888ae18ed
 Content-Type: application/json
 
 {
-    "imageUrl": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29jYWNvbGF8ZW58MHx8MHx8fDA%3D"
+    "stock": 100
 }
 
 
