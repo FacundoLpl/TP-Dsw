@@ -1,0 +1,21 @@
+### crear reservation
+POST http://localhost:3000/api/reservations
+Content-Type: application/json
+
+{
+  "user": "672d4f8bb48ca087afa73e85",
+  "total": 0
+}
+### update
+PUT http://localhost:3000/api/reservations/67378e33d8157f5b27bc0560
+Content-Type: application/json
+
+{"state": "Completed"}
+### crear reservation
+GET http://localhost:3000/api/reservations/6737b23291fff672e31cf7f4
+
+### delete
+DELETE http://localhost:3000/api/reservations/673798510c172ff74e983363
+
+
+
