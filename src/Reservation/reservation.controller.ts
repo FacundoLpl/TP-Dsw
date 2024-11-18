@@ -4,6 +4,9 @@ import { ObjectId } from "@mikro-orm/mongodb"
 import { Reservation } from "./reservation.entity.js"
 import { ReservationFilter } from "./reservation.filter.js"
 import { validateReservation } from "./reservation.schema.js"
+import { Schedule } from "../Schedule/schedule.entity.js"
+import { validateSchedule } from "../Schedule/schedule.schema.js"
+import { ScheduleFilter } from "../Schedule/schedule.filter.js"
 
 const em = orm.em // entity manager funciona como un repository de todas las clases
 
@@ -36,6 +39,29 @@ async function findOne (req: Request, res: Response){
     async function add(req: Request, res: Response) {
         try {
             const validationResult = validateReservation(req.body);
+            const filter: ScheduleFilter = { datetime: new Date(req.body.datetime) };
+let schedule = await em.findOne(Schedule, filter);
+
+            if (!schedule) {
+                const scheduleValidated = validateSchedule({
+                    datetime: req.body.datetime
+            })
+            if (!scheduleValidated.success) {
+                return res.status(400).json({ message: scheduleValidated.error.message });
+            }
+            else {
+                schedule = em.create(Schedule, {
+                    datetime: req.body.datetime,
+                    estimatedTime: scheduleValidated.data.estimatedTime,
+                    toleranceTime: scheduleValidated.data.toleranceTime,
+                    capacityLeft: scheduleValidated.data.capacityLeft - req.body.people
+                });
+                await em.persistAndFlush(schedule);
+            }}
+            else {
+                schedule.capacityLeft -= req.body.people;
+                await em.flush();
+            }
             if (!validationResult.success) 
                 { return res.status(400).json({ message: validationResult.error.message });}
             let reservation = await em.findOne( // encuentro reserva
@@ -50,7 +76,8 @@ async function findOne (req: Request, res: Response){
                   user: req.body.user,
                   state: "Pending",
                   people: req.body.people,
-                  datetime: req.body.datetime
+                  datetime: req.body.datetime,
+                  schedule: schedule.id
                 });
             await em.flush();
             res.status(201).json({ message: 'reservation created', data: reservation });}

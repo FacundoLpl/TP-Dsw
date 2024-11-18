@@ -1,9 +1,15 @@
 import zod from "zod";
 
 const scheduleSchema = zod.object({
-    timeFrom: zod.string().datetime(),
-    estimatedTime: zod.number().int(),
-    toleranceTime: zod.number().int(),
+
+    datetime: zod.string().datetime(),
+
+    estimatedTime: zod.number().int()
+    .default(60),
+
+    toleranceTime: zod.number().int()
+    .default(15),
+
     capacityLeft: zod
     .number().int()
     .default(50),

@@ -1,4 +1,5 @@
 import { Entity, Property, ManyToOne, OneToMany, Cascade, Collection, Rel, DateTimeType} from "@mikro-orm/core"
+import { Schedule } from "../Schedule/schedule.entity.js"
 
 import { BaseEntity } from "../shared/db/baseEntity.entity.js"
 import { User } from "../User/user.entity.js"
@@ -17,6 +18,9 @@ import { ShipmentType } from "../ShipmentType/shipmentType.entity.js"
     people!: number;
 
     @Property({ nullable: false })
-    datetime!: DateTimeType; //Dia y hora de la reserva
+    datetime!: Date; //Dia y hora de la reserva
+
+    @ManyToOne(() => Schedule, { nullable: false })
+    schedule!: Rel<Schedule>;
   }
   

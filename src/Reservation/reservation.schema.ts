@@ -9,10 +9,10 @@ const reservationSchema = zod.object({
     .refine(
       (value: string) =>
         value === "Completed" || value === "Pending" || value === "Canceled",
-      { message: "State must be either Complete, Pending or Canceled" }
+      { message: "State must be either Completed, Pending, or Canceled" }
     ),
-  people: zod.number().min(0, { message: "Total must be a positive number" }),
-  datetime: zod.date(),
+  people: zod.number().min(1, { message: "People must be at least 1" }),
+  datetime: zod.preprocess((arg) => (typeof arg === "string" ? new Date(arg) : arg), zod.date()),
 });
 
 export function validateReservation(data: any) {

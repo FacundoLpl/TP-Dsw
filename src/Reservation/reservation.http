@@ -1,21 +1,25 @@
+### get all
+GET http://localhost:3000/api/reservations
 ### crear reservation
 POST http://localhost:3000/api/reservations
 Content-Type: application/json
 
-{
+{ 
+  "state": "Pending",
   "user": "672d4f8bb48ca087afa73e85",
-  "total": 0
+  "people": 4,
+  "datetime": "2024-09-10T10:00:00Z"
 }
 ### update
-PUT http://localhost:3000/api/reservations/67378e33d8157f5b27bc0560
+PUT http://localhost:3000/api/reservations/673b8a854bd9c50be408e958
 Content-Type: application/json
 
 {"state": "Completed"}
-### crear reservation
-GET http://localhost:3000/api/reservations/6737b23291fff672e31cf7f4
+### get one
+GET http://localhost:3000/api/reservations/673b8a854bd9c50be408e958
 
 ### delete
-DELETE http://localhost:3000/api/reservations/673798510c172ff74e983363
+DELETE http://localhost:3000/api/reservations/673bcff144a436f36ed907c2
 
 
 
