@@ -39,9 +39,20 @@ async function findOne (req: Request, res: Response){
     async function add(req: Request, res: Response) {
         try {
             const validationResult = validateReservation(req.body);
-            const filter: ScheduleFilter = { datetime: new Date(req.body.datetime) };
-let schedule = await em.findOne(Schedule, filter);
-
+            const datetime = new Date(req.body.datetime);
+            const filter: ScheduleFilter = { datetime };
+            let schedule = await em.findOne(Schedule, filter);
+            const now = new Date();
+            const maxDate = new Date(now);
+            maxDate.setDate(maxDate.getDate() + 7); // Sumar 7 días a la fecha actual
+            
+            if (datetime <= now) {
+                return res.status(400).json({ message: "The datetime must be in the future" });
+            }
+            
+            if (datetime > maxDate) {
+                return res.status(400).json({ message: "The datetime must be within the next 7 days" });
+            }
             if (!schedule) {
                 const scheduleValidated = validateSchedule({
                     datetime: req.body.datetime
@@ -59,8 +70,13 @@ let schedule = await em.findOne(Schedule, filter);
                 await em.persistAndFlush(schedule);
             }}
             else {
+                const capacityLeft = schedule.capacityLeft
+                if (capacityLeft < req.body.people) {
+                    return res.status(400).json({ message: "Not enough capacity" });
+                }
+                else {
                 schedule.capacityLeft -= req.body.people;
-                await em.flush();
+                await em.flush();}
             }
             if (!validationResult.success) 
                 { return res.status(400).json({ message: validationResult.error.message });}

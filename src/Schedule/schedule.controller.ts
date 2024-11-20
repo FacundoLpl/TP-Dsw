@@ -2,6 +2,7 @@ import { Request, Response} from "express"
 import { orm } from "../shared/db/orm.js"
 import { Schedule } from "./schedule.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+import { validateSchedule } from "./schedule.schema.js"
 
 
 const em = orm.em
@@ -29,6 +30,9 @@ async function findOne (req: Request, res: Response){
 
 async function add (req: Request,res: Response) {
     try{
+        const validationResult = validateSchedule(req.body);
+        if (!validationResult.success) 
+            { return res.status(400).json({ message: validationResult.error.message });}
         const schedule = em.create(Schedule, req.body)
         await em.flush()
         res

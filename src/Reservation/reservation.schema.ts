@@ -11,7 +11,7 @@ const reservationSchema = zod.object({
         value === "Completed" || value === "Pending" || value === "Canceled",
       { message: "State must be either Completed, Pending, or Canceled" }
     ),
-  people: zod.number().min(1, { message: "People must be at least 1" }),
+  people: zod.number().min(1, { message: "People must be at least 1" }).max(8, { message: "People must be at most 8" }),
   datetime: zod.preprocess((arg) => (typeof arg === "string" ? new Date(arg) : arg), zod.date()),
 });
 
