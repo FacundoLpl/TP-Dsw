@@ -2,6 +2,7 @@ import { Request, Response} from "express"
 import { orm } from "../shared/db/orm.js"
 import { User } from "./user.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+import { validateUser } from "./user.schema.js"
 
 
 const em = orm.em
@@ -29,6 +30,9 @@ async function findOne (req: Request, res: Response){
 
 async function add (req: Request,res: Response) {
     try{
+        const validationResult = validateUser(req.body);
+        if (!validationResult.success) 
+            { return res.status(400).json({ message: validationResult.error.message });}
         const user = em.create(User, req.body)
         await em.flush()
         res

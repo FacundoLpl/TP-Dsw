@@ -31,9 +31,15 @@ async function findOne (req: Request, res: Response){
 async function add (req: Request,res: Response) {
     try{
         const validationResult = validateSchedule(req.body);
-        if (!validationResult.success) 
-            { return res.status(400).json({ message: validationResult.error.message });}
-        const schedule = em.create(Schedule, req.body)
+        if (!validationResult.success) { 
+            return res.status(400).json({ message: validationResult.error.message });
+        }
+        const schedule = em.create(Schedule, {
+            datetime: req.body.datetime,
+            estimatedTime: validationResult.data.estimatedTime,
+            toleranceTime: validationResult.data.toleranceTime,
+            capacityLeft: validationResult.data.capacityLeft
+        })
         await em.flush()
         res
             .status(201)

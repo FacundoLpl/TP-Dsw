@@ -2,6 +2,7 @@ import { Request, Response} from "express"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
 import { Product } from "./product.entity.js"
+import { validateProduct } from "./product.schema.js"
 
 //const repository = new categoryRepository()
 const em = orm.em // entity manager funciona como un repository de todas las clases
@@ -29,6 +30,9 @@ async function findOne (req: Request, res: Response){
 
 async function add(req: Request, res: Response) {
         try {
+            const validationResult = validateProduct(req.body);
+            if (!validationResult.success) 
+                { return res.status(400).json({ message: validationResult.error.message });}
             const product = em.create(Product, req.body); 
     
             await em.flush();

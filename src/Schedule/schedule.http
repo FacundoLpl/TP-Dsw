@@ -8,14 +8,11 @@ POST http://localhost:3000/api/schedules
 Content-Type: application/json
 
 {
-    "datetime": "2025-10-10T20:00:00Z",
-    "estimatedTime": 50,
-    "toleranceTime": 30,
-    "capacityLeft": 5
+    "datetime": "2025-10-10T20:00:00Z"
 }
 
 ### modificar un horario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/schedules/673e4a499e23337dfd071a5b
+PUT http://localhost:3000/api/schedules/673e4ddb0867c47d348ebaca
 Content-Type: application/json
 
 {
@@ -27,5 +24,5 @@ Content-Type: application/json
 
 
 ### borrar un horario
-DELETE http://localhost:3000/api/schedules/673e4d2a69295893c11444ac
+DELETE http://localhost:3000/api/schedules/673e52d60599a66dc6b7ad45
 

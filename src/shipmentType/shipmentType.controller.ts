@@ -2,6 +2,7 @@ import { Request, Response} from "express"
 import { orm } from "../shared/db/orm.js"
 import { ShipmentType } from "./shipmentType.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+import { validateshipmentType } from "./shipmentType.schema.js"
 
 
 const em = orm.em
@@ -10,7 +11,7 @@ const em = orm.em
 async function findAll(req: Request,res: Response) { 
     try{
         const shipmentTypes = await em.find('ShipmentType', {})
-        res.status(200).json({message: 'finded all shipmentTypes', data: shipmentTypes})
+        res.status(200).json({message: 'found all shipmentTypes', data: shipmentTypes})
     } catch (error: any){
         res.status(500).json({message: error.message})
     }
@@ -29,6 +30,9 @@ async function findOne (req: Request, res: Response){
 
 async function add (req: Request,res: Response) {
     try{
+        const validationResult = validateshipmentType(req.body);
+        if (!validationResult.success) 
+            { return res.status(400).json({ message: validationResult.error.message });}
         const shipmentType = em.create(ShipmentType, req.body)
         await em.flush()
         res

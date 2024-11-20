@@ -2,6 +2,7 @@ import { Request, Response} from "express"
 import { Category } from "./category.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
+import { validateCategory } from "./category.schema.js"
 
 const em = orm.em
 
@@ -29,6 +30,9 @@ async function findOne (req: Request, res: Response){
 
 async function add (req: Request,res: Response) {
     try{
+        const validationResult = validateCategory(req.body);
+        if (!validationResult.success)
+            { return res.status(400).json({ message: validationResult.error.message });}
         const category = em.create(Category, req.body)
         await em.flush()
         res
