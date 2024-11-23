@@ -7,8 +7,8 @@ Content-Type: application/json
 { 
   "state": "Pending",
   "user": "672d4f8bb48ca087afa73e85",
-  "people": 3,
-  "datetime": "2024-11-30T10:00:00Z"
+  "people": 5,
+  "datetime": "2024-11-24T20:00:00Z"
 }
 ### update
 PUT http://localhost:3000/api/reservations/673b8a854bd9c50be408e958
@@ -19,7 +19,7 @@ Content-Type: application/json
 GET http://localhost:3000/api/reservations/673b8a854bd9c50be408e958
 
 ### delete
-DELETE http://localhost:3000/api/reservations/673e4ad09e23337dfd071a5f
+DELETE http://localhost:3000/api/reservations/67425696c36901fc6f540943
 
 
 

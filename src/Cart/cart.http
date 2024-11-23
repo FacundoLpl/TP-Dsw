@@ -7,15 +7,15 @@ Content-Type: application/json
   "total": 0
 }
 ### update
-PUT http://localhost:3000/api/carts/67378e33d8157f5b27bc0560
+PUT http://localhost:3000/api/carts/6737a48052d4fc63a20e3b28
 Content-Type: application/json
 
-{"state": "Completed"}
+{"state": "Pending"}
 ### crear cart
-GET http://localhost:3000/api/carts/6737b23291fff672e31cf7f4
+GET http://localhost:3000/api/carts
 
 ### delete
-DELETE http://localhost:3000/api/carts/673798510c172ff74e983363
+DELETE http://localhost:3000/api/carts/6742688e7468771cf494dbc4
 
 
 

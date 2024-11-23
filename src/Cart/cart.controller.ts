@@ -80,7 +80,7 @@ async function findOne (req: Request, res: Response){
 async function remove(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
-        const cart = em.getReference(Cart, _id )
+        const cart = await em.findOneOrFail(Cart, _id, { populate: ['orders'] });
         await em.removeAndFlush(cart)
         res.status(200).json({ message: "Cart removed", data: cart })
     } catch (error: any) {
