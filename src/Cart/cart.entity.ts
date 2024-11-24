@@ -25,13 +25,13 @@ import { ShipmentType } from "../ShipmentType/shipmentType.entity.js"
     orders = new Collection<Order>(this);
 
     @Property({ nullable: true })
-    deliveryAddress?: string; // Dirección de entrega si el tipo de envío es "entrega"
+    deliveryAddress?: string; 
 
     @Property({ nullable: true })
-    paymentMethod?: string; // Método de pago (ejemplo: 'efectivo')
+    paymentMethod?: string; 
 
 
     @Property({ nullable: true })
-    additionalInstructions?: string; // Instrucciones adicionales del usuario (opcional)
+    additionalInstructions?: string; 
   }
   

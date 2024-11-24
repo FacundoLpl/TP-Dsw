@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { /*sanitizecategoryInput, */findAll, findOne, add, update, remove} from "./category.controller.js";
+import { findAll, findOne, add, update, remove} from "./category.controller.js";
 
 export const categoryRouter = Router()
 
 categoryRouter.get('/', findAll)
 categoryRouter.get('/:id', findOne)
-categoryRouter.post('/', /*sanitizecategoryInput,*/ add)
-categoryRouter.put('/:id', /*sanitizecategoryInput,*/ update)
-//categoryRouter.patch('/:id', sanitizecategoryInput, update)
-categoryRouter.delete('/:id', /*sanitizecategoryInput,*/ remove)
+categoryRouter.post('/', add)
+categoryRouter.put('/:id', update)
+categoryRouter.delete('/:id', remove)

@@ -1,5 +1,4 @@
-import {Entity, Property, ManyToOne, Rel, PrimaryKey } from '@mikro-orm/core'
-import { ObjectId } from 'mongodb'
+import {Entity, Property, ManyToOne, Rel} from '@mikro-orm/core'
 import { Category } from '../Category/category.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 

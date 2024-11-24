@@ -1,7 +1,6 @@
 import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
 import config from "dotenv"
-import { MongoDriver } from '@mikro-orm/mongodb'
 
 config.config()
 const connectionString = process.env.MONGO_URI || 'mongodb://localhost:27017/restaurant';
