@@ -8,11 +8,23 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-    "dni": "27316617",
-    "firstName": "German",
-    "lastName": "Baro",
-    "userType": "Admin"
+  "firstName": "Johnan",
+  "lastName": "Doeanan",
+  "dni": "43349481",
+  "email": "johndoe@example.com",
+  "password": "miContraseñaSegura",
+  "address": "123 Main St, Ciudad, País",
+  "userType": "Cliente"
 }
+### login
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com",
+  "password": "miContraseñaSegura"
+}
+
 ### ID 
 @id = {{createUser.response.body.data.id}}
 ### obtengo un user especifico

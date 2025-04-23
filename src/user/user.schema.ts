@@ -2,9 +2,8 @@ import zod from "zod";
 
 const userSchema = zod.object({
   firstName: zod.string().min(5),
-
+  dni: zod.string().min(7, "DNI should have at least 7 characters"),
   lastName: zod.string().min(5),
-
   email: zod.string().email({ message: "Invalid email address" }),
   password: zod.string().min(8),
   address: zod.string(),

@@ -8,10 +8,13 @@ POST http://localhost:3000/api/products
 Content-Type: application/json
 
 { 
-"name": "Helado",
-"price": 4000,
-"description": "Tres bolas de helado, servidas en tu sabor favorito, la manera perfecta de refrescarte.", 
-"category": "672d4b4cdda5ebf5cf0b7e6e"
+"name": "Pure Smasheado",
+"price": 2200,
+"stock": 30,
+"description": "Pure de papas, batatas o mixto", 
+"category": "6806528bfb5d2fe5e23053a4",
+"img_url": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcelestedistribuidora.mitiendanube.com%2Fproductos%2Fcoca-cola-500ml-pack-x-12%2F&psig=AOvVaw3SfK0CpmF6ntLSeN9-cVi4&ust=1745330854313000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCOiyx6im6YwDFQAAAAAdAAAAABAE",
+"state": "Active"
 }
 ### ID 
 @id = {{createUser.response.body.data.id}}

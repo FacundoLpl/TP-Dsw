@@ -8,7 +8,7 @@ POST http://localhost:3000/api/categories
 Content-Type: application/json
 
 {
-    "name": "Postres"
+    "name": "Principales"
 }
 ### obtengo un categoria especifico
 ### ID 

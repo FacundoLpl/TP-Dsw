@@ -3,7 +3,7 @@ import { orm } from "../shared/db/orm.js"
 import { User } from "./user.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
 import { validateUser } from "./user.schema.js"
-
+import bcrypt from 'bcrypt';
 
 const em = orm.em
 
@@ -28,20 +28,45 @@ async function findOne (req: Request, res: Response){
         res.status(500).json({message: error.message})}
     }
 
-async function add (req: Request,res: Response) {
-    try{
-        const validationResult = validateUser(req.body);
-        if (!validationResult.success) 
-            { return res.status(400).json({ message: validationResult.error.message });}
-        const user = em.create(User, req.body)
-        await em.flush()
-        res
-            .status(201)
-            .json({message: 'user created', data: user})
-    }catch (error: any){
-        res.status(500).json({message: error.message})
-    }}
 
+    async function add(req: Request, res: Response) {
+      try {
+        // Validar los datos usando Zod
+        const validationResult = validateUser(req.body);
+        if (!validationResult.success) {
+          return res.status(400).json({ message: validationResult.error.message });
+        }
+    
+        // 🔐 Encriptar la contraseña antes de guardarla
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    
+        // Crear un nuevo objeto con la contraseña encriptada
+        const userData = {
+          ...req.body,
+          password: hashedPassword,
+        };
+    
+        // Crear el usuario en la base de datos
+        const user = em.create(User, userData);
+        await em.flush();
+    
+        res.status(201).json({
+          message: 'user created',
+          data: {
+            id: user.id,
+            dni: user.dni,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            userType: user.userType,
+            address: user.address,
+          }
+        });
+      } catch (error: any) {
+        res.status(500).json({ message: error.message });
+      }
+    }
+    
 async function update(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
@@ -64,5 +89,9 @@ async function remove(req: Request,res: Response){
         res.status(500).json({ message: error.message })
     }}
 
+    async function findUserByEmail(email: string) {
+        return await em.findOne(User, { email });
+      }
+      
 
-export {findAll, findOne, add, update, remove}
+export {findAll, findOne, add, update, remove, findUserByEmail}
