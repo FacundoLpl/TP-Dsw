@@ -4,6 +4,7 @@ import { User } from "./user.entity.js"
 import { ObjectId } from "@mikro-orm/mongodb"
 import { validateUser } from "./user.schema.js"
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken"
 
 const em = orm.em
 
@@ -92,6 +93,34 @@ async function remove(req: Request,res: Response){
     async function findUserByEmail(email: string) {
         return await em.findOne(User, { email });
       }
+
+      async function login(req: Request, res: Response){
+        const { email, password } = req.body;
+      
+        try {
+          // 1. Buscar usuario por email
+          const user = await findUserByEmail(email); // esta función la armamos abajo
+          if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+      
+          // 2. Verificar la contraseña
+          const passwordMatch = await bcrypt.compare(password, user.password);
+          if (!passwordMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
+      
+          // 3. Generar token JWT
+          const token = jwt.sign(
+            { id: user.id, userType: user.userType },
+            process.env.JWT_SECRET || 'clave-secreta',
+            { expiresIn: '1h' }
+          );
+      
+          // 4. Devolver token y tipo de usuario
+          res.json({ token, userType: user.userType, id: user.id });
+      
+        } catch (error) {
+          console.error('Error en login:', error);
+          res.status(500).json({ message: 'Error interno del servidor' });
+        }
+      };
       
 
-export {findAll, findOne, add, update, remove, findUserByEmail}
+export {findAll, findOne, add, update, remove, findUserByEmail, login}
