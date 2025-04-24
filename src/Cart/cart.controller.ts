@@ -6,6 +6,7 @@ import { CartFilter } from "./cart.filter.js"
 import { validateCart } from "./cart.schema.js"
 
 
+
 const em = orm.em // entity manager funciona como un repository de todas las clases
 
 
@@ -42,23 +43,22 @@ async function findOne (req: Request, res: Response){
             const validationResult = validateCart(req.body);
             if (!validationResult.success) 
                 { return res.status(400).json({ message: validationResult.error.message });}
-            let cart = await em.findOne( // encuentro carrito
-                Cart,
-                { user: req.body.user,
-                  state: "Pending",
-                  total: req.body.total,}
-              );
+            let cart = await em.findOne(Cart, {
+                user: req.user.id,
+                state: "Pending",
+              });
+              
               if (cart) { 
                 res.status(400).json({ message: "User already has a cart pending" });}
-              else {  
                 cart = em.create(Cart, {
-                  user: req.body.user,
-                  state: "Pending",
-                  total: req.body.total,
-                });
+                    user: req.user.id,
+                    state: "Pending",
+                    total: req.body.total,
+                  });
+                  
             await em.flush();
             res.status(201).json({ message: 'cart created', data: cart });}
-        } catch (error: any) {
+         catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -69,7 +69,7 @@ async function findOne (req: Request, res: Response){
         try {
             const cart: Cart = req.body;
               const id = req.params.id
-              const cartToUpdate = await em.findOneOrFail(Cart, { id });
+              const cartToUpdate = await em.findOneOrFail(Cart, { id, user: req.user.id });
               em.assign(cartToUpdate, req.body);
               await em.flush();
               res.status(200).json({ message: "Cart updated", data: cartToUpdate });
@@ -77,15 +77,25 @@ async function findOne (req: Request, res: Response){
                 res.status(500).json({ message: error.message });
   }}
      
-async function remove(req: Request,res: Response){
+  async function remove(req: Request, res: Response) {
     try {
-        const _id = new ObjectId(req.params.id)
-        const cart = await em.findOneOrFail(Cart, _id, { populate: ['orders'] });
-        await em.removeAndFlush(cart)
-        res.status(200).json({ message: "Cart removed", data: cart })
+      const userId = req.user?.id;
+  
+      if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+  
+      const _id = new ObjectId(req.params.id);
+  
+      const cart = await em.findOneOrFail(Cart, { _id, user: userId }, { populate: ['orders'] });
+  
+      await em.removeAndFlush(cart);
+  
+      return res.status(200).json({ message: 'Cart removed', data: cart });
     } catch (error: any) {
-        res.status(500).json({ message: error.message })
-    }}
+      return res.status(500).json({ message: error.message });
+    }
+  }
     
 
 export { findAll, findOne, add, update, remove}

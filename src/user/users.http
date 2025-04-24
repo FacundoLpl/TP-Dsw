@@ -28,7 +28,7 @@ Content-Type: application/json
 ### ID 
 @id = {{createUser.response.body.data.id}}
 ### obtengo un user especifico
-GET http://localhost:3000/api/users/{{id}}
+GET http://localhost:3000/api/users/68080ed5d6d3e13e44ea858a
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
 PUT http://localhost:3000/api/users/66d8efd9f97ea117d363ce7c

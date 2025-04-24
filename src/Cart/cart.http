@@ -15,7 +15,7 @@ Content-Type: application/json
 GET http://localhost:3000/api/carts
 
 ### delete
-DELETE http://localhost:3000/api/carts/6742688e7468771cf494dbc4
+DELETE http://localhost:3000/api/carts/6809be5031bd4eb1258c33ee
 
 
 

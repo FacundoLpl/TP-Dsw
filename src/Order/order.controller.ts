@@ -43,17 +43,18 @@ async function findOne (req: Request, res: Response){
         ) {
           return res.status(400).json({ message: "Product not available" }); //devuelvo error
         }
-        let cart = await em.findOne( // encuentro carrito
-          Cart,
-          { user: req.body.user,
-            state: "Pending"},
-        );
+        let cart = await em.findOne(Cart, {
+          user: req.user.id,
+          state: "Pending"
+        });
+        
         if (!cart) { // si no tiene cart pendiente, creo uno
           cart = em.create(Cart, {
-            user: req.body.user,
+            user: req.user.id,
             state: "Pending",
             total: 0,
           });
+          
           await em.persistAndFlush(cart);
         } else { // ya tiene cart pendiente
           cart.total += validationResult.data.subtotal;
@@ -99,21 +100,33 @@ async function findOne (req: Request, res: Response){
         }
         }
     
-async function remove(req: Request,res: Response){
-    try {
-        const _id = new ObjectId(req.params.id)
-        const order = await em.findOneOrFail(Order, { _id }, { populate: ['cart'] });
-        const cartO = order.cart
-        if (cartO.state === 'Completed' ) {
-            return res.status(400).json({ message: "Cannot remove order from completed cart" })
+        async function remove(req: Request, res: Response) {
+          try {
+            const userId = req.user?.id;
+        
+            if (!userId) {
+              return res.status(401).json({ message: 'Unauthorized' });
+            }
+        
+            const _id = new ObjectId(req.params.id);
+        
+            const order = await em.findOneOrFail(Order, { _id }, { populate: ['cart'] });
+        
+            if (!order.cart || order.cart.user.id !== userId) {
+              return res.status(403).json({ message: 'Forbidden: Not your order' });
+            }
+        
+            if (order.cart.state === 'Completed') {
+              return res.status(400).json({ message: 'Cannot remove order from completed cart' });
+            }
+        
+            await em.removeAndFlush(order);
+        
+            return res.status(200).json({ message: 'Order removed', data: order });
+          } catch (error: any) {
+            return res.status(500).json({ message: error.message });
+          }
         }
-        else {
-        await em.removeAndFlush(order)
-        res.status(200).json({ message: "Order removed", data: order })}
-        } catch (error: any) {
-        res.status(500).json({ message: error.message })
-    }}
-
 
 
 export {findAll, findOne, add,update,remove}
