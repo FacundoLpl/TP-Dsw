@@ -31,6 +31,8 @@ async function findOne (req: Request, res: Response){
 async function add (req: Request,res: Response) {
     try{
         const validationResult = validateCategory(req.body);
+        const categoryPrev = await em.findOne(Category, { name: req.body.name })
+        if (categoryPrev != null) { return res.status(400).json({ message: "Already exists a category with that name" });}
         if (!validationResult.success)
             { return res.status(400).json({ message: validationResult.error.message });}
         const category = em.create(Category, req.body)
@@ -42,7 +44,7 @@ async function add (req: Request,res: Response) {
         res.status(500).json({message: error.message})
     }}
 
-    async function update(req: Request,res: Response){
+async function update(req: Request,res: Response){
         try {
             const _id = new ObjectId(req.params.id)
             const categoryToUpdate = em.getReference(Category,  _id )

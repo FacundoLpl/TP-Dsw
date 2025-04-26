@@ -4,9 +4,8 @@ import jwt from 'jsonwebtoken';
 
 async function authenticateToken(req: Request,res: Response,  next: NextFunction
 ) {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.get('Authorization');
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
   if (!token) {
     return res.status(401).json({ message: 'Token no proporcionado' });
   }

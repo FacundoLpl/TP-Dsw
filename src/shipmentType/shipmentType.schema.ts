@@ -1,8 +1,8 @@
 import zod from "zod";
 
 const shipmentTypeSchema = zod.object({
-    estimatedTime: zod.number().int(),
-    type: zod.string().min(5),
+    estimatedTime: zod.number().int().min(0),
+    type: zod.string().min(0),
 
 })
 

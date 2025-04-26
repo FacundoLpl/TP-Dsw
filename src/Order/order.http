@@ -5,13 +5,15 @@ GET http://localhost:3000/api/orders
 @id = 672ce1aee1cd5a14177f1bb0
 POST http://localhost:3000/api/orders
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjIyNzU5LCJleHAiOjE3NDU2MjYzNTl9._HEhpo-GIlEdqb4NGGr7VHoDbFy8fc8ZlE4V1DF7Bas
 
 {
-  "subtotal": 150.0,
-  "quantity": 1,
+  "subtotal": 354.0,
+  "quantity": 1.5,
   "product": "672d4c554a0fac5888ae18ed",
   "user": "672d4f8bb48ca087afa73e85"
 }
 
 ### delete
 DELETE http://localhost:3000/api/orders/673f61de63d0889b9dbbe388
+

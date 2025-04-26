@@ -5,6 +5,6 @@ export const productRouter = Router()
 
 productRouter.get('/', findAll)
 productRouter.get('/:id', findOne)
-productRouter.post('/',authenticateToken, isAdmin, add)
+productRouter.post('/',authenticateToken, add)
 productRouter.put('/:id',authenticateToken, isAdmin, update)
 productRouter.delete('/:id', authenticateToken, isAdmin,remove)

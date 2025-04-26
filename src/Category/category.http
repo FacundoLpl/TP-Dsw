@@ -6,14 +6,17 @@ GET http://localhost:3000/api/categories
 # @name createCategory
 POST http://localhost:3000/api/categories
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjI5NDkwLCJleHAiOjE3NDU2MzMwOTB9.fgSHuMSgvtMufrIq0WV2yGlJZ40Ay1_f7_beOuLw-sQ
 
 {
     "name": "Principales"
 }
 ### obtengo un categoria especifico
 ### ID 
-@id = {{createCategory.response.body.data.id}}
-GET http://localhost:3000/api/categories/{{id}}
+
+GET http://localhost:3000/api/categories/680c19ec22e59b4bcfa32dc8
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjIyNzU5LCJleHAiOjE3NDU2MjYzNTl9._HEhpo-GIlEdqb4NGGr7VHoDbFy8fc8ZlE4V1DF7Bas
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
 PUT http://localhost:3000/api/categories/66da39eed3173d2a2c1944d9
@@ -26,5 +29,6 @@ Content-Type: application/json
 
 
 ### borrar un categorias
-DELETE http://localhost:3000/api/categories/672d4aa6dda5ebf5cf0b7e6a
-
+DELETE http://localhost:3000/api/categories/680c19ec22e59b4bcfa32dc8
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjIyNzU5LCJleHAiOjE3NDU2MjYzNTl9._HEhpo-GIlEdqb4NGGr7VHoDbFy8fc8ZlE4V1DF7Bas

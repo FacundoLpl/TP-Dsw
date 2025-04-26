@@ -21,7 +21,7 @@ const scheduleSchema = zod.object({
     .default(15),
 
     capacityLeft: zod
-    .number().int()
+    .number().int().min(0)
     .default(50),
 })
 

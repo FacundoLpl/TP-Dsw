@@ -1,9 +1,14 @@
 import zod from "zod";
 
 const orderSchema = zod.object({
-  subtotal: zod.number(),
+  subtotal: zod
+  .number()
+  .min (0,"subtotal must be positive"),
   product: zod.string(),
-  quantity: zod.number().min(1),
+  quantity: zod
+  .number()
+  .int("quantity must be a positive integer")
+  .min(1),
   cart: zod.string().optional(),
 });
 

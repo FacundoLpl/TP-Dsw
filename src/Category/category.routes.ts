@@ -5,6 +5,10 @@ export const categoryRouter = Router()
 
 categoryRouter.get('/', findAll)
 categoryRouter.get('/:id', findOne)
-categoryRouter.post('/',authenticateToken, add)
-categoryRouter.put('/:id',authenticateToken, update)
-categoryRouter.delete('/:id',authenticateToken, remove)
+
+
+categoryRouter.use(authenticateToken); 
+
+categoryRouter.post('/', add)
+categoryRouter.put('/:id', update)
+categoryRouter.delete('/:id', remove)
