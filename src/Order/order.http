@@ -1,19 +1,26 @@
 ### obtener todos las orders
 GET http://localhost:3000/api/orders
-
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 ### crear un nuevo order
 @id = 672ce1aee1cd5a14177f1bb0
 POST http://localhost:3000/api/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjIyNzU5LCJleHAiOjE3NDU2MjYzNTl9._HEhpo-GIlEdqb4NGGr7VHoDbFy8fc8ZlE4V1DF7Bas
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NzY2NzI3LCJleHAiOjE3NDU3NzAzMjd9.BDthgu5yuL7dBzUSFZaslj_IDhesC3xCRQdDaWrpvmI
 
 {
   "subtotal": 354.0,
-  "quantity": 1.5,
-  "product": "672d4c554a0fac5888ae18ed",
-  "user": "672d4f8bb48ca087afa73e85"
+  "quantity": 3,
+  "product": "672d4d154a0fac5888ae18f2"
 }
+###
+PUT http://localhost:3000/api/orders/680e49b014f13f676cf879ee
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 
+{
+  "quantity": 9
+}
 ### delete
 DELETE http://localhost:3000/api/orders/673f61de63d0889b9dbbe388
 

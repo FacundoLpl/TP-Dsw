@@ -11,7 +11,7 @@ const em = orm.em
 async function findAll(req: Request,res: Response) { 
     try{
         const orders = await em.find('Order', {})
-        res.status(200).json({message: 'finded all orders', data: orders})
+        res.status(200).json({message: 'found all orders', data: orders})
     } catch (error: any){
         res.status(500).json({message: error.message})
     }
@@ -29,76 +29,125 @@ async function findOne (req: Request, res: Response){
     }
 
 
-    async function add (req: Request, res: Response) {
+    async function add(req: Request, res: Response) {
       try {
-        const validationResult = validateOrder(req.body); // uso order schema para sanitizar
-        if (!validationResult.success) { // datos incorrectos, error
+        const validationResult = validateOrder(req.body);
+        if (!validationResult.success) {
           return res.status(400).json({ message: validationResult.error.message });
         }
+    
         const product = await em.findOne(Product, validationResult.data.product);
-        if ( // si no existe el producto, esta archivado o no hay stock
-          !product ||
-          product.state === "Archived" ||
-          product.stock < validationResult.data.quantity
-        ) {
-          return res.status(400).json({ message: "Product not available" }); //devuelvo error
+    
+        // Validación fuerte: si no existe, archivado o stock inválido
+
+if (
+  !product ||
+  product.state === "Archived" ||
+  product.stock == null || // null o undefined
+  typeof product.stock !== "number" || 
+  isNaN(product.stock) || // <<<<<< ESTA es la que faltaba
+  product.stock < validationResult.data.quantity
+)
+ {
+          return res.status(400).json({ message: "Product not available" });
         }
+
         let cart = await em.findOne(Cart, {
           user: req.user.id,
           state: "Pending"
         });
-        
-        if (!cart) { // si no tiene cart pendiente, creo uno
+    
+        if (!cart) {
           cart = em.create(Cart, {
             user: req.user.id,
             state: "Pending",
             total: 0,
           });
-          
           await em.persistAndFlush(cart);
-        } else { // ya tiene cart pendiente
-          cart.total += validationResult.data.subtotal;
-        }
-        validationResult.data.cart = cart.id; // agrego el cart al order (o el nuevo o el encontrado)
-        // Asegurarse de que la colección 'orders' esté completamente cargada
-        await cart.orders.init();
-        // Verificar si ya existe una orden con el mismo producto en el carrito
-        const existingOrder = cart.orders.getItems().find(order => order.product === product);
-        if (existingOrder) { // si ya existe el producto en el carrito, actualizo la cantidad
+        } 
+    
+        // SIEMPRE actualizar el total del carrito
+        cart.total += validationResult.data.subtotal;
+    
+        validationResult.data.cart = cart.id;
+        await cart.orders.init(); // asegurar que las órdenes estén cargadas
+    
+        const existingOrder = cart.orders.getItems().find(order => {
+          const orderProductId = order.product instanceof Product ? order.product.id : order.product;
+          return orderProductId === product.id;
+        });
+    
+        if (existingOrder) {
           existingOrder.quantity += validationResult.data.quantity;
           existingOrder.subtotal += validationResult.data.subtotal;
-          em.persist(existingOrder);          // Persistir la orden modificada
-          product.stock -= validationResult.data.quantity; // Actualizar el stock del producto
-        } else { // si no existe, creo un nuevo order
-          const order = em.create(Order, { // creo el order
+          em.persist(existingOrder);
+        } else {
+          const order = em.create(Order, {
             quantity: validationResult.data.quantity,
             product: product,
             cart: cart,
             subtotal: validationResult.data.subtotal,
           });
-          product.stock -= validationResult.data.quantity; // Actualizar el stock del producto
-          em.persist(order); // Persistir la nueva orden
+          em.persist(order);
         }
-        em.persist(cart); //Persistir el carrito si es necesario (en caso de que se haya modificado el total)
-        await em.flush(); // Guardar todos los cambios
-        res.status(201).json({ message: "Order added to cart:", data: cart });
+    
+        // Actualizar stock del producto
+        product.stock -= validationResult.data.quantity;
+        em.persist(product);
+    
+        em.persist(cart); // por si el total cambió
+        await em.flush(); // Guardar todo junto
+    
+        res.status(201).json({ message: "Order added to cart", data: cart });
       } catch (error: any) {
         res.status(500).json({ message: error.message });
       }
     }
     
 
-    async function update(req: Request,res: Response){
-        try {
-            const _id = new ObjectId(req.params.id)
-            const orderToUpdate = em.getReference(Order,  _id )
-            em.assign(orderToUpdate, req.body);
-            await em.flush();
-            res.status(200).json({ message: "Order updated", data: orderToUpdate })
-        } catch (error: any) {
-            res.status(500).json({ message: error.message });
+    async function update(req: Request, res: Response) {
+      try {
+        const _id = new ObjectId(req.params.id);
+        
+        // Cargar la orden real (populate product para poder acceder)
+        const orderToUpdate = await em.findOneOrFail(Order, { _id }, { populate: ['product'] });
+    
+        const oldQuantity = orderToUpdate.quantity;
+        const newQuantity = req.body.quantity;
+    
+        if (typeof newQuantity !== "number" || newQuantity <= 0) {
+          return res.status(400).json({ message: "Invalid quantity" });
         }
+    
+        // Calcular la diferencia
+        const quantityDifference = oldQuantity - newQuantity;
+    
+        if (quantityDifference !== 0) {
+          const product = orderToUpdate.product as Product;
+    
+          if (quantityDifference > 0) {
+            // Se redujo la cantidad -> DEVOLVER stock al producto
+            product.stock += quantityDifference;
+          } else {
+            // Se aumentó la cantidad -> QUITAR stock al producto
+            const needed = Math.abs(quantityDifference);
+            if (product.stock < needed) {
+              return res.status(400).json({ message: "Not enough stock to increase order" });
+            }
+            product.stock -= needed;
+          }
+          
+          em.persist(product); // Persistir el cambio de stock
         }
+    
+        em.assign(orderToUpdate, req.body); // Actualizar los campos de la orden
+        await em.flush();
+    
+        res.status(200).json({ message: "Order updated", data: orderToUpdate });
+      } catch (error: any) {
+        res.status(500).json({ message: error.message });
+      }
+    }
     
         async function remove(req: Request, res: Response) {
           try {
@@ -110,8 +159,7 @@ async function findOne (req: Request, res: Response){
         
             const _id = new ObjectId(req.params.id);
         
-            const order = await em.findOneOrFail(Order, { _id }, { populate: ['cart'] });
-        
+            const order = await em.findOneOrFail(Order, { _id }, { populate: ['cart','product'] });
             if (!order.cart || order.cart.user.id !== userId) {
               return res.status(403).json({ message: 'Forbidden: Not your order' });
             }
@@ -119,7 +167,13 @@ async function findOne (req: Request, res: Response){
             if (order.cart.state === 'Completed') {
               return res.status(400).json({ message: 'Cannot remove order from completed cart' });
             }
-        
+           // Forzar a que `product` es un Product
+           const product = order.product as Product;
+
+           // Actualizar el stock
+           product.stock += order.quantity;
+           await em.persistAndFlush(product);
+
             await em.removeAndFlush(order);
         
             return res.status(200).json({ message: 'Order removed', data: order });

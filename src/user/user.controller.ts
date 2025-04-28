@@ -11,7 +11,7 @@ const em = orm.em;
 async function findAll(req: Request, res: Response) { 
     try {
         // Solo Admin puede listar todos los usuarios
-        if (req.user.role !== 'Admin') {
+        if (req.user.userType !== 'Admin') {
             return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
         }
 
@@ -28,7 +28,7 @@ async function findOne(req: Request, res: Response) {
         const user = await em.findOneOrFail(User, { _id });
 
         // Admin puede ver cualquier usuario, otros solo pueden verse a sí mismos
-        if (req.user.role !== 'Admin' && req.user.id !== user.id) {
+        if (req.user.userType !== 'Admin' && req.user.id !== user.id) {
             return res.status(403).json({ message: 'Acceso denegado' });
         }
 
@@ -40,14 +40,16 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
-        // Solo Admin puede crear nuevos usuarios
-        if (req.user.role !== 'Admin') {
-            return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
-        }
-
         const validationResult = validateUser(req.body);
         if (!validationResult.success) {
-            return res.status(400).json({ message: validationResult.error.message });
+            return res.status(400).json({
+                message: 'Datos de usuario inválidos',
+                errors: validationResult.error.errors, // 👈 Detalla los campos con error
+              });
+        }
+        const userWithSameDni = await findUserByDni(req.body.dni)
+       if (userWithSameDni != null) {
+            return res.status(409).json({ message: 'Ya existe un usuario con ese DNI' });
         }
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -55,7 +57,7 @@ async function add(req: Request, res: Response) {
             ...req.body,
             password: hashedPassword,
         };
-
+        console.log("3")
         const user = em.create(User, userData);
         await em.flush();
 
@@ -67,10 +69,10 @@ async function add(req: Request, res: Response) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                role: user.userType, // Ahora usamos role en lugar de userType
+                userType: user.userType, // Ahora usamos userType en lugar de userType
                 address: user.address,
             }
-        });
+        });console.log("4")
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -80,21 +82,25 @@ async function update(req: Request, res: Response) {
     try {
         const _id = new ObjectId(req.params.id);
         const userToUpdate = await em.findOneOrFail(User, { _id });
-
+        
+        
         // Admin puede modificar cualquier usuario, otros solo pueden modificarse a sí mismos
-        if (req.user.role !== 'Admin' && req.user.id !== userToUpdate.id) {
+        if (req.user.userType !== 'Admin' && req.user.id !== userToUpdate.id) {
             return res.status(403).json({ message: 'Acceso denegado' });
         }
 
         // Usuarios no-admin no pueden cambiar su rol
-        if (req.user.role !== 'Admin' && req.body.userType && req.body.userType !== userToUpdate.userType) {
+        if (req.user.userType !== 'Admin' && req.body.userType && req.body.userType !== userToUpdate.userType) {
             return res.status(403).json({ message: 'No puedes cambiar tu tipo de usuario' });
         }
+
 
         // Si se está actualizando la contraseña, encriptarla
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
+
+      
 
         em.assign(userToUpdate, req.body);
         await em.flush();
@@ -110,7 +116,7 @@ async function remove(req: Request, res: Response) {
         const user = await em.findOneOrFail(User, { _id });
 
         // Solo Admin puede eliminar usuarios
-        if (req.user.role !== 'Admin') {
+        if (req.user.userType !== 'Admin') {
             return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
         }
 
@@ -123,6 +129,10 @@ async function remove(req: Request, res: Response) {
 
 async function findUserByEmail(email: string) {
     return await em.findOne(User, { email });
+}
+
+async function findUserByDni(dni: string) {
+    return await em.findOne(User, { dni });
 }
 
 async function login(req: Request, res: Response) {
@@ -144,11 +154,11 @@ async function login(req: Request, res: Response) {
             return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
-        // Generar token con role (userType)
+        // Generar token con userType (userType)
         const token = jwt.sign(
             {
                 id: user.id,
-                role: user.userType, // Usamos role en lugar de userType
+                userType: user.userType, // Usamos userType en lugar de userType
             },
             process.env.JWT_SECRET!,
             { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
@@ -156,7 +166,7 @@ async function login(req: Request, res: Response) {
 
         res.json({
             token,
-            role: user.userType, // Mantenemos userType en la respuesta por compatibilidad
+            userType: user.userType, // Mantenemos userType en la respuesta por compatibilidad
             id: user.id,
             expiresIn: process.env.JWT_EXPIRES_IN || '1h',
         });

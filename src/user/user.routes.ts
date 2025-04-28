@@ -8,7 +8,7 @@ export const userRouter = Router()
 
 userRouter.get('/', authenticateToken, isAdmin, findAll)
 userRouter.get('/:id', authenticateToken, findOne)
-userRouter.post('/', add)
+userRouter.post('/', authenticateToken, isAdmin, add)
 userRouter.put('/:id', authenticateToken, update)
 userRouter.delete('/:id', authenticateToken, isAdmin,remove)
 

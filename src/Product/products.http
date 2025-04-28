@@ -1,17 +1,20 @@
 ### obtener todos los products
 GET http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NzY2NzI3LCJleHAiOjE3NDU3NzAzMjd9.BDthgu5yuL7dBzUSFZaslj_IDhesC3xCRQdDaWrpvmI
+
 
 
 ### crear un nuevo user
 # @name createUser
 POST http://localhost:3000/api/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NjIyNzU5LCJleHAiOjE3NDU2MjYzNTl9._HEhpo-GIlEdqb4NGGr7VHoDbFy8fc8ZlE4V1DF7Bas
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 
 { 
 "name": "Pure Smtegasheado",
 "price": 200,
-"stock": 30.6,
+"stock": 50,
 "description": "Pure de papas, batatas o mixto", 
 "category": "6806528bfb5d2fe5e23053a4",
 "img_url": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcelestedistribuidora.mitiendanube.com%2Fproductos%2Fcoca-cola-500ml-pack-x-12%2F&psig=AOvVaw3SfK0CpmF6ntLSeN9-cVi4&ust=1745330854313000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCOiyx6im6YwDFQAAAAAdAAAAABAE",
@@ -20,11 +23,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1Z
 ### ID 
 @id = {{createUser.response.body.data.id}}
 ### obtengo un user especifico
-GET http://localhost:3000/api/products/{{id}}
+GET http://localhost:3000/api/products/672d4d484a0fac5888ae18f4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/products/672d4c554a0fac5888ae18ed
+PUT http://localhost:3000/api/products/672d4c7a4a0fac5888ae18ee
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
+
 
 {
     "stock": 100

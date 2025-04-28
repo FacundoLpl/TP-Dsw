@@ -1,20 +1,24 @@
 ### obtener todos los users
+
 GET http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
 
 
 ### crear un nuevo user
 # @name createUser
 POST http://localhost:3000/api/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
 
 {
-  "firstName": "Johnan",
-  "lastName": "Doeanan",
+  "firstName": "Facundo",
+  "lastName": "Cantaberta",
   "dni": "43349481",
-  "email": "johndoe@example.com",
+  "userType": "Admin",
+  "email": "cantabertafacus@gmail.com",
   "password": "miContraseñaSegura",
-  "address": "123 Main St, Ciudad, País",
-  "userType": "Cliente"
+  "address": "Santiago 427, Rosario, Argentina"
 }
 ### login
 POST http://localhost:3000/api/users/login
@@ -24,11 +28,21 @@ Content-Type: application/json
   "email": "johndoe@example.com",
   "password": "miContraseñaSegura"
 }
+###
 
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "cantabertafacus@gmail.com",
+  "password": "miContraseñaSegura"
+}
 ### ID 
 @id = {{createUser.response.body.data.id}}
 ### obtengo un user especifico
-GET http://localhost:3000/api/users/68080ed5d6d3e13e44ea858a
+GET http://localhost:3000/api/users/672d4f6cb48ca087afa73e84
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
 PUT http://localhost:3000/api/users/66d8efd9f97ea117d363ce7c
@@ -42,4 +56,6 @@ Content-Type: application/json
 
 
 ### borrar un user
-DELETE http://localhost:3000/api/users/66d9093d13851e7f75dccac8
+DELETE http://localhost:3000/api/users/680ecbad207b6b801cb53ca7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc

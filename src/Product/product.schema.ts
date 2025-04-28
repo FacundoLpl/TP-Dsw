@@ -4,7 +4,7 @@ const productSchema = zod.object({
   name: zod.string().min(4, "name must be at least 4 letters"),
   description: zod.string().min(10),
   price: zod.number().min(1),
-  stock: zod.number().int().min(0, { message: "Stock must be a positive number" }).int(),
+  stock: zod.number().int().min(0, { message: "Stock must be a positive number" }),
   img_url: zod.string(),
   state: zod
     .enum(["Archived", "Active"])

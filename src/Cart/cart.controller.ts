@@ -42,14 +42,18 @@ async function findOne (req: Request, res: Response){
         try {
             const validationResult = validateCart(req.body);
             if (!validationResult.success) 
-                { return res.status(400).json({ message: validationResult.error.message });}
+                { return res.status(400).json({
+                  message: "Datos del carrito inválidos",
+                  errors: validationResult.error.errors, // 👈 Detalla los campos con error
+                });}
             let cart = await em.findOne(Cart, {
                 user: req.user.id,
                 state: "Pending",
               });
               
-              if (cart) { 
-                res.status(400).json({ message: "User already has a cart pending" });}
+              if (cart) {
+                return res.status(409).json({ message: "Ya tienes un carrito pendiente" }); // ✅ 409 Conflict
+              }
                 cart = em.create(Cart, {
                     user: req.user.id,
                     state: "Pending",

@@ -31,10 +31,15 @@ async function findOne (req: Request, res: Response){
 async function add (req: Request,res: Response) {
     try{
         const validationResult = validateCategory(req.body);
-        const categoryPrev = await em.findOne(Category, { name: req.body.name })
-        if (categoryPrev != null) { return res.status(400).json({ message: "Already exists a category with that name" });}
+        const categoryPrev = await em.findOne(Category, { name: req.body.name });
+        if (categoryPrev) {
+          return res.status(409).json({ message: "Ya existe una categoría con ese nombre" }); // ✅ 409 Conflict
+        }
         if (!validationResult.success)
-            { return res.status(400).json({ message: validationResult.error.message });}
+            return res.status(400).json({
+                message: "Datos de categoría inválidos",
+                errors: validationResult.error.errors, // 👈 Detalla los campos con error
+              });
         const category = em.create(Category, req.body)
         await em.flush()
         res
