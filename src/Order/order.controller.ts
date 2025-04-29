@@ -29,7 +29,7 @@ async function findOne (req: Request, res: Response){
     }
 
 
-    async function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
       try {
         const validationResult = validateOrder(req.body);
         if (!validationResult.success) {
@@ -65,18 +65,10 @@ if (
           });
           await em.persistAndFlush(cart);
         } 
-    
-        // SIEMPRE actualizar el total del carrito
-        cart.total += validationResult.data.subtotal;
-    
-        validationResult.data.cart = cart.id;
-        await cart.orders.init(); // asegurar que las órdenes estén cargadas
-    
-        const existingOrder = cart.orders.getItems().find(order => {
-          const orderProductId = order.product instanceof Product ? order.product.id : order.product;
-          return orderProductId === product.id;
+        const existingOrder = await em.findOne(Order, {
+          cart: cart.id,
+          product: product.id
         });
-    
         if (existingOrder) {
           existingOrder.quantity += validationResult.data.quantity;
           existingOrder.subtotal += validationResult.data.subtotal;
@@ -90,14 +82,18 @@ if (
           });
           em.persist(order);
         }
-    
-        // Actualizar stock del producto
-        product.stock -= validationResult.data.quantity;
-        em.persist(product);
-    
-        em.persist(cart); // por si el total cambió
+         // Actualizar stock del producto
+         product.stock -= validationResult.data.quantity;
+
+// Recalculate cart total
+const orders = await cart.orders.loadItems();
+cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0);
+        // SIEMPRE actualizar el total del carrito
+        //cart.total += validationResult.data.subtotal;
+        await cart.orders.init(); // asegurar que las órdenes estén cargadas
+       
+      
         await em.flush(); // Guardar todo junto
-    
         res.status(201).json({ message: "Order added to cart", data: cart });
       } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -109,42 +105,54 @@ if (
       try {
         const _id = new ObjectId(req.params.id);
         
-        // Cargar la orden real (populate product para poder acceder)
-        const orderToUpdate = await em.findOneOrFail(Order, { _id }, { populate: ['product'] });
+        // Verify the order exists and belongs to current user
+        const orderToUpdate = await em.findOneOrFail(Order, { 
+          _id,
+          cart: { user: req.user.id } // Ensure order belongs to current user
+        }, { populate: ['product', 'cart'] });
     
-        const oldQuantity = orderToUpdate.quantity;
+        if (!orderToUpdate) {
+          return res.status(404).json({ message: "Order not found" });
+        }
+    
+        // Validate new quantity
         const newQuantity = req.body.quantity;
-    
         if (typeof newQuantity !== "number" || newQuantity <= 0) {
           return res.status(400).json({ message: "Invalid quantity" });
         }
     
-        // Calcular la diferencia
-        const quantityDifference = oldQuantity - newQuantity;
+        // Calculate stock difference
+        const quantityDifference = orderToUpdate.quantity - newQuantity;
+        const product = orderToUpdate.product as Product;
     
-        if (quantityDifference !== 0) {
-          const product = orderToUpdate.product as Product;
-    
-          if (quantityDifference > 0) {
-            // Se redujo la cantidad -> DEVOLVER stock al producto
-            product.stock += quantityDifference;
-          } else {
-            // Se aumentó la cantidad -> QUITAR stock al producto
-            const needed = Math.abs(quantityDifference);
-            if (product.stock < needed) {
-              return res.status(400).json({ message: "Not enough stock to increase order" });
-            }
-            product.stock -= needed;
+        if (quantityDifference > 0) {
+          // Quantity decreased - return stock
+          product.stock += quantityDifference;
+        } else if (quantityDifference < 0) {
+          // Quantity increased - check stock
+          const needed = Math.abs(quantityDifference);
+          if (product.stock < needed) {
+            return res.status(409).json({ message: "Not enough stock available" });
           }
-          
-          em.persist(product); // Persistir el cambio de stock
+          product.stock -= needed;
         }
     
-        em.assign(orderToUpdate, req.body); // Actualizar los campos de la orden
-        await em.flush();
+        // Update order and cart total
+        const pricePerUnit = orderToUpdate.subtotal / orderToUpdate.quantity;
+        orderToUpdate.quantity = newQuantity;
+        orderToUpdate.subtotal = pricePerUnit * newQuantity;
+        
+        // Update cart total
+        const cart = orderToUpdate.cart as Cart;
+        const orders = await cart.orders.loadItems();
+        cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0);
     
+        await em.flush();
         res.status(200).json({ message: "Order updated", data: orderToUpdate });
       } catch (error: any) {
+        if (error.name === "NotFoundError") {
+          return res.status(404).json({ message: "Order not found" });
+        }
         res.status(500).json({ message: error.message });
       }
     }
@@ -172,10 +180,16 @@ if (
 
            // Actualizar el stock
            product.stock += order.quantity;
-           await em.persistAndFlush(product);
+           const cart = order.cart as Cart
 
-            await em.removeAndFlush(order);
-        
+           const subtotal = order.subtotal
+           if (subtotal > 0) {
+            cart.total -= subtotal
+           }
+           await em.persistAndFlush(product);
+           await em.persistAndFlush(cart);
+           await em.removeAndFlush(order);
+           
             return res.status(200).json({ message: 'Order removed', data: order });
           } catch (error: any) {
             return res.status(500).json({ message: error.message });

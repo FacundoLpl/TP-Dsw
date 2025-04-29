@@ -82,26 +82,18 @@ async function update(req: Request, res: Response) {
     try {
         const _id = new ObjectId(req.params.id);
         const userToUpdate = await em.findOneOrFail(User, { _id });
-        
-        
         // Admin puede modificar cualquier usuario, otros solo pueden modificarse a sí mismos
         if (req.user.userType !== 'Admin' && req.user.id !== userToUpdate.id) {
             return res.status(403).json({ message: 'Acceso denegado' });
         }
-
         // Usuarios no-admin no pueden cambiar su rol
         if (req.user.userType !== 'Admin' && req.body.userType && req.body.userType !== userToUpdate.userType) {
             return res.status(403).json({ message: 'No puedes cambiar tu tipo de usuario' });
         }
-
-
         // Si se está actualizando la contraseña, encriptarla
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
-
-      
-
         em.assign(userToUpdate, req.body);
         await em.flush();
         res.status(200).json({ message: "Usuario actualizado", data: userToUpdate });

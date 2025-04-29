@@ -1,7 +1,7 @@
 ### obtener todos los products
 GET http://localhost:3000/api/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInJvbGUiOiJDbGllbnRlIiwiaWF0IjoxNzQ1NzY2NzI3LCJleHAiOjE3NDU3NzAzMjd9.BDthgu5yuL7dBzUSFZaslj_IDhesC3xCRQdDaWrpvmI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4NzUyMjIsImV4cCI6MTc0NTg3ODgyMn0.gQtae98rWCrhfhKbH8qEPAycs49avF8yZZGgPwGzohI
 
 
 
@@ -9,14 +9,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1Z
 # @name createUser
 POST http://localhost:3000/api/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4NzUyMjIsImV4cCI6MTc0NTg3ODgyMn0.gQtae98rWCrhfhKbH8qEPAycs49avF8yZZGgPwGzohI
+
 
 { 
 "name": "Pure Smtegasheado",
 "price": 200,
 "stock": 50,
 "description": "Pure de papas, batatas o mixto", 
-"category": "6806528bfb5d2fe5e23053a4",
+"category": "66d9c449c530dbc8f754f452",
 "img_url": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcelestedistribuidora.mitiendanube.com%2Fproductos%2Fcoca-cola-500ml-pack-x-12%2F&psig=AOvVaw3SfK0CpmF6ntLSeN9-cVi4&ust=1745330854313000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCOiyx6im6YwDFQAAAAAdAAAAABAE",
 "state": "Active"
 }
@@ -28,16 +29,19 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/products/672d4c7a4a0fac5888ae18ee
+PUT http://localhost:3000/api/products/672d4ec04a0fac5888ae18fd
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4NzUyMjIsImV4cCI6MTc0NTg3ODgyMn0.gQtae98rWCrhfhKbH8qEPAycs49avF8yZZGgPwGzohI
 
 
 {
-    "stock": 100
+    "stock": 50
 }
 
 
 ### borrar un user
-DELETE http://localhost:3000/api/products/66da3a6f4b62e2f444142282
+DELETE http://localhost:3000/api/products/680ff67221c2b4cbe5be5fac
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4NzUyMjIsImV4cCI6MTc0NTg3ODgyMn0.gQtae98rWCrhfhKbH8qEPAycs49avF8yZZGgPwGzohI
+
 

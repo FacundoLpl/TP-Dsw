@@ -13,9 +13,13 @@ Content-Type: application/json
 {"state": "Pending"}
 ### crear cart
 GET http://localhost:3000/api/carts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInVzZXJUeXBlIjoiQ2xpZW50ZSIsImlhdCI6MTc0NTg3NDkyOSwiZXhwIjoxNzQ1ODc4NTI5fQ.1CsaJ1Mm8wQTEbHLCGA4idLANkTLdxQ5JFEYCXaAJJM
 
 ### delete
-DELETE http://localhost:3000/api/carts/6809be5031bd4eb1258c33ee
+DELETE http://localhost:3000/api/carts/6809bfe531bd4eb1258c33f0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInVzZXJUeXBlIjoiQ2xpZW50ZSIsImlhdCI6MTc0NTg3NDkyOSwiZXhwIjoxNzQ1ODc4NTI5fQ.1CsaJ1Mm8wQTEbHLCGA4idLANkTLdxQ5JFEYCXaAJJM
 
 
 
