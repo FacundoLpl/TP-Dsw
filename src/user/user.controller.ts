@@ -8,9 +8,9 @@ import jwt from "jsonwebtoken";
 
 const em = orm.em;
 
+// Función para obtener todos los usuarios (solo Admin puede hacerlo)
 async function findAll(req: Request, res: Response) { 
     try {
-        // Solo Admin puede listar todos los usuarios
         if (req.user.userType !== 'Admin') {
             return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
         }
@@ -22,12 +22,12 @@ async function findAll(req: Request, res: Response) {
     }
 }
 
+// Función para obtener un solo usuario por ID
 async function findOne(req: Request, res: Response) {
     try {
         const _id = new ObjectId(req.params.id);
         const user = await em.findOneOrFail(User, { _id });
 
-        // Admin puede ver cualquier usuario, otros solo pueden verse a sí mismos
         if (req.user.userType !== 'Admin' && req.user.id !== user.id) {
             return res.status(403).json({ message: 'Acceso denegado' });
         }
@@ -38,62 +38,60 @@ async function findOne(req: Request, res: Response) {
     }
 }
 
+// Función para registrar un usuario
 async function add(req: Request, res: Response) {
     try {
         const validationResult = validateUser(req.body);
         if (!validationResult.success) {
-            return res.status(400).json({
-                message: 'Datos de usuario inválidos',
-                errors: validationResult.error.errors, // 👈 Detalla los campos con error
-              });
+          return res.status(400).json({ message: 'Datos inválidos', errors: validationResult.error?.errors ?? [] });
         }
-        const userWithSameDni = await findUserByDni(req.body.dni)
-       if (userWithSameDni != null) {
-            return res.status(409).json({ message: 'Ya existe un usuario con ese DNI' });
+    
+        const userWithSameDni = await findUserByDni(req.body.dni);
+        if (userWithSameDni) {
+          return res.status(409).json({ message: 'DNI ya registrado' });
         }
-
+    
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const userData = {
-            ...req.body,
-            password: hashedPassword,
-        };
-        console.log("3")
+        const userData = { ...req.body, password: hashedPassword };
         const user = em.create(User, userData);
         await em.flush();
-
+    
+        const token = jwt.sign(
+          { id: user.id, userType: user.userType },
+          process.env.JWT_SECRET!,
+          { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
+        );
+    
         res.status(201).json({
-            message: 'Usuario creado',
-            data: {
-                id: user.id,
-                dni: user.dni,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                userType: user.userType, // Ahora usamos userType en lugar de userType
-                address: user.address,
-            }
-        });console.log("4")
-    } catch (error: any) {
+          message: 'Usuario registrado',
+          token,
+          id: user.id,
+          userType: user.userType,
+          expiresIn: process.env.JWT_EXPIRES_IN || '1h'
+        });
+      } catch (error: any) {
         res.status(500).json({ message: error.message });
-    }
+      }
 }
 
+// Función para actualizar un usuario
 async function update(req: Request, res: Response) {
     try {
         const _id = new ObjectId(req.params.id);
         const userToUpdate = await em.findOneOrFail(User, { _id });
-        // Admin puede modificar cualquier usuario, otros solo pueden modificarse a sí mismos
+
         if (req.user.userType !== 'Admin' && req.user.id !== userToUpdate.id) {
             return res.status(403).json({ message: 'Acceso denegado' });
         }
-        // Usuarios no-admin no pueden cambiar su rol
-        if (req.user.userType !== 'Admin' && req.body.userType && req.body.userType !== userToUpdate.userType) {
+
+        if (req.user.userType !== 'Admin' && req.body.userType) {
             return res.status(403).json({ message: 'No puedes cambiar tu tipo de usuario' });
         }
-        // Si se está actualizando la contraseña, encriptarla
+
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
+
         em.assign(userToUpdate, req.body);
         await em.flush();
         res.status(200).json({ message: "Usuario actualizado", data: userToUpdate });
@@ -102,12 +100,12 @@ async function update(req: Request, res: Response) {
     }
 }
 
+// Función para eliminar un usuario
 async function remove(req: Request, res: Response) {
     try {
         const _id = new ObjectId(req.params.id);
         const user = await em.findOneOrFail(User, { _id });
 
-        // Solo Admin puede eliminar usuarios
         if (req.user.userType !== 'Admin') {
             return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
         }
@@ -119,18 +117,20 @@ async function remove(req: Request, res: Response) {
     }
 }
 
+// Función para buscar un usuario por email
 async function findUserByEmail(email: string) {
     return await em.findOne(User, { email });
 }
 
+// Función para buscar un usuario por DNI
 async function findUserByDni(dni: string) {
     return await em.findOne(User, { dni });
 }
 
+// Función para login de usuario
 async function login(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    // Validación básica
     if (!email || !password) {
         return res.status(400).json({ message: 'Email y contraseña son requeridos' });
     }
@@ -146,19 +146,15 @@ async function login(req: Request, res: Response) {
             return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
-        // Generar token con userType (userType)
         const token = jwt.sign(
-            {
-                id: user.id,
-                userType: user.userType, // Usamos userType en lugar de userType
-            },
+            { id: user.id, userType: user.userType },
             process.env.JWT_SECRET!,
             { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
         );
 
         res.json({
             token,
-            userType: user.userType, // Mantenemos userType en la respuesta por compatibilidad
+            userType: user.userType,
             id: user.id,
             expiresIn: process.env.JWT_EXPIRES_IN || '1h',
         });
@@ -168,4 +164,4 @@ async function login(req: Request, res: Response) {
     }
 }
 
-export { findAll, findOne, add, update, remove, findUserByEmail, login };
+export { findAll, findOne, add, update, remove, findUserByEmail, login};

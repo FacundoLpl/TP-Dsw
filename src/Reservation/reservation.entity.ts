@@ -3,7 +3,6 @@ import { Schedule } from "../Schedule/schedule.entity.js"
 
 import { BaseEntity } from "../shared/db/baseEntity.entity.js"
 import { User } from "../User/user.entity.js"
-
   
   @Entity()
   export class Reservation extends BaseEntity {
