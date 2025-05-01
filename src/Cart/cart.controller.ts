@@ -69,7 +69,7 @@ async function findOne (req: Request, res: Response){
     
 
 
-    async function update(req: Request,res: Response){
+async function update(req: Request,res: Response){
         try {
             const cart: Cart = req.body;
               const id = req.params.id
@@ -79,9 +79,9 @@ async function findOne (req: Request, res: Response){
               res.status(200).json({ message: "Cart updated", data: cartToUpdate });
             } catch (error: any) {
                 res.status(500).json({ message: error.message });
-  }}
+}}
      
-  async function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
     try {
       const userId = req.user?.id;
   

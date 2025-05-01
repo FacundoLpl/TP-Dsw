@@ -9,7 +9,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxM
 # @name createUser
 POST http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
+Authorization: Bearer 
 
 {
   "firstName": "Facundo",

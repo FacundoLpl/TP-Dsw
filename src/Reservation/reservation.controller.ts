@@ -11,17 +11,47 @@ import { ScheduleFilter } from "../Schedule/schedule.filter.js"
 const em = orm.em // entity manager funciona como un repository de todas las clases
 
 
-async function findAll(req: Request,res: Response) { 
-    try{
-        const filter: ReservationFilter = req.query
-        const reservations = await em.find(Reservation, filter, {
-            populate: [
-                'user'
-            ]})
-        res.status(200).json({message: 'Found all reservations', data: reservations})
-    } catch (error: any){
-        res.status(500).json({message: error.message})
-}}
+async function findAll(req: Request, res: Response) {
+  try {
+      const user = req.user;
+      const query = req.query;
+      const filter: any = {};
+
+      const validStates = ['Pending', 'Completed', 'Canceled'] as const;
+      const state = typeof query.state === 'string' && validStates.includes(query.state as any)
+          ? query.state
+          : undefined;
+
+      const userIdInQuery = typeof query.user === 'string' ? query.user : undefined;
+
+      // Caso 1: Buscar todas las reservas pendientes (sin filtro de usuario)
+      if (state === 'Pending' && (!userIdInQuery)) {
+          if (user.userType !== 'Admin') {
+              return res.status(403).json({ message: 'Only admins can view all pending reservations.' });
+          }
+      }
+
+      // Caso 2: Buscar reservas pendientes para un usuario específico
+      if (state === 'Pending' && userIdInQuery) {
+          if (user.userType !== 'admin' && user.id !== userIdInQuery) {
+              return res.status(403).json({ message: 'You can only view your own pending reservations.' });
+          }
+      }
+
+      // Aplicamos los filtros válidos
+      if (state) filter.state = state;
+      if (userIdInQuery) filter.user = userIdInQuery;
+
+      const reservations = await em.find(Reservation, filter, {
+          populate: ['user'],
+      });
+
+      res.status(200).json({ message: 'Found reservations', data: reservations });
+  } catch (error: any) {
+      res.status(500).json({ message: error.message });
+  }
+}
+
 
 async function findOne (req: Request, res: Response){
     try{
@@ -38,14 +68,15 @@ async function findOne (req: Request, res: Response){
 
     async function add(req: Request, res: Response) {
         try {
+          const user = req.user
             const validationResult = validateReservation(req.body);
-            const datetime = new Date(req.body.datetime);
+            const datetime = new Date(req.body.datetime); //UTC 
             const filter: ScheduleFilter = { datetime };
             let schedule = await em.findOne(Schedule, filter);
-            const now = new Date();
-            const maxDate = new Date(now);
+            const now = new Date(Date.now()); // Ya es UTC (pero lo hacemos explícito)
+const maxDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // UTC + 7 días
+
             maxDate.setDate(maxDate.getDate() + 7); // Sumar 7 días a la fecha actual
-            
             if (datetime <= now) {
                 return res.status(400).json({ message: "The datetime must be in the future" });
             }
@@ -81,7 +112,7 @@ async function findOne (req: Request, res: Response){
             if (!validationResult.success) 
                 { return res.status(400).json({ message: validationResult.error.message });}
             let reservation = await em.findOne(Reservation, {
-                user: req.user.id,
+                user: user.id,
                 state: "Pending",
               });
               
@@ -132,6 +163,7 @@ async function findOne (req: Request, res: Response){
       async function remove(req: Request, res: Response) {
         try {
           const userId = req.user?.id;
+          const user = req.user
       
           if (!userId) {
             return res.status(401).json({ message: 'Unauthorized' });
@@ -141,10 +173,10 @@ async function findOne (req: Request, res: Response){
           const reservation = await em.findOneOrFail(Reservation, { _id }, { populate: ['user'] });
       
           // Verificar si la reserva pertenece al usuario logeado
-          if (reservation.user.id !== userId) {
+          if ((reservation.user.id !== userId ) && (user.userType != 'Admin') ){
             return res.status(403).json({ message: 'Forbidden: Not your reservation' });
           }
-      
+
           await em.removeAndFlush(reservation);
           return res.status(200).json({ message: 'Reservation removed', data: reservation });
         } catch (error: any) {
