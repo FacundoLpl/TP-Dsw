@@ -2,14 +2,13 @@
 
 GET http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYwNTQ5NjQsImV4cCI6MTc0NjA1ODU2NH0.fjt4JEgpG1ejSDwGJvypw8WvVGGuYbxlk_jy_yUkVaw
 
 
 ### crear un nuevo user
 # @name createUser
-POST http://localhost:3000/api/users
+POST http://localhost:3000/api/users/register
 Content-Type: application/json
-Authorization: Bearer 
 
 {
   "firstName": "Facundo",
@@ -20,6 +19,21 @@ Authorization: Bearer
   "password": "miContraseñaSegura",
   "address": "Santiago 427, Rosario, Argentina"
 }
+
+### Registro test
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "firstName": "Prueba",
+  "lastName": "Usuario",
+  "dni": "99999999",
+  "email": "prueba@registro.com",
+  "password": "123456",
+  "address": "Calle Test 123",
+  "userType": "cliente"
+}
+
 ### login
 POST http://localhost:3000/api/users/login
 Content-Type: application/json
@@ -59,3 +73,4 @@ Content-Type: application/json
 DELETE http://localhost:3000/api/users/680ecbad207b6b801cb53ca7
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVjNWMxMDI2NTZmNTY5ZmNkODYzZCIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU3OTg2MDUsImV4cCI6MTc0NTgwMjIwNX0.XZa4qMf_kQ99uxgPrm6ADCSebqDFtDF4DUj7DiM0soc
+

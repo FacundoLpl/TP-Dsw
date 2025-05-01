@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {findAll, findOne, add, update, remove} from "./shipmentType.controller.js"
-import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
+import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js"
 export const shipmentTypeRouter = Router()
 
 shipmentTypeRouter.get('/', findAll)

@@ -23,5 +23,9 @@ const userSchema = zod.object({
 });
 
 export function validateUser(data: any) {
-  return userSchema.safeParse(data);
-}
+  const result = userSchema.safeParse(data); // Validate using zod schema
+    if (result.success) {
+        return { success: true, data: result.data };
+    } else {
+        return { success: false, error: result.error };
+    }}
