@@ -13,8 +13,7 @@ async function findAll(req: Request, res: Response) {
     try {
         if (req.user.userType !== 'Admin') {
             return res.status(403).json({ message: 'Acceso denegado: se requieren privilegios de administrador' });
-        }
-
+}
         const users = await em.find(User, {});
         res.status(200).json({ message: 'Usuarios encontrados', data: users });
     } catch (error: any) {
@@ -45,7 +44,7 @@ async function add(req: Request, res: Response) {
         if (!validationResult.success) {
           return res.status(400).json({ message: 'Datos inválidos', errors: validationResult.error?.errors ?? [] });
         }
-    
+
         const userWithSameDni = await findUserByDni(req.body.dni);
         if (userWithSameDni) {
           return res.status(409).json({ message: 'DNI ya registrado' });
