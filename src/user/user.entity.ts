@@ -15,7 +15,7 @@ export class User extends BaseEntity{
         lastName!: string
 
         @Property()
-        userType!: 'Admin' | 'Client'
+        userType!: 'Admin' | 'Client' | 'Mozo'
 
         @OneToMany(() => Cart, (cart: Cart) => cart.user, {
                 cascade: [Cascade.ALL],

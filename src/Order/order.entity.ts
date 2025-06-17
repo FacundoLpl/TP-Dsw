@@ -1,4 +1,4 @@
-import { Entity, Property, ManyToOne } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne, Ref } from "@mikro-orm/core";
 
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Product } from "../Product/product.entity.js";
@@ -7,15 +7,22 @@ import { Rel } from '@mikro-orm/core';
 
 @Entity()
 export class Order extends BaseEntity {
-  @Property({ nullable: false })
-  quantity!: number;
+  @Property()
+  quantity!: number
 
-  @ManyToOne(() => Product, { nullable: false })
-  product!: Product | string;
+  @Property()
+  subtotal!: number
 
   @Property({ nullable: true })
-  subtotal!: number;
+  comment?: string
 
-  @ManyToOne(() => Cart, { nullable: false })
-  cart!: Rel<Cart>;
+  @Property({ nullable: true })
+  productName?: string
+
+  @ManyToOne(() => Product)
+  product!: Product
+
+  // Use a forward reference to break the circular dependency
+  @ManyToOne(() => "Cart", { wrappedReference: true })
+  cart!: Ref<Cart>
 }
