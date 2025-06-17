@@ -1,6 +1,6 @@
 // tests/hash.test.ts
 import { describe, expect, test } from 'vitest';
-import { hashPassword, comparePassword } from '../src/utils/hash';
+import { hashPassword, comparePassword } from '../utils/hash';
 
 describe('Password hashing', () => {
   const password = 'secure123';

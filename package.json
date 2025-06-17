@@ -3,12 +3,14 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "scripts": { 
-    "build": "tsc -p ./tsconfig.json",
-    "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/app.js\"",
-    "test": "vitest"
-  },
+  "main": "dist/src/app.js",
+  "module": "dist/src/app.js",
+  "scripts": {
+  "clean": "rimraf dist",
+  "build": "npm run clean && tsc -p ./tsconfig.json",
+  "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
+  "test": "vitest"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -18,14 +20,13 @@
     "@types/express": "4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "20.12.8",
-    "supertest": "^7.1.1",
     "@vitest/coverage-v8": "^3.1.2",
     "@vitest/ui": "^3.1.2",
+    "rimraf": "^6.0.1",
+    "supertest": "^7.1.1",
     "tsc-watch": "6.0.4",
     "typescript": "5.1.3",
-    "vitest": "^3.2.3"
-    "typescript": "5.1.3",
-    "vitest": "^3.1.2"
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@mikro-orm/core": "5.8.10",
