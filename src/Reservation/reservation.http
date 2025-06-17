@@ -1,7 +1,7 @@
 ### get all
 GET http://localhost:3000/api/reservations
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4OTExNTksImV4cCI6MTc0NTg5NDc1OX0.X1qhGhtIjph1IhgheLtI0d9FAAnHRPkF9E-39fTDyM0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYxMjkzMTMsImV4cCI6MTc0NjEzMjkxM30.H3G2OwMiiuMt5RAa8Idg_bVCxpCbakFDhfx6Pcjbqxs
 ### crear reservation
 POST http://localhost:3000/api/reservations
 Content-Type: application/json
@@ -21,8 +21,9 @@ Content-Type: application/json
 GET http://localhost:3000/api/reservations/673b8a854bd9c50be408e958
 
 ### delete
-DELETE http://localhost:3000/api/reservations/68102f811232628bf0f8d29c
+DELETE http://localhost:3000/api/reservations/68098f57ce01c5af8deb1812
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4OTExNTksImV4cCI6MTc0NTg5NDc1OX0.X1qhGhtIjph1IhgheLtI0d9FAAnHRPkF9E-39fTDyM0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYxMjkzMTMsImV4cCI6MTc0NjEzMjkxM30.H3G2OwMiiuMt5RAa8Idg_bVCxpCbakFDhfx6Pcjbqxs
+
 
 

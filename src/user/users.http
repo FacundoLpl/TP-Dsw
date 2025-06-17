@@ -2,7 +2,7 @@
 
 GET http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYwNTQ5NjQsImV4cCI6MTc0NjA1ODU2NH0.fjt4JEgpG1ejSDwGJvypw8WvVGGuYbxlk_jy_yUkVaw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGE1NGZhMTdmNjYyNzcyY2FkNjE5YSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDk3MDM1MTIsImV4cCI6MTc0OTcwNzExMn0.N3LjIoqMpMU8ECIoSuRPMj82XhO31we1cun-cOeWC64
 
 
 ### crear un nuevo user
@@ -20,6 +20,49 @@ Content-Type: application/json
   "password": "miContraseñaSegura",
   "address": "Santiago 427, Rosario, Argentina"
 }
+
+### Crear un nuevo usuario Admin
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Facundo",
+  "lastName": "Cantaberta",
+  "dni": "43349482",
+  "userType": "Admin",
+  "email": "cantaberta@gmail.com",
+  "password": "12345678",
+  "address": "Santiago 427, Rosario, Argentina"
+}
+
+### Crear un nuevo usuario Mozo
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Maria",
+  "lastName": "Pazzzzzzz",
+  "dni": "42249482",
+  "userType": "Mozo",
+  "email": "maria@gmail.com",
+  "password": "12345678",
+  "address": "Santiago 427, Rosario, Argentina"
+}
+### Crear un nuevo usuario Cliente
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Maria",
+  "lastName": "Paszsxs",
+  "dni": "41249482",
+  "userType": "Client",
+  "email": "maria123@gmail.com",
+  "password": "12345678",
+  "address": "Santiago 427, Rosario, Argentina"
+}
+
+
 
 ### Registro test
 POST http://localhost:3000/api/users/register

@@ -1,57 +1,66 @@
-// authMiddleware.ts
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+import { Request, Response, NextFunction } from "express"
 
-async function authenticateToken(req: Request,res: Response,  next: NextFunction
-) {
-  const authHeader = req.get('Authorization');
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-  if (!token) {
-    return res.status(401).json({ 
-      code: 'MISSING_TOKEN',
-      message: 'Authentication token is required' 
-    });}
-// authMiddleware.ts
-jwt.verify(token, process.env.JWT_SECRET!, (err: any, decoded: any) => {
-  if (err) {
-    return res.status(403).json({
-      code: 'INVALID_TOKEN',
-      message: 'Invalid authentication token'
-    });}
-  
-  // Asegúrate que el payload tenga userType
-  req.user = {
-    id: decoded.id,
-    userType: decoded.userType || decoded.userType // Usa el nombre correcto de tu campo
-  };
-  
-  next();
-});}
+dotenv.config()
 
-async function isAdmin(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key"
 
-  if (!token) {
-    return res.status(401).json({
-      code: 'UNAUTHORIZED',
-      message: 'Authentication required'
-    });
+export interface AuthenticatedRequest extends Request {
+ user: {
+    id: string
+    userType: string
+  }
+}
+
+export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader) {
+    return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
   }
 
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-    if (decoded.userType !== 'Admin') {
-      return res.status(403).json({
-        code: 'FORBIDDEN',
-        message: 'Admin privileges required'
-      });
+    const token = authHeader.split(" ")[1]
+    if (!token) {
+      return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
     }
 
-    (req as any).user = decoded;
-    next();
+    const decoded = jwt.verify(token, JWT_SECRET)
+
+    if (!decoded || typeof decoded !== "object" || !("id" in decoded) || !("userType" in decoded)) {
+      return res.status(401).json({ code: "INVALID_TOKEN", message: "Invalid token format" })
+    }
+
+    req.user = {
+      id: (decoded as any).id,
+      userType: (decoded as any).userType,
+    }
+
+    next()
   } catch (err) {
-    return res.status(403).json({ message: 'Token inválido o expirado' });
+    if (err && typeof err === "object" && "name" in err && (err as any).name === "TokenExpiredError") {
+      return res.status(401).json({ code: "TOKEN_EXPIRED", message: "Token has expired" })
+    }
+
+    return res.status(401).json({ code: "INVALID_TOKEN", message: "Invalid token" })
   }
 }
-export {authenticateToken, isAdmin}
+
+export const roleMiddleware = (roles: string[] = []) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
+    }
+
+    const userRole = req.user.userType
+
+    if (roles.length && !roles.includes(userRole)) {
+      return res.status(403).json({ code: "FORBIDDEN", message: "Access denied: insufficient permissions" })
+    }
+
+    next()
+  }
+}
+
+// Alias para uso rápido
+export const isAdmin = roleMiddleware(["admin"])

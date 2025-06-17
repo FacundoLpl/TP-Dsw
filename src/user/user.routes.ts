@@ -1,17 +1,16 @@
-import { Router } from "express";
-import { findAll, findOne, add, update, remove, login } from "./user.controller.js";
-import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import express from "express"
+import { add, findAll, findOne, update, remove, login } from "./user.controller.js"
+import { authenticateToken } from "../middlewares/authMiddleware.js"
+import { isAdmin } from "../middlewares/authMiddleware.js"
 
-export const userRouter = Router()
+export const userRouter = express.Router()
 
-userRouter.get('/', authenticateToken, isAdmin, findAll)
-userRouter.get('/:id', authenticateToken, findOne)
-//userRouter.post('/', authenticateToken, isAdmin, add)
-userRouter.put('/:id', authenticateToken, update)
-userRouter.delete('/:id', authenticateToken, isAdmin,remove)
+// Public routes
+userRouter.post("/register", add)
+userRouter.post("/login", login)
 
-userRouter.post('/login', login)
-userRouter.post('/',add)
-
+// Protected routes
+userRouter.get("/", authenticateToken, isAdmin, findAll)
+userRouter.get("/:id", authenticateToken, findOne)
+userRouter.put("/:id", authenticateToken, update)
+userRouter.delete("/:id", authenticateToken, isAdmin, remove)

@@ -1,7 +1,7 @@
 ### obtener todos las orders
 GET http://localhost:3000/api/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGE1NGZhMTdmNjYyNzcyY2FkNjE5YSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDk3NzAwNjIsImV4cCI6MTc0OTc3MzY2Mn0.3VrdSY8CzR5e1my7EpUHTzZRbIB1gKDISUbHie0VDIw
 ### crear un nuevo order
 @id = 672ce1aee1cd5a14177f1bb0
 POST http://localhost:3000/api/orders
