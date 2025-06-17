@@ -7,7 +7,7 @@ const scheduleSchema = zod.object({
     .datetime()
     .refine((value) => {
         const date = new Date(value);
-        const hour = date.getUTCHours(); 
+        const hour = date.getHours(); 
         return hour >= 19 && hour <= 23;
       }, {
         message: "La hora debe estar entre las 19:00 y las 23:00.",

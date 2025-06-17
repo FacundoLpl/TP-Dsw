@@ -7,14 +7,15 @@ Content-Type: application/json
   "total": 0
 }
 ### update
-PUT http://localhost:3000/api/carts/6737a48052d4fc63a20e3b28
+PUT http://localhost:3000/api/carts/6813c7c454cffed0b6498cd2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYxMjk5MTMsImV4cCI6MTc0NjEzMzUxM30.sNu_A5z7IC3IHZ0Whtk-brpPgWNkQ5PzSLpmkxG0ZD8
 
 {"state": "Pending"}
 ### crear cart
 GET http://localhost:3000/api/carts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInVzZXJUeXBlIjoiQ2xpZW50ZSIsImlhdCI6MTc0NTg3NDkyOSwiZXhwIjoxNzQ1ODc4NTI5fQ.1CsaJ1Mm8wQTEbHLCGA4idLANkTLdxQ5JFEYCXaAJJM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDYxMjk5MTMsImV4cCI6MTc0NjEzMzUxM30.sNu_A5z7IC3IHZ0Whtk-brpPgWNkQ5PzSLpmkxG0ZD8
 
 ### delete
 DELETE http://localhost:3000/api/carts/6809bfe531bd4eb1258c33f0

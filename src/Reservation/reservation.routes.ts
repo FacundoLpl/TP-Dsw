@@ -5,7 +5,7 @@ import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
 export const reservationRouter = Router();
 
 // Admin puede ver todas
-reservationRouter.get('/', authenticateToken, isAdmin, findAll);
+reservationRouter.get('/', authenticateToken, findAll);
 
 // Nuevas rutas para usuarios
 reservationRouter.get('/user/all', authenticateToken, findByUser);        // Todas las reservas del usuario
