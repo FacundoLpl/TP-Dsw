@@ -63,4 +63,4 @@ export const roleMiddleware = (roles: string[] = []) => {
 }
 
 // Alias para uso rápido
-export const isAdmin = roleMiddleware(["admin"])
+export const isAdmin = roleMiddleware(["Admin"])
