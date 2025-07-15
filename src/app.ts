@@ -12,16 +12,22 @@ import { cartRouter } from "./Cart/cart.routes.js"
 import { orderRouter } from "./Order/order.routes.js"
 import { reservationRouter } from "./Reservation/reservation.routes.js"
 import { authenticateToken } from "./middlewares/authMiddleware.js"
+import swaggerUi from "swagger-ui-express"
+import swaggerSpec from "./shared/db/swagger.js";
 
 const app = express()
 app.use(express.json())
 app.use(cors())
+
 
 //Agrego un middleware, luego de express, antes de las rutas.
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next) // entity manager
 })
 await syncSchema() // sincroniza la base de datos con el modelo de datos
+
+// Swagger setup
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rutas públicas (no requieren autenticación)
 app.use("/api/users/login", userRouter) // Mantener la ruta de login pública
