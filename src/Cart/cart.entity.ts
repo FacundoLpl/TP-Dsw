@@ -1,5 +1,4 @@
-import { Entity, Property, ManyToOne, OneToMany, Cascade, Collection, Rel, Ref } from "@mikro-orm/core"
-
+import { Entity, Property, ManyToOne, OneToMany, Collection, Ref } from "@mikro-orm/core"
 import { BaseEntity } from "../shared/db/baseEntity.entity.js"
 import { User } from "../User/user.entity.js"
 import { Order } from "../Order/order.entity.js"
@@ -29,15 +28,13 @@ export class Cart extends BaseEntity {
   @Property({ nullable: true })
   additionalInstructions?: string
 
-  // Add reference to ShipmentType entity
+  // Agrega la relación con ShipmentType
   @ManyToOne(() => ShipmentType, { nullable: true })
   shipmentType?: ShipmentType
 
-  // Use a string reference to break the circular dependency
   @ManyToOne(() => "User", { wrappedReference: true })
   user!: Ref<User>
-
-  // Use a forward reference to break the circular dependency
+  
   @OneToMany(
     () => "Order",
     (order: Order) => order.cart,

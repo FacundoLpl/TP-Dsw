@@ -6,8 +6,6 @@ import { validateCategory } from "./category.schema.js"
 
 const em = orm.em
 
-
-
 async function findAll(req: Request,res: Response) { 
     try{
         const categories = await em.find('Category', {})
@@ -16,7 +14,6 @@ async function findAll(req: Request,res: Response) {
         res.status(500).json({message: error.message})
     }
 }
-
 async function findOne (req: Request, res: Response){
     try{
         const _id = new ObjectId(req.params.id)
@@ -27,7 +24,6 @@ async function findOne (req: Request, res: Response){
     }catch (error: any){
         res.status(500).json({message: error.message})}
     }
-
 async function add (req: Request,res: Response) {
     try{
         const validationResult = validateCategory(req.body);
@@ -48,7 +44,6 @@ async function add (req: Request,res: Response) {
     }catch (error: any){
         res.status(500).json({message: error.message})
     }}
-
 async function update(req: Request,res: Response){
         try {
             const _id = new ObjectId(req.params.id)
@@ -60,8 +55,6 @@ async function update(req: Request,res: Response){
             res.status(500).json({ message: error.message });
         }
         }
-
-    
 async function remove(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
@@ -71,7 +64,5 @@ async function remove(req: Request,res: Response){
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }}
-
-
 
 export {findAll, findOne, add, update, remove}

@@ -1,4 +1,4 @@
-import { Cascade, Collection, Entity, OneToMany, Property, ManyToOne } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, OneToMany, Property} from '@mikro-orm/core';
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Product } from "../Product/product.entity.js";
 
