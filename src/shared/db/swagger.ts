@@ -118,21 +118,88 @@ const options = {
             cost: { type: "number" },
           },
         },
-        User: {
-          type: "object",
-          properties: {
-            id: { type: "string" },
-            name: { type: "string" },
-            email: { type: "string" },
-            password: { type: "string" }, // Podés omitir esto en responses
-            role: { type: "string", enum: ["admin", "client"] },
-          },
-        },
+       User: {
+  type: "object",
+  required: ["dni", "firstName", "lastName", "userType", "email", "password"],
+  properties: {
+    dni: {
+      type: "string",
+      description: "DNI del usuario",
+    },
+    firstName: {
+      type: "string",
+      description: "Nombre del usuario",
+    },
+    lastName: {
+      type: "string",
+      description: "Apellido del usuario",
+    },
+    userType: {
+      type: "string",
+      enum: ["Admin", "Client", "Mozo"],
+      description: "Rol del usuario",
+    },
+    email: {
+      type: "string",
+      format: "email",
+      description: "Correo electrónico del usuario",
+    },
+    password: {
+      type: "string",
+      minLength: 6,
+      description: "Contraseña (mínimo 6 caracteres)",
+    },
+    address: {
+      type: "string",
+      nullable: true,
+      description: "Dirección del usuario (opcional)",
+    },
+  },
+},
+UserResponse: {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "ID único del usuario",
+    },
+    dni: {
+      type: "string",
+      description: "DNI del usuario",
+    },
+    firstName: {
+      type: "string",
+      description: "Nombre del usuario",
+    },
+    lastName: {
+      type: "string",
+      description: "Apellido del usuario",
+    },
+    userType: {
+      type: "string",
+      enum: ["Admin", "Client", "Mozo"],
+      description: "Rol del usuario",
+    },
+    email: {
+      type: "string",
+      format: "email",
+      description: "Correo electrónico del usuario",
+    },
+    address: {
+      type: "string",
+      nullable: true,
+      description: "Dirección del usuario (opcional)",
+    },
+  },
+},
+
+
+
       },
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./src/**/*.routes.js"], // tus rutas con comentarios @swagger
+  apis: ["./src/**/*.routes.{js,ts}"], // tus rutas con comentarios @swagger
 };
 
 const swaggerSpec = swaggerJsdoc(options);
