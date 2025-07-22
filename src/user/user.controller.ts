@@ -50,6 +50,7 @@ async function createInitialCart(userId: string) {
 
     if (!existingCart) {
       // Create a new cart for the user
+      // Create a new cart for the user
       const cart = em.create("Cart", {
         user: userId,
         state: "Pending",

@@ -19,7 +19,7 @@
 
 - https://github.com/FacundoLpl/FrontEnd-TPdsw
 
-## Tema
+## 1.Tema
 
 ### Descripción
 
@@ -104,7 +104,7 @@ class Schedule {
 }
 ```
 
-## Alcance Funcional
+## 2. Alcance Funcional
 
 Aprobación Directa
 |Req|Detalle|
@@ -121,3 +121,30 @@ Aprobación Directa
 | :------- | :------------ |
 | Listados | 1. Listado de carritos completados por el usuario, con detalle de fecha, productos, cantidades, tipo de envío, forma de pago, estado, y opción de   cancelar si está dentro del plazo.- |
 | CUU/Epic | 1. Cancelar un carrito<br>2. Envio del carrito-<br>3.Moderación de reviews con la api de OpenAI |
+
+### 3. Instrucciones de instalacion
+a. Clona este repositorio en tu máquina local:
+git clone https://github.com/FacundoLpl/TP-Dsw.git
+
+b. Instalar las dependencias usando pnpm:
+pnpm install
+
+c. Crea una cuenta en MongoDB Atlas si aún no tienes una.
+d. Crea un clúster en MongoDB Atlas.
+
+e. Crea un archivo .env y agrega la configuración de tu conexión a MongoDB Atlas en el archivo .env:
+MONGO_DB=nombre_de_tu_base_de_datos
+MONGO_URI=tu_URI_de_conexión_a_MongoDB_Atlas
+
+f. Ejecutar comando:
+pnpm run start:dev
+
+La aplicación estará disponible en http://localhost:3000
+
+### 4. Documentación de la API
+Debido a las limitaciones de la cuenta gratuita en Render, puede haber un retraso de unos minutos en la carga de la documentación.
+@subir a render
+
+### 5. Playlist de vistas del cliente, mozo y admin
+Puedes ver las vistas del cliente, mozo y admin en nuestra playlist de YouTube:
+@yutu/btn
