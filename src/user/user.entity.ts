@@ -8,14 +8,14 @@ import {Reservation} from '../Reservation/reservation.entity.js'
 export class User extends BaseEntity{
 
         
-        @Property()
+        @Property({ type: 'string' })
         firstName!: string
 
-        @Property()
+        @Property({ type: 'string' })
         dni!: string
 
 
-        @Property()
+        @Property({ type: 'string' })
         lastName!: string
 
         @Property({ type: 'string' }) 
@@ -31,12 +31,12 @@ export class User extends BaseEntity{
         })
         reservations = new Collection<Reservation>(this);
 
-        @Property({ nullable: true })
+        @Property({ type: 'string', nullable: true })
         email!: string;
 
-        @Property({ nullable: true })
+        @Property({ type: 'string', nullable: true })
         password!: string;
 
-        @Property({ nullable: true })
+        @Property({ type: 'string', nullable: true })
         address!: string;
 }

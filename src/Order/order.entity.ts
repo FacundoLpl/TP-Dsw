@@ -5,16 +5,16 @@ import { Cart } from "../Cart/cart.entity.js";
 
 @Entity()
 export class Order extends BaseEntity {
-  @Property()
+  @Property({ type: 'number' })
   quantity!: number
 
-  @Property()
+  @Property({ type: 'number' })
   subtotal!: number
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   comment?: string
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   productName?: string
 
   @ManyToOne(() => Product)

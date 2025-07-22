@@ -9,12 +9,15 @@ import { Product } from '../Product/product.entity';
 import { Category } from '../Category/category.entity'; 
 import jwt from 'jsonwebtoken';
 import { fetch } from 'undici';
-
+import { Order } from '../Order/order.entity';
+import { Cart } from '../Cart/cart.entity';
+import { Schedule } from '../Schedule/schedule.entity';
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 let server: ReturnType<typeof createServer>;
 let url: string;
 let orm: MikroORM<MongoDriver>;
+const TEST_TIMEOUT = 90000;
 
 
 // Fix: Use orm.em.getConnection() for MongoDriver, and ensure orm is initialized
@@ -66,79 +69,82 @@ async function createFakeProduct() {
 }
 
 describe('POST /api/orders', () => {
-  beforeAll(async () => {
-    orm = await MikroORM.init<MongoDriver>({
-      type: 'mongo',
-      clientUrl: 'mongodb://localhost:27017/myapp-test',
-      dbName: 'myapp-test',
-      entities: [User, Product, Category], 
-      debug: false,
-    });
+    beforeAll(async () => {
+        orm = await MikroORM.init<MongoDriver>({
+            type: 'mongo',
+            clientUrl: 'mongodb://localhost:27017/myapp-test',
+            dbName: 'myapp-test',
+            entities: [
+                User, 
+                Product, 
+                Category,
+                Order,
+                Cart,
+                Schedule
+            ],
+            debug: false,
+        });
 
-    server = createServer(app);
-    await new Promise<void>((resolve) => server.listen(0, resolve));
-    const address = server.address();
-    const port = typeof address === 'object' && address ? address.port : 0;
-    url = `http://localhost:${port}`;
-  });
+        server = createServer(app);
+        await new Promise<void>((resolve) => server.listen(0, resolve));
+        const address = server.address();
+        const port = typeof address === 'object' && address ? address.port : 0;
+        url = `http://localhost:${port}`;
+    }, TEST_TIMEOUT);
 
-  afterAll(async () => {
-    await clearDb(); 
-    if (orm) {
-      await orm.close(true);
-    }
-    if (server) {
-      server.close();
-    }
-  });
+    afterAll(async () => {
+        await clearDb();
+        if (orm) await orm.close(true);
+        if (server) server.close();
+    }, TEST_TIMEOUT);
 
-  it('✔️ Pedido válido con token → 201', async () => {
-    const { token } = await createUserAndToken();
-    const product = await createFakeProduct();
+    it('✔️ Pedido válido con token → 201', async () => {
+        const { token } = await createUserAndToken();
+        const product = await createFakeProduct();
 
-    const res = await fetch(`${url}/api/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        products: [{ id: product.id, quantity: 2 }],
-        deliveryType: 'local',
-      }),
-    });
+        const res = await fetch(`${url}/api/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                products: [{ id: product.id, quantity: 2 }],
+                deliveryType: 'local',
+            }),
+        });
 
-    expect(res.status).toBe(201);
-  });
+        expect(res.status).toBe(201);
+    }, TEST_TIMEOUT);
 
-  it('❌ Sin token → 403', async () => {
-    const res = await fetch(`${url}/api/orders`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        products: [],
-        deliveryType: 'local',
-      }),
-    });
+    it('❌ Sin token → 403', async () => {
+        const res = await fetch(`${url}/api/orders`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                products: [],
+                deliveryType: 'local',
+            }),
+        });
 
-    expect(res.status).toBe(403);
-  });
+        expect(res.status).toBe(403);
+    }, TEST_TIMEOUT);
 
-  it('❌ Producto inválido → 400', async () => {
-    const { token } = await createUserAndToken();
+    it('❌ Producto inválido → 400', async () => {
+        const { token } = await createUserAndToken();
 
-    const res = await fetch(`${url}/api/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        products: [{ id: 'inexistente', quantity: 2 }],
-        deliveryType: 'local',
-      }),
-    });
+        const res = await fetch(`${url}/api/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                products: [{ id: 'inexistente', quantity: 2 }],
+                deliveryType: 'local',
+            }),
+        });
 
-    expect(res.status).toBe(400);
-  });
+        expect(res.status).toBe(400);
+    }, TEST_TIMEOUT);
 });

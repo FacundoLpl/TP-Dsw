@@ -6,16 +6,16 @@ import { User } from "../User/user.entity.js"
   
   @Entity()
 export class Reservation extends BaseEntity {
-  @Property({ nullable: false })
+  @Property({type: 'string', nullable: false })
   state!: "Completed" | "Pending" | "Canceled"
 
   @ManyToOne(() => "User", { nullable: false, wrappedReference: true })
   user!: Ref<User>
 
-  @Property({ nullable: false })
+  @Property({ type: 'number', nullable: false })
   people!: number
 
-  @Property({ nullable: false })
+  @Property({ type: 'date', nullable: false })
   datetime!: Date  // Dia y hora de la reserva
   
   @ManyToOne(() => "Schedule", { nullable: false, wrappedReference: true })
