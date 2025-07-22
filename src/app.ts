@@ -19,23 +19,19 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-
-//Agrego un middleware, luego de express, antes de las rutas.
 app.use((req, res, next) => {
-  RequestContext.create(orm.em, next) // entity manager
+  RequestContext.create(orm.em, next)
 })
-await syncSchema() // sincroniza la base de datos con el modelo de datos
-
-// Swagger setup
+await syncSchema()
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Rutas públicas (no requieren autenticación)
-app.use("/api/users/login", userRouter) // Mantener la ruta de login pública
-app.use("/api/users/register", userRouter) // Mantener la ruta de registro pública
-app.use("/api/products", productRouter) // Mantener productos públicos para navegación
+// Rutas públicas 
+app.use("/api/users/login", userRouter)
+app.use("/api/users/register", userRouter)
+app.use("/api/products", productRouter)
 
-// Rutas protegidas (requieren autenticación)
-app.use("/api/users", userRouter) // Proteger otras rutas de usuarios
+// Rutas protegidas 
+app.use("/api/users", userRouter) 
 app.use("/api/shipmentTypes", authenticateToken, shipmentTypeRouter)
 app.use("/api/schedules", authenticateToken, scheduleRouter)
 app.use("/api/categories", authenticateToken, categoryRouter)

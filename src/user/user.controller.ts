@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { User } from "./user.entity.js";
-import { ObjectId } from "@mikro-orm/mongodb";
 import { validateUser, validateLogin } from "./user.schema.js";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
@@ -11,30 +10,25 @@ const em = orm.em;
 
 async function login(req: Request, res: Response) {
   try {
-    // Validate login data
     const validationResult = validateLogin(req.body)
     if (!validationResult.success) {
       return res.status(400).json({ message: "Datos inválidos", errors: validationResult.error?.errors ?? [] })
     }
-
-    // Find user by email
     const user = await findUserByEmail(req.body.email)
     if (!user) {
       return res.status(401).json({ message: "Credenciales inválidas" })
     }
-
-    // Verify password
     const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Credenciales inválidas" })
     }
 
-    // Generate JWT token
+    // Genera JWT token
     const token = jwt.sign({ id: user.id, userType: user.userType }, process.env.JWT_SECRET!, {
       expiresIn: process.env.JWT_EXPIRES_IN || "1h",
     })
 
-    // Return user data and token
+    // Devuelve el token y los datos del usuario
     res.status(200).json({
       message: "Login exitoso",
       token,
@@ -46,7 +40,6 @@ async function login(req: Request, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-// Add this function to your user.controller.ts file
 async function createInitialCart(userId: string) {
   try {
     // Check if user already has a pending cart
@@ -73,18 +66,14 @@ async function createInitialCart(userId: string) {
     return null
   }
 }
-
-// Helper function to find a user by email
+// Funcion helper para encontrar un usuario por email 
 async function findUserByEmail(email: string) {
   return await em.findOne(User, { email });
 }
-
-// Helper function to find a user by DNI
 async function findUserByDni(dni: string) {
   return await em.findOne(User, { dni });
 }
 
-// Modify your add function to create a cart after user registration
 async function add(req: AuthenticatedRequest, res: Response) {
   try {
     const validationResult = validateUser(req.body)
@@ -102,7 +91,6 @@ async function add(req: AuthenticatedRequest, res: Response) {
     const user = em.create(User, userData)
     await em.flush()
 
-    // Create initial cart for the user
     await createInitialCart(user.id)
 
     const token = jwt.sign({ id: user.id, userType: user.userType }, process.env.JWT_SECRET!, {
@@ -121,7 +109,6 @@ async function add(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-// Update other functions to use authUser instead of user
 async function findAll(req: AuthenticatedRequest, res: Response) {
   try {
     if (!req.user) {
@@ -145,8 +132,6 @@ async function findOne(req: AuthenticatedRequest, res: Response) {
     if (!req.user) {
       return res.status(401).json({ message: "Authentication required" })
     }
-
-    // Check if user is admin or requesting their own data
     if (req.user.userType !== "Admin" && req.user.id !== req.params.id) {
       return res.status(403).json({ message: "Access denied" })
     }
@@ -164,7 +149,6 @@ async function update(req: AuthenticatedRequest, res: Response) {
       return res.status(401).json({ message: "Authentication required" })
     }
 
-    // Check if user is admin or updating their own data
     if (req.user.userType !== "Admin" && req.user.id !== req.params.id) {
       return res.status(403).json({ message: "Access denied" })
     }
@@ -183,8 +167,6 @@ async function remove(req: AuthenticatedRequest, res: Response) {
     if (!req.user) {
       return res.status(401).json({ message: "Authentication required" })
     }
-
-    // Only admin can delete users
     if (req.user.userType !== "Admin") {
       return res.status(403).json({ message: "Admin privileges required" })
     }
@@ -196,6 +178,5 @@ async function remove(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 
 export { add, findAll, findOne, update, remove, createInitialCart ,login}

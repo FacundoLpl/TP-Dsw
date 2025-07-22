@@ -1,4 +1,4 @@
-import {Entity, Property, Collection, OneToMany, Cascade } from '@mikro-orm/core'
+import {Entity, Property, Collection, OneToMany } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Reservation } from '../Reservation/reservation.entity.js';
 
@@ -17,7 +17,6 @@ export class Schedule extends BaseEntity {
   @Property()
   capacityLeft!: number
 
-  // Use string reference to break circular dependency
   @OneToMany(
     () => Reservation,
     (reservation: Reservation) => reservation.schedule,

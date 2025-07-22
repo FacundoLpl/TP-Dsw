@@ -9,7 +9,6 @@ export class Reservation extends BaseEntity {
   @Property({ nullable: false })
   state!: "Completed" | "Pending" | "Canceled"
 
-  // Use string reference to break circular dependency with User
   @ManyToOne(() => "User", { nullable: false, wrappedReference: true })
   user!: Ref<User>
 
@@ -18,8 +17,7 @@ export class Reservation extends BaseEntity {
 
   @Property({ nullable: false })
   datetime!: Date  // Dia y hora de la reserva
-
-  // Use string reference to break circular dependency with Schedule
+  
   @ManyToOne(() => "Schedule", { nullable: false, wrappedReference: true })
   schedule!: Ref<Schedule>
 }

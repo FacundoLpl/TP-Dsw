@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Response } from "express"
 import { Cart } from "./cart.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
@@ -9,39 +9,30 @@ const em = orm.em
 export async function findAll(req: AuthenticatedRequest, res: Response) {
   try {
     const filter: any = {}
-
-    // Apply filters if provided in query params
     if (req.query.state) {
       filter.state = req.query.state
-    }
-
+    } // Filtra por estado del carrito
     if (req.query.user) {
       filter.user = req.query.user
     } else if (req.user) {
-      // If no user filter provided, use the authenticated user
       filter.user = req.user.id
-    }
-
-    // Filter by deliveryType (string property)
+    } // Filtra por usuario, si no se proporciona, usa el usuario autenticado
     if (req.query.deliveryType) {
       filter.deliveryType = req.query.deliveryType
     }
-
-    // Filter by shipmentType (reference to ShipmentType entity)
+    // Filtra por tipo de envío si se proporciona
     if (req.query.shipmentType) {
       filter.shipmentType = req.query.shipmentType
     }
-
     const carts = await em.find(Cart, filter, {
       populate: ["orders", "orders.product", "user", "shipmentType"],
-    })
+    }) // Obtiene todos los carritos con sus órdenes, productos, usuario y tipo de envío
 
     res.status(200).json({ message: "found all carts", data: carts })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
-  }
+  } // Maneja errores y envía una respuesta de error
 }
-
 export async function findOne(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
@@ -51,9 +42,9 @@ export async function findOne(req: AuthenticatedRequest, res: Response) {
       {
         populate: ["orders", "orders.product", "user", "shipmentType"],
       },
-    )
+    ) // Busca un carrito por ID y lo llena con órdenes, productos, usuario y tipo de envío
 
-    // Check if the cart belongs to the current user or user is admin
+    // Checkea si el carrito pertenece al usuario actual o si el usuario es admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to access this cart" })
     }
@@ -61,17 +52,15 @@ export async function findOne(req: AuthenticatedRequest, res: Response) {
     res.status(200).json({ message: "found cart", data: cart })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
-  }
+  } // Maneja errores y envía una respuesta de error
 }
-
 export async function add(req: AuthenticatedRequest, res: Response) {
   try {
-    // If no user provided in the request body, use the authenticated user
     if (!req.body.user && req.user) {
       req.body.user = req.user.id
     }
 
-    // Handle shipmentType reference if provided
+    // Maneja la referencia de shipmentType si se proporciona
     if (req.body.shipmentType && typeof req.body.shipmentType === "string") {
       try {
         const shipmentTypeId = new ObjectId(req.body.shipmentType)
@@ -83,23 +72,20 @@ export async function add(req: AuthenticatedRequest, res: Response) {
 
     const cart = em.create(Cart, req.body)
     await em.persistAndFlush(cart)
-    res.status(201).json({ message: "cart created", data: cart })
+    res.status(201).json({ message: "cart created", data: cart })// Crea un nuevo carrito y lo guarda en la base de datos
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
-
 export async function update(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
     const cart = await em.findOneOrFail(Cart, { _id })
 
-    // Check if the cart belongs to the current user or user is admin
+    // Valida si el carrito pertenece al usuario actual o si el usuario es admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to update this cart" })
     }
-
-    // Handle shipmentType reference if provided
     if (req.body.shipmentType && typeof req.body.shipmentType === "string") {
       try {
         const shipmentTypeId = new ObjectId(req.body.shipmentType)
@@ -109,7 +95,7 @@ export async function update(req: AuthenticatedRequest, res: Response) {
       }
     }
 
-    // Update cart properties
+    // Actualiza el carrito con los datos proporcionados
     em.assign(cart, req.body)
     await em.flush()
 
@@ -118,13 +104,11 @@ export async function update(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 export async function remove(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
     const cart = await em.findOneOrFail(Cart, { _id })
 
-    // Check if the cart belongs to the current user or user is admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to delete this cart" })
     }
@@ -135,18 +119,16 @@ export async function remove(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 export async function removeOrders(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
     const cart = await em.findOneOrFail(Cart, { _id }, { populate: ["orders"] })
 
-    // Check if the cart belongs to the current user or user is admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to modify this cart" })
     }
 
-    // Remove all orders from the cart
+    // Elimina todas las órdenes del carrito
     await em.nativeDelete("Order", { cart: cart.id })
 
     // Reset cart total
@@ -158,26 +140,20 @@ export async function removeOrders(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 export async function addOrder(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
     const cart = await em.findOneOrFail(Cart, { _id })
-
-    // Check if the cart belongs to the current user or user is admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to modify this cart" })
     }
-
-    // Create a new order
     const order = em.create("Order", {
       ...req.body,
       cart: cart,
-    }) as { subtotal: number } // Explicitly type order
+    }) as { subtotal: number } 
 
     await em.persistAndFlush(order)
 
-    // Update cart total
     cart.total += order.subtotal
     await em.flush()
 
@@ -186,12 +162,11 @@ export async function addOrder(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 export async function getCartWithOrders(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
 
-    // Find the cart with all its orders and products
+    // Encuentra el carrito por ID y llena las órdenes, productos y usuario
     const cart = await em.findOneOrFail(
       Cart,
       { _id },
@@ -200,14 +175,13 @@ export async function getCartWithOrders(req: AuthenticatedRequest, res: Response
       },
     )
 
-    // Check if the cart belongs to the current user or user is admin
     if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
       return res.status(403).json({ message: "You don't have permission to access this cart" })
     }
 
     res.status(200).json({ message: "found cart with orders", data: cart })
   } catch (error: any) {
-    // If cart not found, create a new one
+    // Si el carrito no se encuentra, intenta crear uno nuevo
     if (error.name === "NotFoundError" && req.user) {
       try {
         const newCart = em.create(Cart, {
@@ -242,7 +216,7 @@ export async function findUserOrders(req: AuthenticatedRequest, res: Response) {
       }, 
       {
         populate: ["orders", "orders.product", "user"],
-        orderBy: { _id: 'DESC' } // Más recientes primero, use _id if createdAt does not exist
+        orderBy: { _id: 'DESC' } // Más recientes primero, usa _id si createdAt no existe
       }
     );
 

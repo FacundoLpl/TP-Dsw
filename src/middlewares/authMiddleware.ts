@@ -12,13 +12,11 @@ export interface AuthenticatedRequest extends Request {
     userType: string
   }
 }
-
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
     return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
   }
-
   try {
     const token = authHeader.split(" ")[1]
     if (!token) {
@@ -62,5 +60,4 @@ export const roleMiddleware = (roles: string[] = []) => {
   }
 }
 
-// Alias para uso rápido
 export const isAdmin = roleMiddleware(["Admin"])

@@ -5,10 +5,9 @@ import { Product } from "./product.entity.js"
 import { validateProduct } from "./product.schema.js"
 import { Category } from "../Category/category.entity.js"
 
-//const repository = new categoryRepository()
-const em = orm.em // entity manager funciona como un repository de todas las clases
 
-// el 3er parametro indicamos que relaciones queremos que cargue
+const em = orm.em 
+
 async function findAll(req: Request,res: Response) { 
     try{
         const products = await em.find(Product,{}, {populate: ['category']})
@@ -16,10 +15,7 @@ async function findAll(req: Request,res: Response) {
         res.status(200).json({message: 'found all products', data: products})
     } catch (error: any){
         res.status(500).json({message: error.message})
-}}
-
-
-
+  }}
 async function findOne(req: Request, res: Response) {
   try {
     const { id } = req.params;
@@ -38,8 +34,7 @@ async function findOne(req: Request, res: Response) {
   } catch (error: any) {
     return res.status(500).json({ message: 'Internal server error', detail: error.message });
   }
-}
-
+  }
 async function add(req: Request, res: Response) {
     try {
       const user = req.user;
@@ -76,9 +71,6 @@ async function add(req: Request, res: Response) {
       return res.status(500).json({ message: 'Internal server error', detail: error.message });
     }
   }
-  
-    
-
   async function update(req: Request, res: Response) {
     try {
       const user = req.user;
@@ -114,9 +106,7 @@ async function add(req: Request, res: Response) {
     } catch (error: any) {
       return res.status(500).json({ message: 'Internal server error', detail: error.message });
     }
-  }
-  
-    
+  }    
   async function remove(req: Request, res: Response) {
     try {
       const user = req.user;
@@ -144,7 +134,4 @@ async function add(req: Request, res: Response) {
       return res.status(500).json({ message: 'Internal server error', detail: error.message });
     }
   }
-  
-
-
 export { findAll, findOne, add, update, remove}

@@ -22,7 +22,6 @@ async function findAll(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 async function findOne(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
@@ -32,18 +31,12 @@ async function findOne(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 async function add(req: AuthenticatedRequest, res: Response) {
   try {
-
-    
-    // 1. Validar body completo con Zod primero
     const validationResult = validateReservation(req.body)
     if (!validationResult.success) {
       return res.status(400).json({ message: validationResult.error.message, errors: validationResult.error.errors })
     }
-
-    // 2. Ahora que sabemos que es válido, usamos los datos validados
     const data = validationResult.data
     const datetime = data.datetime
     const now = new Date()
@@ -57,24 +50,19 @@ async function add(req: AuthenticatedRequest, res: Response) {
     if (datetime > maxDate) {
       return res.status(400).json({ message: "The datetime must be within the next 7 days" })
     }
-
-    // 3. Buscar schedule
     const filter: ScheduleFilter = { datetime } as any
 
     let schedule = await em.findOne(Schedule, filter)
 
-    if (!schedule) {
-      // Convertir Date de vuelta a string para validateSchedule
+    if (!schedule) {  
       const datetimeString = datetime.toISOString();
-      
       const scheduleValidated = validateSchedule({ datetime: datetimeString })
       if (!scheduleValidated.success) {
-
         return res.status(400).json({ message: scheduleValidated.error.message })
       }
 
       schedule = em.create(Schedule, {
-        datetime, // ✅ Usar el Date object para la entidad
+        datetime,
         estimatedTime: scheduleValidated.data.estimatedTime,
         toleranceTime: scheduleValidated.data.toleranceTime,
         capacityLeft: scheduleValidated.data.capacityLeft - data.people,
@@ -94,7 +82,6 @@ async function add(req: AuthenticatedRequest, res: Response) {
       await em.flush()
     }
 
-    // 4. Verificar si el usuario ya tiene reserva pendiente
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Authentication required" })
     }
@@ -111,7 +98,6 @@ async function add(req: AuthenticatedRequest, res: Response) {
       return res.status(400).json({ message: "User already has a reservation pending" })
     }
 
-    // 5. Crear reserva - use references for user and schedule
     reservation = em.create(Reservation, {
       user: em.getReference("User", userId),
       state: "Pending",
@@ -119,33 +105,24 @@ async function add(req: AuthenticatedRequest, res: Response) {
       datetime,
       schedule: schedule.id,
     })
-
-
     await em.flush()
-
     res.status(201).json({ message: "Reservation created", data: reservation })
-
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
-
 async function update(req: AuthenticatedRequest, res: Response) {
   try {
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Authentication required" })
     }
-
     const userId = req.user.id
-
     const id = req.params.id
     const reservationToUpdate = await em.findOneOrFail(Reservation, { id }, { populate: ["user"] })
 
-    // When using wrapped references, we need to access the user ID differently
-    const reservationUserId = reservationToUpdate.user.id
+        const reservationUserId = reservationToUpdate.user.id
 
-    // Verificar si la reserva pertenece al usuario logeado
-    if (reservationUserId !== userId) {
+        if (reservationUserId !== userId) {
       return res.status(403).json({ message: "Forbidden: Not your reservation" })
     }
 
@@ -157,12 +134,9 @@ async function update(req: AuthenticatedRequest, res: Response) {
     return res.status(500).json({ message: error.message })
   }
 }
-
 async function remove(req: AuthenticatedRequest, res: Response) {
   try {
-    
-    // Validar que el ID sea válido
-    if (!req.params.id || req.params.id === 'undefined') {
+      if (!req.params.id || req.params.id === 'undefined') {
       return res.status(400).json({ message: 'Invalid reservation ID' });
     }
 
@@ -172,18 +146,11 @@ async function remove(req: AuthenticatedRequest, res: Response) {
     } catch (error) {
       return res.status(400).json({ message: 'Invalid reservation ID format' });
     }
-
-    // Buscar la reserva primero
     const reservation = await em.findOne(Reservation, { _id });
-    
     if (!reservation) {
       return res.status(404).json({ message: 'Reservation not found' });
     }
-
-    // Verificar que la reserva pertenece al usuario (si no es admin)
-    const reservationUserId = reservation.user?.id || reservation.user;
-
-    
+    const reservationUserId = reservation.user?.id || reservation.user;    
     if (req.user.userType !== 'admin' && reservationUserId !== req.user.id) {
 
       return res.status(403).json({ message: 'Not authorized to cancel this reservation' });
@@ -191,8 +158,6 @@ async function remove(req: AuthenticatedRequest, res: Response) {
 
     // Restaurar capacidad del schedule
     if (reservation.schedule) {
-
-  
   // Obtener el ID del schedule
   let scheduleId;
   if (typeof reservation.schedule === 'string') {
@@ -202,11 +167,8 @@ async function remove(req: AuthenticatedRequest, res: Response) {
   } else if (reservation.schedule._id) {
     scheduleId = reservation.schedule._id.toString();
   }
-  
-  
   if (scheduleId) {
     try {
-      // Convertir a ObjectId si es necesario
       const objectId = new ObjectId(scheduleId);
       const schedule = await em.findOne(Schedule, { _id: objectId });
 
@@ -214,14 +176,13 @@ async function remove(req: AuthenticatedRequest, res: Response) {
       if (schedule) {
         schedule.capacityLeft += reservation.people;
 
-        await em.flush(); // Guardar los cambios
+        await em.flush();
       }
     } catch (error) {
 
     }
   }
 }
-
     await em.removeAndFlush(reservation);
 
     
@@ -265,7 +226,6 @@ async function findByUser(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
 // Obtener solo la reserva pendiente del usuario
 async function findPendingByUser(req: AuthenticatedRequest, res: Response) {
   try {
@@ -285,7 +245,6 @@ async function findPendingByUser(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
 
 export { findAll, findOne, add, update, remove, findByUser, findPendingByUser }
 

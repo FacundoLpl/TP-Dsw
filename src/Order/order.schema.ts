@@ -7,17 +7,15 @@ const orderSchema = zod.object({
   cart: zod.string().optional(),
 })
 
-// Define the return type explicitly
 type OrderValidationResult =
   | zod.SafeParseSuccess<zod.infer<typeof orderSchema>>
   | zod.SafeParseError<zod.infer<typeof orderSchema>>
 
 export function validateOrder(data: any): OrderValidationResult {
-  // Convert quantity to number if it's a string
+
   if (typeof data.quantity === "string") {
     data.quantity = Number(data.quantity)
 
-    // Check if conversion resulted in a valid number
     if (isNaN(data.quantity)) {
       return {
         success: false,
@@ -33,12 +31,9 @@ export function validateOrder(data: any): OrderValidationResult {
       }
     }
   }
-
-  // Convert subtotal to number if it's a string
   if (typeof data.subtotal === "string") {
     data.subtotal = Number(data.subtotal)
 
-    // Check if conversion resulted in a valid number
     if (isNaN(data.subtotal)) {
       return {
         success: false,

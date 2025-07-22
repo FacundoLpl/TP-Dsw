@@ -16,18 +16,16 @@ async function findAll(req: Request,res: Response) {
         res.status(500).json({message: error.message})
     }
 }
-
 async function findOne (req: Request, res: Response){
     try{
         const _id = new ObjectId(req.params.id)
-        const schedule = await em.findOneOrFail(Schedule, { _id }) // primer parametro la clase, 2do el filtro
+        const schedule = await em.findOneOrFail(Schedule, { _id })
         res
             .status(200)
             .json({message: 'found schedule', data: schedule})
     }catch (error: any){
         res.status(500).json({message: error.message})}
     }
-
 async function add (req: Request,res: Response) {
     try{
         const validationResult = validateSchedule(req.body);
@@ -47,7 +45,6 @@ async function add (req: Request,res: Response) {
     }catch (error: any){
         res.status(500).json({message: error.message})
     }}
-
 async function update(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
@@ -59,7 +56,6 @@ async function update(req: Request,res: Response){
         res.status(500).json({ message: error.message });
     }
     }
-    
 async function remove(req: Request,res: Response){
     try {
         const _id = new ObjectId(req.params.id)
@@ -70,4 +66,4 @@ async function remove(req: Request,res: Response){
         res.status(500).json({ message: error.message })
     }}
 
-    export {findAll, findOne, add, update, remove}
+export {findAll, findOne, add, update, remove}
