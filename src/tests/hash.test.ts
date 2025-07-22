@@ -1,6 +1,17 @@
-// tests/hash.test.ts
 import { describe, expect, test } from 'vitest';
 import { hashPassword, comparePassword } from '../utils/hash';
+
+
+
+
+// Este archivo testea las funciones de hashing de contraseñas (`hashPassword` y `comparePassword`).
+// Cubre los siguientes casos:
+// - Que el hash se genere correctamente.
+// - Que la comparación entre contraseña y hash sea verdadera o falsa según corresponda.
+// - Que se manejen errores al intentar hashear o comparar valores inválidos (null, undefined, '').
+
+
+
 
 describe('Password hashing', () => {
   const password = 'secure123';

@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import "reflect-metadata" ;
 import { orm, syncSchema } from "./shared/db/orm.js"
 import cors from "cors"
 import { RequestContext } from "@mikro-orm/core"
@@ -15,7 +15,7 @@ import { authenticateToken } from "./middlewares/authMiddleware.js"
 import swaggerUi from "swagger-ui-express"
 import swaggerSpec from "./shared/db/swagger.js";
 
-const app = express()
+export const app = express()
 app.use(express.json())
 app.use(cors())
 
