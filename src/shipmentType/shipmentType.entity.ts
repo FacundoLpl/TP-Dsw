@@ -3,9 +3,9 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 
 @Entity()
 export class ShipmentType extends BaseEntity {
-  @Property({ type: 'number' })
+  @Property()
   estimatedTime!: number 
 
-  @Property({ type: 'string' })
+  @Property()
   type!: string
 }

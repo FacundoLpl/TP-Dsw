@@ -5,17 +5,17 @@ import { Reservation } from '../Reservation/reservation.entity.js';
 
 @Entity()
 export class Schedule extends BaseEntity {
-  @Property({ type: 'datetime' })
+  @Property()
   datetime!: Date
 
-  @Property({ type: 'number' })
-  estimatedTime!: number
+  @Property()
+   estimatedTime!: number
 
-  @Property({ type: 'number' })
-  toleranceTime!: number
+  @Property()
+   toleranceTime!: number
 
-  @Property({ type: 'number' })
-  capacityLeft!: number
+  @Property()
+   capacityLeft!: number
 
   @OneToMany(
     () => Reservation,

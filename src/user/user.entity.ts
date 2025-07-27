@@ -8,17 +8,17 @@ import {Reservation} from '../Reservation/reservation.entity.js'
 export class User extends BaseEntity{
 
         
-        @Property({ type: 'string' })
+        @Property()
         firstName!: string
 
-        @Property({ type: 'string' })
+        @Property()
         dni!: string
 
 
-        @Property({ type: 'string' })
+        @Property()
         lastName!: string
 
-        @Property({ type: 'string' }) 
+        @Property()
         userType!: 'Admin' | 'Client' | 'Mozo';
 
         @OneToMany(() => Cart, (cart: Cart) => cart.user, {
@@ -31,12 +31,12 @@ export class User extends BaseEntity{
         })
         reservations = new Collection<Reservation>(this);
 
-        @Property({ type: 'string', nullable: true })
+        @Property({ nullable: true })
         email!: string;
 
-        @Property({ type: 'string', nullable: true })
+        @Property({ nullable: true })
         password!: string;
 
-        @Property({ type: 'string', nullable: true })
+        @Property({ nullable: true })
         address!: string;
 }

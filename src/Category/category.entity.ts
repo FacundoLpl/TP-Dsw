@@ -6,7 +6,7 @@ import { Product } from "../Product/product.entity.js";
 @Entity()
 export class Category extends BaseEntity {
 
-    @Property({type: 'string', nullable: false })
+    @Property({nullable: false })
     name!: string;
 
     @OneToMany(() => Product, product => product.category, { cascade: [Cascade.ALL] })

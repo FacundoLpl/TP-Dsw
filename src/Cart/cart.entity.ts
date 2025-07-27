@@ -7,25 +7,25 @@ import { ShipmentType } from "../ShipmentType/shipmentType.entity.js"
   
 @Entity()
 export class Cart extends BaseEntity {
-  @Property({ type: 'string' })
+  @Property()
   state!: string
 
-  @Property({ type: 'number' })
+  @Property()
   total!: number
 
-  @Property({type: 'string', nullable: true })
+  @Property({nullable: true })
   deliveryType?: string
 
-  @Property({type: 'string', nullable: true })
+  @Property({nullable: true })
   deliveryAddress?: string
 
-  @Property({type: 'string', nullable: true })
+  @Property({nullable: true })
   paymentMethod?: string
 
-  @Property({type: 'string', nullable: true })
+  @Property({nullable: true })
   contactNumber?: string
 
-  @Property({ type: 'string', nullable: true })
+  @Property({ nullable: true })
   additionalInstructions?: string
 
   // Agrega la relación con ShipmentType

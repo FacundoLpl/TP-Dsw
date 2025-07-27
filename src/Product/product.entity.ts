@@ -5,24 +5,24 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 @Entity()
 export class Product extends BaseEntity{ 
 
-    @Property({type: 'string', nullable: false, unique: true })
+    @Property({nullable: false, unique: true })
     name!: string;
 
-    @Property({ type: 'number', nullable: false }) 
+    @Property({nullable: false }) 
     price!: number;
 
-    @Property({ type: 'number', nullable: false })
+    @Property({nullable: false })
     stock!: number;
 
-    @Property({ type: 'string', nullable: true })
+    @Property({nullable: true })
     description?: string;
 
     @ManyToOne(() => Category, { nullable: false }) 
     category!: Rel<Category>;
 
-    @Property({ type: 'string', nullable: true })
+    @Property({nullable: true })
     imageUrl?: string;
 
-    @Property({ type: 'string', nullable: false })
+    @Property({nullable: false })
     state!: "Active" | "Archived";
 }
