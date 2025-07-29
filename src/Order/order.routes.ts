@@ -5,6 +5,9 @@ import {
   add,
   update,
   remove,
+  getTotalOrders,
+  getTotalRevenue,
+  getWeeklySales,
 } from "./order.controller.js";
 import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -17,6 +20,10 @@ export const orderRouter = Router();
  *   description: Endpoints para pedidos (orders)
  */
 
+// NUEVAS RUTAS PARA DASHBOARD - solo admin
+orderRouter.get("/total", authenticateToken, isAdmin, getTotalOrders);
+orderRouter.get("/total-revenue", authenticateToken, isAdmin, getTotalRevenue);
+orderRouter.get("/weekly", authenticateToken, isAdmin, getWeeklySales);
 /**
  * @swagger
  * /orders:
@@ -143,3 +150,4 @@ orderRouter.put("/:id", authenticateToken, update);
  *         description: Pedido no encontrado
  */
 orderRouter.delete("/:id", authenticateToken, remove);
+

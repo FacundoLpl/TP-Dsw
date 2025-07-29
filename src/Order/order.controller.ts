@@ -261,3 +261,68 @@ export async function remove(req: AuthenticatedRequest, res: Response) {
     });
   }
 }
+
+export async function getTotalOrders(req: AuthenticatedRequest, res: Response) {
+  try {
+    const totalOrders = await em.count(Order, {});
+    res.json({ totalOrders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al contar pedidos" });
+  }
+}
+
+export async function getTotalRevenue(req: AuthenticatedRequest, res: Response) {
+  try {
+    const rawCollection = em.getConnection().getCollection('order');
+    const result = await rawCollection.aggregate([
+      { $group: { _id: null, totalRevenue: { $sum: '$subtotal' } } }
+    ]).toArray();
+
+    const totalRevenue = result[0]?.totalRevenue || 0;
+    res.json({ totalRevenue });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al calcular ingresos totales" });
+  }
+}
+
+export async function getWeeklySales(req: AuthenticatedRequest, res: Response) {
+  try {
+    const today = new Date();
+    const last7Days = new Date();
+    last7Days.setDate(today.getDate() - 6);
+
+    const rawCollection = em.getConnection().getCollection('order');
+    const sales = await rawCollection.aggregate([
+      {
+        $match: {
+          date: { $gte: last7Days, $lte: today }
+        }
+      },
+      {
+        $group: {
+          _id: { day: { $dayOfWeek: "$date" } }, 
+          totalAmount: { $sum: "$subtotal" }
+        }
+      }
+    ]).toArray();
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const result = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dayNumber = d.getDay() + 1; // MongoDB $dayOfWeek (1=Sunday)
+      const sale = sales.find(s => s._id.day === dayNumber);
+      result.push({ day: dayNames[d.getDay()], amount: sale ? sale.totalAmount : 0 });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener ventas semanales" });
+  }
+}
+

@@ -2,7 +2,7 @@
 
 GET http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGE1NGZhMTdmNjYyNzcyY2FkNjE5YSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDk3MDM1MTIsImV4cCI6MTc0OTcwNzExMn0.N3LjIoqMpMU8ECIoSuRPMj82XhO31we1cun-cOeWC64
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODY1ZWFjODMwMjJhMjM0NTFmODllYiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTM4MTMxNTYsImV4cCI6MTc1MzgxNjc1Nn0.80MUdljJ55lzuICtqlAMhYUcCaUg7mv5Qt2YEJ4kS2A
 
 
 ### crear un nuevo user

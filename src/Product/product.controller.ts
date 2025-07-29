@@ -44,9 +44,11 @@ async function add(req: Request, res: Response) {
       if (user.userType !== 'Admin') {
         return res.status(403).json({ message: 'Forbidden' });
       }
-  
+       console.log("🧪 Body recibido:", req.body);
+
       const validationResult = validateProduct(req.body);
       if (!validationResult.success) {
+        console.error("❌ Error de validación:", validationResult.error.format());
         return res.status(400).json({
           message: 'Invalid product data',
           errors: validationResult.error.errors,
@@ -58,7 +60,7 @@ async function add(req: Request, res: Response) {
         return res.status(400).json({ message: 'Invalid or missing category ID' });
       }
   
-      const category = await em.findOne(Category, { id: categoryId });
+      const category = await em.findOne(Category, { _id: new ObjectId(categoryId) });
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }

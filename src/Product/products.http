@@ -24,19 +24,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY
 ### ID 
 @id = {{createUser.response.body.data.id}}
 ### obtengo un user especifico
-GET http://localhost:3000/api/products/672d4d484a0fac5888ae18f4
+GET http://localhost:3000/api/products/6888ee9e100e23eeefc8cc15
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTc4OTI1NiwiZXhwIjoxNzQ1NzkyODU2fQ.mBJkdmJxQXh70dboWghG1eMq4N7aapvX0ciqsnMBEE8
 
 ### modificar un usuario (PUT - idempotente, se modifican TODOS los elementos posibles)
-PUT http://localhost:3000/api/products/672d4ec04a0fac5888ae18fd
+PUT http://localhost:3000/api/products/6888ee9e100e23eeefc8cc15
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY2UyNmViZThiOTBmYTc2YyIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NDU4NzUyMjIsImV4cCI6MTc0NTg3ODgyMn0.gQtae98rWCrhfhKbH8qEPAycs49avF8yZZGgPwGzohI
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODY1ZWFjODMwMjJhMjM0NTFmODllYiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTM4MDU2MzEsImV4cCI6MTc1MzgwOTIzMX0.FgA15_fzfGXTlrWborwdtdVfmh2yliApm0sugzZUQ8o
 
 {
-    "stock": 50
+  "name": "Remolacha",
+  "price": 1000,
+  "stock": 10,
+  "description": "La mejor del mundo",
+  "category": "672d4b36dda5ebf5cf0b7e6c",
+  "imageUrl": "https://i.pinimg.com/736x/1c/59/8d/1c598d69cf8777658b7f670a884c78c3.jpg",
+  "state": "Active"
 }
+
 
 
 ### borrar un user
