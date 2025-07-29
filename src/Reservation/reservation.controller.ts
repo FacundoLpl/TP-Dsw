@@ -9,6 +9,7 @@ import { validateSchedule } from "../Schedule/schedule.schema.js"
 import  { ScheduleFilter } from "../Schedule/schedule.filter.js"
 import { AuthenticatedRequest } from "../middlewares/authMiddleware.js"
 
+
 const em = orm.em
 
 async function findAll(req: AuthenticatedRequest, res: Response) {

@@ -14,18 +14,23 @@ export interface AuthenticatedRequest extends Request {
 }
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization
+ console.log("Auth header:", authHeader) 
   if (!authHeader) {
+    console.log("No Authorization header present")
     return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
   }
   try {
     const token = authHeader.split(" ")[1]
+    console.log("Token extracted:", token) 
     if (!token) {
+      console.log("No token found after Bearer")
       return res.status(401).json({ code: "MISSING_TOKEN", message: "Authentication token is required" })
     }
 
     const decoded = jwt.verify(token, JWT_SECRET)
-
+ console.log("Decoded token:", decoded)  // <--- Aquí
     if (!decoded || typeof decoded !== "object" || !("id" in decoded) || !("userType" in decoded)) {
+      console.log("Token missing required fields")
       return res.status(401).json({ code: "INVALID_TOKEN", message: "Invalid token format" })
     }
 
@@ -33,9 +38,10 @@ export const authenticateToken = (req: AuthenticatedRequest, res: Response, next
       id: (decoded as any).id,
       userType: (decoded as any).userType,
     }
-
+console.log("User set in request:", req.user) 
     next()
   } catch (err) {
+    console.log("User set in request:", req.user) 
     if (err && typeof err === "object" && "name" in err && (err as any).name === "TokenExpiredError") {
       return res.status(401).json({ code: "TOKEN_EXPIRED", message: "Token has expired" })
     }
