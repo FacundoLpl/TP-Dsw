@@ -69,4 +69,19 @@ async function remove(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { findAll, findOne, add, remove, update };
+async function findByProductId(req: Request, res: Response) {
+  try {
+    const productId = req.params.productId
+
+    const reviews = await em.find(Review, {
+      product: productId,
+      state: 'Active'
+    })
+
+    res.json(reviews)
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener las reviews del producto' })
+  }
+}
+
+export { findAll, findOne, add, remove, update, findByProductId };
