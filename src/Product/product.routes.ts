@@ -78,7 +78,7 @@ productRouter.get("/:id", findOne);
  *       400:
  *         description: Error en la petición
  */
-productRouter.post("/", authenticateToken, add);
+productRouter.post("/", authenticateToken, isAdmin, add);
 
 /**
  * @swagger

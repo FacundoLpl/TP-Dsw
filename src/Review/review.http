@@ -1,0 +1,28 @@
+
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
+
+{ 
+"rating": 3.3,
+"comment" : "This is a test review",
+"state": "Active",
+"product": "672d4c554a0fac5888ae18ed"
+
+}
+###
+GET http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
+###
+DELETE http://localhost:3000/api/reviews/689361d09403582261ea3c85
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
+###
+GET http://localhost:3000/api/reviews/6893619e9403582261ea3c84
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
