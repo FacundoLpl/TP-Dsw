@@ -30,6 +30,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/users/login", userRouter)
 app.use("/api/users/register", userRouter)
 app.use("/api/products", productRouter)
+app.use("/api/reviews", reviewRouter)
 
 // Rutas protegidas 
 app.use("/api/users", userRouter) 
@@ -39,7 +40,7 @@ app.use("/api/categories", authenticateToken, categoryRouter)
 app.use("/api/carts", authenticateToken, cartRouter)
 app.use("/api/orders", authenticateToken, orderRouter)
 app.use("/api/reservations", authenticateToken, reservationRouter)
-app.use("/api/reviews", authenticateToken, reviewRouter)
+app.use("/api/reviews", reviewRouter)
 
 app.use((req, res) => {
   res.status(404).send({ message: "Resource not found" })
