@@ -12,6 +12,7 @@ import { cartRouter } from "./Cart/cart.routes.js"
 import { orderRouter } from "./Order/order.routes.js"
 import { reservationRouter } from "./Reservation/reservation.routes.js"
 import { authenticateToken } from "./middlewares/authMiddleware.js"
+import { reviewRouter } from "./Review/review.routes.js"
 import swaggerUi from "swagger-ui-express"
 import swaggerSpec from "./shared/db/swagger.js";
 
@@ -29,6 +30,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/users/login", userRouter)
 app.use("/api/users/register", userRouter)
 app.use("/api/products", productRouter)
+app.use("/api/reviews", reviewRouter)
 
 // Rutas protegidas 
 app.use("/api/users", userRouter) 
@@ -38,6 +40,7 @@ app.use("/api/categories", authenticateToken, categoryRouter)
 app.use("/api/carts", authenticateToken, cartRouter)
 app.use("/api/orders", authenticateToken, orderRouter)
 app.use("/api/reservations", authenticateToken, reservationRouter)
+app.use("/api/reviews", reviewRouter)
 
 app.use((req, res) => {
   res.status(404).send({ message: "Resource not found" })

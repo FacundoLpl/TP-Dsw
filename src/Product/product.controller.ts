@@ -10,7 +10,7 @@ const em = orm.em
 
 async function findAll(req: Request,res: Response) { 
     try{
-        const products = await em.find(Product,{}, {populate: ['category']})
+        const products = await em.find(Product,{}, {populate: ['category', 'reviews']});
         console.log(products);
         res.status(200).json({message: 'found all products', data: products})
     } catch (error: any){
@@ -26,7 +26,7 @@ async function findOne(req: Request, res: Response) {
       return res.status(400).json({ message: 'Invalid product ID format' });
     }
     const _id = new ObjectId(id);
-    const product = await em.findOne(Product, { _id }, { populate: ['category'] });
+    const product = await em.findOne(Product, { _id }, { populate: ['category', 'reviews'] });
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }

@@ -1,4 +1,4 @@
-import zod from "zod";
+import zod, { date } from "zod";
 
 const cartSchema = zod.object({
   user: zod.string(),
@@ -13,6 +13,12 @@ const cartSchema = zod.object({
     ),
   total: zod.number().min(0, { message: "Total must be a positive number" }),
   shipmentType: zod.string().optional(),
+  date: zod.date().optional(),
+  deliveryType: zod.string(),
+  deliveryAddress: zod.string(),
+  paymentMethod: zod.string(),
+  contactNumber: zod.string(),
+  additionalInstructions: zod.string().optional(),
 });
 
 export function validateCart(data: any) {

@@ -28,6 +28,9 @@ export class Cart extends BaseEntity {
   @Property({ nullable: true })
   additionalInstructions?: string
 
+  @Property({ nullable: true })
+  date?: Date;
+
   // Agrega la relación con ShipmentType
   @ManyToOne(() => ShipmentType, { nullable: true })
   shipmentType?: ShipmentType

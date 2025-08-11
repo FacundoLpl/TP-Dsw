@@ -1,6 +1,7 @@
 ### crear cart
 POST http://localhost:3000/api/carts
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQwNTkwNzYsImV4cCI6MTc1NDA2MjY3Nn0.PdBQ7EVMQy168uEWtGaeKLyYS-JX6XFAJKAtZVF0EhA
 
 {
   "user": "672d4f8bb48ca087afa73e85",
@@ -19,9 +20,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MTk4NjYsImV4cCI6MTc1NDUyMzQ2Nn0.ddx3e6TsUA_Xoy2Dib77dbP3YR9DrM0eClLzo6h1twY
 
 ### delete
-DELETE http://localhost:3000/api/carts/6809bfe531bd4eb1258c33f0
+DELETE http://localhost:3000/api/carts/68953c6daf883268dfee7c14
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDgwZWQ1ZDZkM2UxM2U0NGVhODU4YSIsInVzZXJUeXBlIjoiQ2xpZW50ZSIsImlhdCI6MTc0NTg3NDkyOSwiZXhwIjoxNzQ1ODc4NTI5fQ.1CsaJ1Mm8wQTEbHLCGA4idLANkTLdxQ5JFEYCXaAJJM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ2MTE3MDMsImV4cCI6MTc1NDYxNTMwM30.DWuAHI6p3Oxg-3OtIjUW6CnBRmMFV8-lJIsd11HA-JU
 
 
 

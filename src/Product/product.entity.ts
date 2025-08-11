@@ -1,6 +1,8 @@
-import {Entity, Property, ManyToOne, Rel} from '@mikro-orm/core'
+import {Entity, Collection, Property, ManyToOne, Rel, OneToMany, Cascade} from '@mikro-orm/core'
 import { Category } from '../Category/category.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { Review } from '../Review/review.entity.js'
+
 
 @Entity()
 export class Product extends BaseEntity{ 
@@ -25,4 +27,9 @@ export class Product extends BaseEntity{
 
     @Property({nullable: false })
     state!: "Active" | "Archived";
+
+    @OneToMany(() => Review, (review: Review) => review.product, {
+    cascade: [Cascade.ALL],
+  })
+  reviews = new Collection<Review>(this);
 }
