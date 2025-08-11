@@ -16,7 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGVhMTEzY
 ### get all carts
 GET http://localhost:3000/api/carts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGE1NGZhMTdmNjYyNzcyY2FkNjE5YSIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTE0MDQ1OTMsImV4cCI6MTc1MTQwODE5M30.SDJz-Qa29GLe3bteJnuIqBO-7CbRKupIf0wR_3MVLCA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MTk4NjYsImV4cCI6MTc1NDUyMzQ2Nn0.ddx3e6TsUA_Xoy2Dib77dbP3YR9DrM0eClLzo6h1twY
 
 ### delete
 DELETE http://localhost:3000/api/carts/6809bfe531bd4eb1258c33f0
