@@ -24,7 +24,7 @@
 ### Descripción
 
 Para el trabajo decidimos realizar un sistema relacionado con el sector gastronomico. Seria una aplicacion pensada para que la utilicen en bares, restaurantes, u otros establecimientos similares. Alguna de las opciones que permite hacer serian: hacer reservas y pedidos, indicar metodos de pago, llevar registro de pedidos y turnos disponibles, aceptar reseñas, entre otras cosas.
-El sitio estará diseñado para admitir diferentes niveles de usuarios, entre ellos cliente, mozo y administrador.
+El sitio estará diseñado para admitir diferentes niveles de usuarios, entre ellos cliente y administrador.
 
 ### Modelo
 
@@ -138,9 +138,11 @@ b. Instalar las dependencias usando pnpm:
 pnpm install
 
 c. Crea una cuenta en MongoDB Atlas si aún no tienes una.
+
 d. Crea un clúster en MongoDB Atlas.
 
 e. Crea un archivo .env y agrega la configuración de tu conexión a MongoDB Atlas en el archivo .env:
+
 MONGO_DB=nombre_de_tu_base_de_datos
 MONGO_URI=tu_URI_de_conexión_a_MongoDB_Atlas
 
@@ -154,9 +156,11 @@ http://localhost:3000/api-docs/
 
 ### 5. Playlist de vistas 
 Puedes ver las vistas del cliente y admin en nuestra playlist de YouTube:
+
 https://www.youtube.com/watch?v=weAU8VJpBGo&list=PLf6CHWHo-JCBbGxIeUZTRqLe3IcO5Srze&ab_channel=FacundoCantaberta
 
 Cuentas de prueba: 
+
 user: soyadmin@gmail.com
 pw: 12345678
 
