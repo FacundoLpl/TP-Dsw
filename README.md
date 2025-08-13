@@ -152,6 +152,6 @@ La aplicación estará disponible en http://localhost:3000
 ### 4. Documentación de la API
 http://localhost:3000/api-docs/
 
-### 5. Playlist de vistas del cliente, mozo y admin
+### 5. Playlist de vistas 
 Puedes ver las vistas del cliente y admin en nuestra playlist de YouTube:
 https://www.youtube.com/watch?v=weAU8VJpBGo&list=PLf6CHWHo-JCBbGxIeUZTRqLe3IcO5Srze&ab_channel=FacundoCantaberta
