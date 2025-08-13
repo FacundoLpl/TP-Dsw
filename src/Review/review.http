@@ -1,16 +1,12 @@
 
 POST http://localhost:3000/api/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU1MTAwMDU0LCJleHAiOjE3NTUxMDM2NTR9.9ER00tFtqK9D_CZwUs6b5QfJ7Y0sTV5EyIWUbcF_rKY
 
 
-{ 
-"rating": 5,
-"comment" : "This is a test review",
-"state": "Active",
-"product": "672d4e2b4a0fac5888ae18f9",
-"createdAt": "2023-09-15T12:34:56Z",
-"updatedAt": "2023-09-15T12:34:56Z"
+{"product":"672d4d2e4a0fac5888ae18f3",
+"rating":3,
+"comment":"reviewtest"
 }
 
 ### Coca-Cola
