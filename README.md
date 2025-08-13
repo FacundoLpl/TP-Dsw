@@ -155,3 +155,10 @@ http://localhost:3000/api-docs/
 ### 5. Playlist de vistas 
 Puedes ver las vistas del cliente y admin en nuestra playlist de YouTube:
 https://www.youtube.com/watch?v=weAU8VJpBGo&list=PLf6CHWHo-JCBbGxIeUZTRqLe3IcO5Srze&ab_channel=FacundoCantaberta
+
+Cuentas de prueba: 
+user: soyadmin@gmail.com
+pw: 12345678
+
+user: maria123@gmail.com
+pw: 12345678
