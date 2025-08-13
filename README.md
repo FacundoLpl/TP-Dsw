@@ -23,8 +23,8 @@
 
 ### Descripción
 
-Para el trabajo decidimos realizar un sistema relacionado con el sector gastronomico. Seria una aplicacion pensada para que la utilicen en bares, restaurantes, u otros establecimientos similares. Alguna de las opciones que permite hacer serian: hacer reservas, //utilizar distintos perfiles para cada mozo//, indicar metodos de pago, //realizar el pago mediante la aplicacion//, llevar registro de pedidos y turnos disponibles, //aceptar opiniones//, entre otras cosas.
-El sitio estará diseñado para admitir diferentes niveles de usuarios, entre ellos cliente, mozo y administrador.
+Para el trabajo decidimos realizar un sistema relacionado con el sector gastronomico. Seria una aplicacion pensada para que la utilicen en bares, restaurantes, u otros establecimientos similares. Alguna de las opciones que permite hacer serian: hacer reservas y pedidos, indicar metodos de pago, llevar registro de pedidos y turnos disponibles, aceptar reseñas, entre otras cosas.
+El sitio estará diseñado para admitir diferentes niveles de usuarios, entre ellos cliente y administrador.
 
 ### Modelo
 
@@ -43,6 +43,7 @@ Cart "*" -- "0..1" ShipmentType
 Order "*" -- "1" Product
 Product "*" -- "1" Category
 Reservation "*" -- "1" Schedule
+Product "1" -- "*" Review
 
 %% Clases
 class User {
@@ -102,6 +103,13 @@ class Schedule {
   +number toleranceTime
   +number capacityLeft
 }
+
+class Review {
+  +number rating
+  +string comment
+  +"Active"|"Archived" state
+}
+
 ```
 
 ## 2. Alcance Funcional
@@ -120,7 +128,7 @@ Aprobación Directa
 | Req      | Detalle       |
 | :------- | :------------ |
 | Listados | 1. Listado de carritos completados por el usuario, con detalle de fecha, productos, cantidades, tipo de envío, forma de pago, estado, y opción de   cancelar si está dentro del plazo.- |
-| CUU/Epic | 1. Cancelar un carrito<br>2. Envio del carrito-<br>3.Moderación de reviews con la api de OpenAI |
+| CUU/Epic | 1. Cancelar un carrito<br>2. Envio del carrito-<br>3.Crear una review a un producto post-compra |
 
 ### 3. Instrucciones de instalacion
 a. Clona este repositorio en tu máquina local:
@@ -130,9 +138,11 @@ b. Instalar las dependencias usando pnpm:
 pnpm install
 
 c. Crea una cuenta en MongoDB Atlas si aún no tienes una.
+
 d. Crea un clúster en MongoDB Atlas.
 
 e. Crea un archivo .env y agrega la configuración de tu conexión a MongoDB Atlas en el archivo .env:
+
 MONGO_DB=nombre_de_tu_base_de_datos
 MONGO_URI=tu_URI_de_conexión_a_MongoDB_Atlas
 
@@ -142,9 +152,17 @@ pnpm run start:dev
 La aplicación estará disponible en http://localhost:3000
 
 ### 4. Documentación de la API
-Debido a las limitaciones de la cuenta gratuita en Render, puede haber un retraso de unos minutos en la carga de la documentación.
-@subir a render
+http://localhost:3000/api-docs/
 
-### 5. Playlist de vistas del cliente, mozo y admin
-Puedes ver las vistas del cliente, mozo y admin en nuestra playlist de YouTube:
-@yutu/btn
+### 5. Playlist de vistas 
+Puedes ver las vistas del cliente y admin en nuestra playlist de YouTube:
+
+https://www.youtube.com/watch?v=weAU8VJpBGo&list=PLf6CHWHo-JCBbGxIeUZTRqLe3IcO5Srze&ab_channel=FacundoCantaberta
+
+Cuentas de prueba: 
+
+user: soyadmin@gmail.com
+pw: 12345678
+
+user: maria123@gmail.com
+pw: 12345678
