@@ -15,7 +15,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4N
 ### Coca-Cola
 POST http://localhost:3000/api/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3R1c2VyaWQiLCJ1c2VyVHlwZSI6IkFkbWluIiwiaWF0IjoxNzU1NDcwMDkyLCJleHAiOjE3NTU0NzM2OTJ9.cUzYuHMOTG_3cNQzjguhXq67-m1t4CqU09uLgMgpbHA
+
 
 {
   "rating": 5,
@@ -81,6 +82,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4N
   "product": "672d4cde4a0fac5888ae18f1",
   "createdAt": "2023-09-15T12:34:56Z",
   "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Review
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU1NDY5OTU0LCJleHAiOjE3NTU0NzM1NTR9.YcDgb6Gv_ej-u1tN7BZcv8dIcJYgFxuDO5mgcrqiIgM
+{
+  "product": "672d4d484a0fac5888ae18f4",
+  "rating": 3,
+  "comment": "todo bien"
 }
 
 ### Ensalada César

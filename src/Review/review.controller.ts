@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Review } from './review.entity.js';
+import { Product } from "../Product/product.entity.js";
 import { validateReview } from './review.schema.js';
 import { orm } from '../shared/db/orm.js';
 
@@ -49,7 +50,10 @@ async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const id = req.params.id;
     const reviewToUpdate = await em.findOneOrFail(Review, { id });
-    em.assign(reviewToUpdate, req.body);
+    em.assign(reviewToUpdate, {
+      rating: req.body.rating,
+      comment: req.body.comment,
+});
     await em.flush();
     res.status(200).json({ message: 'Review updated', data: reviewToUpdate });
   } catch (err: any) {
