@@ -1,0 +1,125 @@
+
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+
+{ 
+"rating": 5,
+"comment" : "This is a test review",
+"state": "Active",
+"product": "672d4e2b4a0fac5888ae18f9",
+"createdAt": "2023-09-15T12:34:56Z",
+"updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Coca-Cola
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3R1c2VyaWQiLCJ1c2VyVHlwZSI6IkFkbWluIiwiaWF0IjoxNzU1NDcwMDkyLCJleHAiOjE3NTU0NzM2OTJ9.cUzYuHMOTG_3cNQzjguhXq67-m1t4CqU09uLgMgpbHA
+
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4c554a0fac5888ae18ed",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Jugo de Naranja
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4c7a4a0fac5888ae18ee",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Agua Mineral
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4c9a4a0fac5888ae18ef",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Agua con Gas
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4cb54a0fac5888ae18f0",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Cerveza
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4cde4a0fac5888ae18f1",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+
+### Review
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU1NDY5OTU0LCJleHAiOjE3NTU0NzM1NTR9.YcDgb6Gv_ej-u1tN7BZcv8dIcJYgFxuDO5mgcrqiIgM
+{
+  "product": "672d4d484a0fac5888ae18f4",
+  "rating": 3,
+  "comment": "todo bien"
+}
+
+### Ensalada César
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+
+{
+  "rating": 5,
+  "comment": "This is a test review",
+  "state": "Active",
+  "product": "672d4d154a0fac5888ae18f2",
+  "createdAt": "2023-09-15T12:34:56Z",
+  "updatedAt": "2023-09-15T12:34:56Z"
+}
+###
+GET http://localhost:3000/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
+###
+DELETE http://localhost:3000/api/reviews/689361d09403582261ea3c85
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+
+###
+GET http://localhost:3000/api/reviews/6893619e9403582261ea3c84
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3NDY2OTk5ZGJjYzE4MTYyNSIsInVzZXJUeXBlIjoiQ2xpZW50IiwiaWF0IjoxNzU0NDg5MDc4LCJleHAiOjE3NTQ0OTI2Nzh9.jP1vHU5Xm1jml8vBQdNZuThIQUMOwa5CDgfUo_-vxvw
+

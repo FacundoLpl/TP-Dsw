@@ -1,5 +1,7 @@
 ### obtener todos los categorias
 GET http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTUwNDExMjksImV4cCI6MTc1NTA0NDcyOX0.N312aXskIIsjSrRHY67SpCIepqE84RwtwiuwoVRjzdg
 
 
 ### crear un nuevo categoria

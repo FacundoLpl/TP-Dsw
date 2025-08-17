@@ -12,8 +12,6 @@ const scheduleSchema = zod.object({
       }, {
         message: "La hora debe estar entre las 19:00 y las 23:00.",
       }),
-    
-
     estimatedTime: zod.number().int()
     .default(60),
 

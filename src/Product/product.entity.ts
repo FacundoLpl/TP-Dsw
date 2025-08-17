@@ -1,28 +1,35 @@
-import {Entity, Property, ManyToOne, Rel} from '@mikro-orm/core'
+import {Entity, Collection, Property, ManyToOne, Rel, OneToMany, Cascade} from '@mikro-orm/core'
 import { Category } from '../Category/category.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { Review } from '../Review/review.entity.js'
+
 
 @Entity()
-export class Product extends BaseEntity{ //faltan los atributos; como lo relaciono con categoria? avisar si no quedo bien, intente resolverlo
+export class Product extends BaseEntity{ 
 
-    @Property({ nullable: false, unique: true })
+    @Property({nullable: false, unique: true })
     name!: string;
 
-    @Property({ nullable: false }) 
+    @Property({nullable: false }) 
     price!: number;
 
-    @Property({ nullable: false })
+    @Property({nullable: false })
     stock!: number;
 
-    @Property({ nullable: true }) 
+    @Property({nullable: true })
     description?: string;
 
     @ManyToOne(() => Category, { nullable: false }) 
     category!: Rel<Category>;
 
-    @Property({ nullable: true }) 
+    @Property({nullable: true })
     imageUrl?: string;
 
-    @Property({ nullable: false })
+    @Property({nullable: false })
     state!: "Active" | "Archived";
+
+    @OneToMany(() => Review, (review: Review) => review.product, {
+    cascade: [Cascade.ALL],
+  })
+  reviews = new Collection<Review>(this);
 }

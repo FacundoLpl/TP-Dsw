@@ -1,105 +1,296 @@
-import { Request, Response} from "express"
+import { Response } from "express"
+import { Cart } from "./cart.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
-import { Cart } from "./cart.entity.js"
-import { CartFilter } from "./cart.filter.js"
-import { validateCart } from "./cart.schema.js"
+import { AuthenticatedRequest } from "../middlewares/authMiddleware.js"
 
+const em = orm.em
 
+export async function findAll(req: AuthenticatedRequest, res: Response) {
+  try {
+    const filter: any = {}
+    if (req.query.state) {
+      filter.state = req.query.state
+    } // Filtra por estado del carrito
+    if (req.query.user) {
+      filter.user = req.query.user
+    } // Filtra por usuario si se proporciona
+    if (req.query.deliveryType) {
+      filter.deliveryType = req.query.deliveryType
+    }
+    // Filtra por tipo de envío si se proporciona
+    if (req.query.shipmentType) {
+      filter.shipmentType = req.query.shipmentType
+    }
+    const carts = await em.find(Cart, filter, {
+      populate: ["orders", "orders.product", "user", "shipmentType"],
+    }) // Obtiene todos los carritos con sus órdenes, productos, usuario y tipo de envío
 
-const em = orm.em // entity manager funciona como un repository de todas las clases
+    res.status(200).json({ message: "found all carts", data: carts })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  } // Maneja errores y envía una respuesta de error
+}
+export async function findOne(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const cart = await em.findOneOrFail(
+      Cart,
+      { _id },
+      {
+        populate: ["orders", "orders.product", "user", "shipmentType"],
+      },
+    ) // Busca un carrito por ID y lo llena con órdenes, productos, usuario y tipo de envío
 
-
-async function findAll(req: Request,res: Response) { 
-    try{
-        const filter: CartFilter = req.query
-        const carts = await em.find(Cart, filter, {
-            populate: [
-                'orders',
-                'user',
-                'orders.product',
-                'shipmentType'
-            ]})
-        res.status(200).json({message: 'Found all carts', data: carts})
-    } catch (error: any){
-        res.status(500).json({message: error.message})
-}}
-
-async function findOne (req: Request, res: Response){
-    try{
-        const _id = new ObjectId(req.params.id)
-        const cart = await em.findOneOrFail(Cart, { _id },
-            {populate: ['orders']} 
-            ) // primer parametro la clase, 2do el filtro
-        res
-            .status(200)
-            .json({message: 'found cart', data: cart})
-    }catch (error: any){
-        res.status(500).json({message: error.message})}
+    // Checkea si el carrito pertenece al usuario actual o si el usuario es admin
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to access this cart" })
     }
 
-    async function add(req: Request, res: Response) {
-        try {
-            const validationResult = validateCart(req.body);
-            if (!validationResult.success) 
-                { return res.status(400).json({
-                  message: "Datos del carrito inválidos",
-                  errors: validationResult.error.errors, // 👈 Detalla los campos con error
-                });}
-            let cart = await em.findOne(Cart, {
-                user: req.user.id,
-                state: "Pending",
-              });
-              
-              if (cart) {
-                return res.status(409).json({ message: "Ya tienes un carrito pendiente" }); // ✅ 409 Conflict
-              }
-                cart = em.create(Cart, {
-                    user: req.user.id,
-                    state: "Pending",
-                    total: req.body.total,
-                  });
-                  
-            await em.flush();
-            res.status(201).json({ message: 'cart created', data: cart });}
-         catch (error: any) {
-            res.status(500).json({ message: error.message });
-        }
+    res.status(200).json({ message: "found cart", data: cart })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  } // Maneja errores y envía una respuesta de error
+}
+export async function add(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (!req.body.user && req.user) {
+      req.body.user = req.user.id
     }
-    
 
-
-async function update(req: Request,res: Response){
-        try {
-            const cart: Cart = req.body;
-              const id = req.params.id
-              const cartToUpdate = await em.findOneOrFail(Cart, { id, user: req.user.id });
-              em.assign(cartToUpdate, req.body);
-              await em.flush();
-              res.status(200).json({ message: "Cart updated", data: cartToUpdate });
-            } catch (error: any) {
-                res.status(500).json({ message: error.message });
-}}
-     
-async function remove(req: Request, res: Response) {
-    try {
-      const userId = req.user?.id;
-  
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+    // Maneja la referencia de shipmentType si se proporciona
+    if (req.body.shipmentType && typeof req.body.shipmentType === "string") {
+      try {
+        const shipmentTypeId = new ObjectId(req.body.shipmentType)
+        req.body.shipmentType = em.getReference("ShipmentType", shipmentTypeId)
+      } catch (error) {
+        return res.status(400).json({ message: "Invalid shipmentType ID" })
       }
-  
-      const _id = new ObjectId(req.params.id);
-  
-      const cart = await em.findOneOrFail(Cart, { _id, user: userId }, { populate: ['orders'] });
-  
-      await em.removeAndFlush(cart);
-  
-      return res.status(200).json({ message: 'Cart removed', data: cart });
-    } catch (error: any) {
-      return res.status(500).json({ message: error.message });
+    }
+
+    const cart = em.create(Cart, req.body)
+    await em.persistAndFlush(cart)
+    res.status(201).json({ message: "cart created", data: cart })// Crea un nuevo carrito y lo guarda en la base de datos
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+export async function update(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const cart = await em.findOneOrFail(Cart, { _id })
+
+    // Valida si el carrito pertenece al usuario actual o si el usuario es admin
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to update this cart" })
+    }
+    if (req.body.shipmentType && typeof req.body.shipmentType === "string") {
+      try {
+        const shipmentTypeId = new ObjectId(req.body.shipmentType)
+        req.body.shipmentType = em.getReference("ShipmentType", shipmentTypeId)
+      } catch (error) {
+        return res.status(400).json({ message: "Invalid shipmentType ID" })
+      }
+    }
+
+    // Actualiza el carrito con los datos proporcionados
+    em.assign(cart, req.body)
+    await em.flush()
+
+    res.status(200).json({ message: "cart updated", data: cart })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+export async function remove(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const cart = await em.findOneOrFail(Cart, { _id })
+
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to delete this cart" })
+    }
+
+    await em.removeAndFlush(cart)
+    res.status(200).json({ message: "cart removed", data: cart })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+export async function removeOrders(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const cart = await em.findOneOrFail(Cart, { _id }, { populate: ["orders"] })
+
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to modify this cart" })
+    }
+
+    // Elimina todas las órdenes del carrito
+    await em.nativeDelete("Order", { cart: cart.id })
+
+    // Reset cart total
+    cart.total = 0
+    await em.flush()
+
+    res.status(200).json({ message: "all orders removed from cart", data: cart })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+export async function addOrder(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const cart = await em.findOneOrFail(Cart, { _id })
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to modify this cart" })
+    }
+    const order = em.create("Order", {
+      ...req.body,
+      cart: cart,
+    }) as { subtotal: number } 
+
+    await em.persistAndFlush(order)
+
+    cart.total += order.subtotal
+    await em.flush()
+
+    res.status(201).json({ message: "order added to cart", data: order })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+export async function getCartWithOrders(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+
+    // Encuentra el carrito por ID y llena las órdenes, productos y usuario
+    const cart = await em.findOneOrFail(
+      Cart,
+      { _id },
+      {
+        populate: ["orders", "orders.product", "user"],
+      },
+    )
+
+    if (cart.user.id !== req.user?.id && req.user?.userType !== "Admin") {
+      return res.status(403).json({ message: "You don't have permission to access this cart" })
+    }
+
+    res.status(200).json({ message: "found cart with orders", data: cart })
+  } catch (error: any) {
+    // Si el carrito no se encuentra, intenta crear uno nuevo
+    if (error.name === "NotFoundError" && req.user) {
+      try {
+        const newCart = em.create(Cart, {
+          user: req.user.id,
+          state: "Pending",
+          total: 0,
+        })
+        await em.persistAndFlush(newCart)
+
+        res.status(200).json({ message: "created new cart", data: newCart })
+      } catch (createError: any) {
+        res.status(500).json({ message: createError.message })
+      }
+    } else {
+      res.status(500).json({ message: error.message })
     }
   }
-    
+}
+export async function findUserOrders(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
 
-export { findAll, findOne, add, update, remove}
+    const userId = req.user.id;
+    
+    // Buscar carritos completados del usuario
+    const completedCarts = await em.find(Cart, 
+      { 
+        user: userId, 
+        state: "Completed" 
+      }, 
+      {
+        populate: ["orders", "orders.product", "user"],
+        orderBy: { _id: 'DESC' } // Más recientes primero, usa _id si createdAt no existe
+      }
+    );
+
+    res.status(200).json({ 
+      message: "found user orders", 
+      data: completedCarts 
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getTotalCarts(req: AuthenticatedRequest, res: Response) {
+  try {
+    const filter: any = {}
+    if (req.query.state) {
+      filter.state = req.query.state
+    } // Filtra por estado del carrito
+    const totalCarts = await em.count(Cart, filter);
+    res.json({ totalCarts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al contar pedidos" });
+  }
+}
+
+export async function getTotalRevenue(req: AuthenticatedRequest, res: Response) {
+  try {
+    const rawCollection = em.getConnection().getCollection('cart');
+    const result = await rawCollection.aggregate([
+      { $group: { _id: null, totalRevenue: { $sum: '$subtotal' } } }
+    ]).toArray();
+
+    const totalRevenue = result[0]?.totalRevenue || 0;
+    res.json({ totalRevenue });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al calcular ingresos totales" });
+  }
+}
+
+export async function getWeeklySales(req: AuthenticatedRequest, res: Response) {
+  try {
+    const today = new Date();
+    const last7Days = new Date();
+    last7Days.setDate(today.getDate() - 6);
+
+    const rawCollection = em.getConnection().getCollection('cart');
+    const sales = await rawCollection.aggregate([
+      {
+        $match: {
+          date: { $gte: last7Days, $lte: today }
+        }
+      },
+      {
+        $group: {
+          _id: { day: { $dayOfWeek: "$date" } }, 
+          totalAmount: { $sum: "$subtotal" }
+        }
+      }
+    ]).toArray();
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const result = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dayNumber = d.getDay() + 1; // MongoDB $dayOfWeek (1=Sunday)
+      const sale = sales.find(s => s._id.day === dayNumber);
+      result.push({ day: dayNames[d.getDay()], amount: sale ? sale.totalAmount : 0 });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener ventas semanales" });
+  }
+}

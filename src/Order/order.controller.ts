@@ -1,200 +1,355 @@
-import { Request, Response} from "express"
+import type { Request, Response } from "express"
 import { Order } from "./order.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { ObjectId } from "@mikro-orm/mongodb"
 import { validateOrder } from "./order.schema.js"
 import { Product } from "../Product/product.entity.js"
 import { Cart } from "../Cart/cart.entity.js"
+import { AuthenticatedRequest } from "../middlewares/authMiddleware.js"
 
 const em = orm.em
 
-async function findAll(req: Request,res: Response) { 
-    try{
-        const orders = await em.find('Order', {})
-        res.status(200).json({message: 'found all orders', data: orders})
-    } catch (error: any){
-        res.status(500).json({message: error.message})
-    }
+export async function findAll(req: Request, res: Response) {
+  try {
+    const orders = await em.find("Order", {})
+    res.status(200).json({ message: "found all orders", data: orders })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-async function findOne (req: Request, res: Response){
-    try{
-        const _id = new ObjectId(req.params.id)
-        const order = await em.findOneOrFail(Order, { _id }) // primer parametro la clase, 2do el filtro
-        res
-            .status(200)
-            .json({message: 'found order', data: order})
-    }catch (error: any){
-        res.status(500).json({message: error.message})}
+export async function findOne(req: Request, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+    const order = await em.findOneOrFail(Order, { _id }) // primer parametro la clase, 2do el filtro
+    res.status(200).json({ message: "found order", data: order })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export async function add(req: AuthenticatedRequest, res: Response) {
+  try {    
+    if (req.body.quantity !== undefined) {
+      req.body.quantity = Number(req.body.quantity)
+
+      if (isNaN(req.body.quantity)) {
+        return res.status(400).json({
+          message: "La cantidad debe ser un número válido",
+        })
+      }
+    }
+    if (req.body.subtotal !== undefined) {
+      req.body.subtotal = Number(req.body.subtotal)
+
+      if (isNaN(req.body.subtotal)) {
+        return res.status(400).json({
+          message: "El subtotal debe ser un número válido",
+        })
+      }
     }
 
+    const validationResult = validateOrder(req.body)
+    if (!validationResult.success) {
+      return res.status(400).json({ message: validationResult.error.message })
+    }
 
-async function add(req: Request, res: Response) {
-      try {
-        const validationResult = validateOrder(req.body);
-        if (!validationResult.success) {
-          return res.status(400).json({ message: validationResult.error.message });
-        }
-    
-        const product = await em.findOne(Product, validationResult.data.product);
-    
-        // Validación fuerte: si no existe, archivado o stock inválido
+    const product = await em.findOne(Product, validationResult.data.product)
+    if (
+      !product ||
+      product.state === "Archived" ||
+      product.stock == null || // null o undefined
+      typeof product.stock !== "number" ||
+      isNaN(product.stock) || 
+      product.stock < validationResult.data.quantity
+    ) {
+      return res.status(400).json({ message: "Product not available" })
+    }
 
-if (
-  !product ||
-  product.state === "Archived" ||
-  product.stock == null || // null o undefined
-  typeof product.stock !== "number" || 
-  isNaN(product.stock) || // <<<<<< ESTA es la que faltaba
-  product.stock < validationResult.data.quantity
-)
- {
-          return res.status(400).json({ message: "Product not available" });
-        }
-
-        let cart = await em.findOne(Cart, {
+    // Valida si el cart ya existe o si se debe crear uno nuevo
+    let cart
+    if (req.body.cart) {
+      cart = await em.findOne(Cart, req.body.cart)
+      if (!cart) {
+        return res.status(404).json({ message: "Cart not found" })
+      }
+    } else {
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Authentication required" })
+      }
+      cart = await em.findOne(Cart, {
+        user: req.user.id,
+        state: "Pending",
+      })
+      if (!cart) {
+        cart = em.create(Cart, {
           user: req.user.id,
-          state: "Pending"
-        });
-    
-        if (!cart) {
-          cart = em.create(Cart, {
-            user: req.user.id,
-            state: "Pending",
-            total: 0,
-          });
-          await em.persistAndFlush(cart);
-        } 
-        const existingOrder = await em.findOne(Order, {
-          cart: cart.id,
-          product: product.id
-        });
-        if (existingOrder) {
-          existingOrder.quantity += validationResult.data.quantity;
-          existingOrder.subtotal += validationResult.data.subtotal;
-          em.persist(existingOrder);
-        } else {
-          const order = em.create(Order, {
-            quantity: validationResult.data.quantity,
-            product: product,
-            cart: cart,
-            subtotal: validationResult.data.subtotal,
-          });
-          em.persist(order);
-        }
-         // Actualizar stock del producto
-         product.stock -= validationResult.data.quantity;
+          state: "Pending",
+          total: 0,
+        })
+        await em.persistAndFlush(cart)
+      }
+    }
+      const existingOrder = await em.findOne(Order, {
+      cart: cart.id,
+      product: product.id,
+    })
 
-// Recalculate cart total
-const orders = await cart.orders.loadItems();
-cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0);
-        // SIEMPRE actualizar el total del carrito
-        //cart.total += validationResult.data.subtotal;
-        await cart.orders.init(); // asegurar que las órdenes estén cargadas
-       
+    if (existingOrder) {
+      existingOrder.quantity += validationResult.data.quantity
+      existingOrder.subtotal += validationResult.data.subtotal
+      em.persist(existingOrder)
+    } else {
+      const order = em.create(Order, {
+        quantity: validationResult.data.quantity,
+        product: product,
+        cart: cart,
+        subtotal: validationResult.data.subtotal,
+        productName: product.name || "Unknown Product"
+      })
+      em.persist(order)
+    }
+    product.stock -= validationResult.data.quantity
+    
+    await cart.orders.init()
+    const orders = await cart.orders.loadItems()
+    cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0)
+
+    await em.flush() 
+    const updatedCart = await em.findOne(Cart, cart.id, {
+      populate: ["orders", "orders.product"],
+    })
+
+    res.status(201).json({ message: "Order added to cart", data: updatedCart })
+  } catch (error: any) {
+    console.error("Error adding order:", error)
+    res.status(500).json({ message: error.message })
+  }
+}
+/* export async function changeOrderStatus(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (!req.user || req.user.userType !== "Admin") {
+      return res.status(403).json({ message: "Access denied" })
+    }
+
+    const _id = new ObjectId(req.params.id)
+    const newStatus = req.body.status
+
+    const validStatuses = ["Pendiente", "Completado", "Cancelado"]
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).json({ message: "Invalid status" })
+    }
+
+    const order = await em.findOne(Order, { _id })
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" })
+    }
+
+    order.status = newStatus
+    await em.flush()
+
+    res.status(200).json({ message: "Order status updated", data: order })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+} */
+
+export async function update(req: AuthenticatedRequest, res: Response) {
+  try {
+    const _id = new ObjectId(req.params.id)
+
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Authentication required" })
+    }
+    const orderToUpdate = await em.findOneOrFail(
+      Order,
+      {
+        _id,
+        cart: { user: req.user.id },
+      },
+      { populate: ["product", "cart"] },
+    )
+
+    if (!orderToUpdate) {
+      return res.status(404).json({ message: "Order not found" })
+    }
+
+    const newQuantity = req.body.quantity
+    if (typeof newQuantity !== "number" || newQuantity <= 0) {
+      return res.status(400).json({ message: "Invalid quantity" })
+    }
+    const quantityDifference = orderToUpdate.quantity - newQuantity
+    const product = orderToUpdate.product as Product
+
+    if (quantityDifference > 0) {
+     
+      product.stock += quantityDifference
+    } else if (quantityDifference < 0) {
+     
+      const needed = Math.abs(quantityDifference)
+      if (product.stock < needed) {
+        return res.status(409).json({ message: "Not enough stock available" })
+      }
+      product.stock -= needed
+    }
+
+    // Actualizar subtotal
+    const pricePerUnit = orderToUpdate.subtotal / orderToUpdate.quantity
+    orderToUpdate.quantity = newQuantity
+    orderToUpdate.subtotal = pricePerUnit * newQuantity
+
+    // Actualiza el total del carrito
+    const cart = orderToUpdate.cart as Cart
+    const orders = await cart.orders.loadItems()
+    cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0)
+
+    await em.flush()
+    res.status(200).json({ message: "Order updated", data: orderToUpdate })
+  } catch (error: any) {
+    if (error.name === "NotFoundError") {
+      return res.status(404).json({ message: "Order not found" })
+    }
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export async function remove(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+    const userId = req.user.id;
+    const _id = new ObjectId(req.params.id);
+    const order = await em.findOneOrFail(Order, { _id }, { 
+      populate: ["cart", "cart.user", "product"] 
+    });
+
+    const cartRef = order.cart;
+    let cart: Cart;
+    if (cartRef && typeof cartRef === 'object' && 'unwrap' in cartRef) {
+      cart = (cartRef as any).unwrap();
+
+    } else {
+      cart = cartRef as Cart;
       
-        await em.flush(); // Guardar todo junto
-        res.status(201).json({ message: "Order added to cart", data: cart });
-      } catch (error: any) {
-        res.status(500).json({ message: error.message });
-      }
+    }
+
+    if (!cart) {
+      return res.status(400).json({ message: "Order has no associated cart" });
+    }
+    const userRef = cart.user;
+    let cartUserId: string;
+    if (userRef && typeof userRef === 'object' && 'unwrap' in userRef) {
+      const user = (userRef as any).unwrap();
+      cartUserId = user.id || user._id?.toString();
+
+    } else if (userRef && typeof userRef === 'object' && 'id' in userRef) {
+      cartUserId = (userRef as any).id;
+
+    } else if (typeof userRef === 'string') {
+      cartUserId = userRef;
+
+    } else {
+      return res.status(400).json({ message: "Cannot determine cart owner" });
     }
     
-
-    async function update(req: Request, res: Response) {
-      try {
-        const _id = new ObjectId(req.params.id);
-        
-        // Verify the order exists and belongs to current user
-        const orderToUpdate = await em.findOneOrFail(Order, { 
-          _id,
-          cart: { user: req.user.id } // Ensure order belongs to current user
-        }, { populate: ['product', 'cart'] });
+    if (cartUserId !== userId) {
     
-        if (!orderToUpdate) {
-          return res.status(404).json({ message: "Order not found" });
-        }
-    
-        // Validate new quantity
-        const newQuantity = req.body.quantity;
-        if (typeof newQuantity !== "number" || newQuantity <= 0) {
-          return res.status(400).json({ message: "Invalid quantity" });
-        }
-    
-        // Calculate stock difference
-        const quantityDifference = orderToUpdate.quantity - newQuantity;
-        const product = orderToUpdate.product as Product;
-    
-        if (quantityDifference > 0) {
-          // Quantity decreased - return stock
-          product.stock += quantityDifference;
-        } else if (quantityDifference < 0) {
-          // Quantity increased - check stock
-          const needed = Math.abs(quantityDifference);
-          if (product.stock < needed) {
-            return res.status(409).json({ message: "Not enough stock available" });
-          }
-          product.stock -= needed;
-        }
-    
-        // Update order and cart total
-        const pricePerUnit = orderToUpdate.subtotal / orderToUpdate.quantity;
-        orderToUpdate.quantity = newQuantity;
-        orderToUpdate.subtotal = pricePerUnit * newQuantity;
-        
-        // Update cart total
-        const cart = orderToUpdate.cart as Cart;
-        const orders = await cart.orders.loadItems();
-        cart.total = orders.reduce((sum, order) => sum + order.subtotal, 0);
-    
-        await em.flush();
-        res.status(200).json({ message: "Order updated", data: orderToUpdate });
-      } catch (error: any) {
-        if (error.name === "NotFoundError") {
-          return res.status(404).json({ message: "Order not found" });
-        }
-        res.status(500).json({ message: error.message });
-      }
+      return res.status(403).json({ message: "Forbidden: Not your order" });
     }
+
+    if (cart.state === "Completed") {
     
-        async function remove(req: Request, res: Response) {
-          try {
-            const userId = req.user?.id;
-        
-            if (!userId) {
-              return res.status(401).json({ message: 'Unauthorized' });
-            }
-        
-            const _id = new ObjectId(req.params.id);
-        
-            const order = await em.findOneOrFail(Order, { _id }, { populate: ['cart','product'] });
-            if (!order.cart || order.cart.user.id !== userId) {
-              return res.status(403).json({ message: 'Forbidden: Not your order' });
-            }
-        
-            if (order.cart.state === 'Completed') {
-              return res.status(400).json({ message: 'Cannot remove order from completed cart' });
-            }
-           // Forzar a que `product` es un Product
-           const product = order.product as Product;
+      return res.status(400).json({ message: "Cannot remove order from completed cart" });
+    }
 
-           // Actualizar el stock
-           product.stock += order.quantity;
-           const cart = order.cart as Cart
+    // Actualizar stock del producto
+    const product = order.product as Product;
+    
+    product.stock += order.quantity;
 
-           const subtotal = order.subtotal
-           if (subtotal > 0) {
-            cart.total -= subtotal
-           }
-           await em.persistAndFlush(product);
-           await em.persistAndFlush(cart);
-           await em.removeAndFlush(order);
-           
-            return res.status(200).json({ message: 'Order removed', data: order });
-          } catch (error: any) {
-            return res.status(500).json({ message: error.message });
-          }
+    // Actualizar total del carrito
+    const subtotal = order.subtotal;
+    if (subtotal > 0) {
+      cart.total -= subtotal;
+    }
+    // Persistir cambios
+    await em.persistAndFlush([product, cart]);
+    await em.removeAndFlush(order);
+
+    return res.status(200).json({ message: "Order removed", data: order });
+  } catch (error: any) {
+    if (error.name === "NotFoundError") {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    return res.status(500).json({ 
+      message: error.message,
+      details: error.stack 
+    });
+  }
+}
+
+export async function getTotalOrders(req: AuthenticatedRequest, res: Response) {
+  try {
+    const totalOrders = await em.count(Order, {});
+    res.json({ totalOrders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al contar pedidos" });
+  }
+}
+
+export async function getTotalRevenue(req: AuthenticatedRequest, res: Response) {
+  try {
+    const rawCollection = em.getConnection().getCollection('order');
+    const result = await rawCollection.aggregate([
+      { $group: { _id: null, totalRevenue: { $sum: '$subtotal' } } }
+    ]).toArray();
+
+    const totalRevenue = result[0]?.totalRevenue || 0;
+    res.json({ totalRevenue });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al calcular ingresos totales" });
+  }
+}
+
+export async function getWeeklySales(req: AuthenticatedRequest, res: Response) {
+  try {
+    const today = new Date();
+    const last7Days = new Date();
+    last7Days.setDate(today.getDate() - 6);
+
+    const rawCollection = em.getConnection().getCollection('order');
+    const sales = await rawCollection.aggregate([
+      {
+        $match: {
+          date: { $gte: last7Days, $lte: today }
         }
+      },
+      {
+        $group: {
+          _id: { day: { $dayOfWeek: "$date" } }, 
+          totalAmount: { $sum: "$subtotal" }
+        }
+      }
+    ]).toArray();
 
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export {findAll, findOne, add,update,remove}
+    const result = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dayNumber = d.getDay() + 1; // MongoDB $dayOfWeek (1=Sunday)
+      const sale = sales.find(s => s._id.day === dayNumber);
+      result.push({ day: dayNames[d.getDay()], amount: sale ? sale.totalAmount : 0 });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener ventas semanales" });
+  }
+}
+

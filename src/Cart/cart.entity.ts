@@ -1,37 +1,46 @@
-import { Entity, Property, ManyToOne, OneToMany, Cascade, Collection, Rel} from "@mikro-orm/core"
-
+import { Entity, Property, ManyToOne, OneToMany, Collection, Ref } from "@mikro-orm/core"
 import { BaseEntity } from "../shared/db/baseEntity.entity.js"
 import { User } from "../User/user.entity.js"
 import { Order } from "../Order/order.entity.js"
 import { ShipmentType } from "../ShipmentType/shipmentType.entity.js"
   
-  @Entity()
-  export class Cart extends BaseEntity {
-    @Property({ nullable: false })
-    state!: "Completed" | "Pending" | "Canceled";
   
-    @ManyToOne(() => User, { nullable: false })
-    user!: Rel<User>;
+@Entity()
+export class Cart extends BaseEntity {
+  @Property()
+  state!: string
+
+  @Property()
+  total!: number
+
+  @Property({nullable: true })
+  deliveryType?: string
+
+  @Property({nullable: true })
+  deliveryAddress?: string
+
+  @Property({nullable: true })
+  paymentMethod?: string
+
+  @Property({nullable: true })
+  contactNumber?: string
+
+  @Property({ nullable: true })
+  additionalInstructions?: string
+
+  @Property({ nullable: true })
+  date?: Date;
+
+  // Agrega la relación con ShipmentType
+  @ManyToOne(() => ShipmentType, { nullable: true })
+  shipmentType?: ShipmentType
+
+  @ManyToOne(() => "User", { wrappedReference: true })
+  user!: Ref<User>
   
-    @Property({ nullable: false })
-    total!: number;
-  
-    @ManyToOne(() => ShipmentType, { nullable: true })
-    shipmentType?: ShipmentType | null;
-
-    @OneToMany(() => Order, (order: Order) => order.cart, {
-      cascade: [Cascade.ALL],
-    })
-    orders = new Collection<Order>(this);
-
-    @Property({ nullable: true })
-    deliveryAddress?: string; 
-
-    @Property({ nullable: true })
-    paymentMethod?: string; 
-
-
-    @Property({ nullable: true })
-    additionalInstructions?: string; 
-  }
-  
+  @OneToMany(
+    () => "Order",
+    (order: Order) => order.cart,
+  )
+  orders = new Collection<Order>(this)
+}
