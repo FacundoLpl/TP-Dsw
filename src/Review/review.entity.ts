@@ -15,4 +15,7 @@ export class Review extends BaseEntity {
 
   @ManyToOne(() => Product, { nullable: false })
   product!: Rel<Product>;
+
+
 }
+

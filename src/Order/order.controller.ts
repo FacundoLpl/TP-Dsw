@@ -105,7 +105,7 @@ export async function add(req: AuthenticatedRequest, res: Response) {
         product: product,
         cart: cart,
         subtotal: validationResult.data.subtotal,
-        productName: product.name || "Unknown Product",
+        productName: product.name || "Unknown Product"
       })
       em.persist(order)
     }
@@ -126,6 +126,33 @@ export async function add(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
+/* export async function changeOrderStatus(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (!req.user || req.user.userType !== "Admin") {
+      return res.status(403).json({ message: "Access denied" })
+    }
+
+    const _id = new ObjectId(req.params.id)
+    const newStatus = req.body.status
+
+    const validStatuses = ["Pendiente", "Completado", "Cancelado"]
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).json({ message: "Invalid status" })
+    }
+
+    const order = await em.findOne(Order, { _id })
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" })
+    }
+
+    order.status = newStatus
+    await em.flush()
+
+    res.status(200).json({ message: "Order status updated", data: order })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+} */
 
 export async function update(req: AuthenticatedRequest, res: Response) {
   try {
