@@ -120,7 +120,7 @@ Aprobación Directa
 |CRUD simple|1. CRUD de Tipos de Envio (ShipmentType)<br>2. CRUD de Usuarios (User)<br>3. Crud de Categorias de Producto (Category)|
 |CRUD dependiente|1.CRUD Pedidos (Order)<br>2. CRUD de Carritos (Cart)<br>3. CRUD de Productos (Product)<br>4. CRUD de Reservas (Reservation)|
 |Listado + Detalle|1. Listado de productos por categoría con filtros: nombre, categoría y precio. Incluye descripción, imagen, precio, stock.|
-|CUU/Epic|1.Completar un carrito con productos seleccionados. -<br>2.Realizar una reserva con selección de día, hora y cantidad de personas.|
+|CUU/Epic|1.Completar un carrito con productos seleccionados. -<br>2. Realizar una reserva con selección de día, hora y cantidad de personas.|
 
 ### Alcance Adicional Voluntario
 
