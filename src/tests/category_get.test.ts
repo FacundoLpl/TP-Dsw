@@ -4,7 +4,7 @@ config();
 
 interface ApiResponse {
   message: string;
-  data: any; // Puedes reemplazar any con tu interfaz Category si la tienes definida
+  data: any; 
 }
 
 describe('Endpoint GET "/api/categories"', () => {
@@ -13,7 +13,7 @@ describe('Endpoint GET "/api/categories"', () => {
 
   describe('With access token', () => {
     beforeAll(async () => {
-      const token = process.env.TOKEN; // Asegúrate de tener este token en tu .env
+      const token = process.env.TOKEN;
       response = await fetch(
         'http://localhost:3000/api/categories', {
           headers: {
@@ -45,7 +45,7 @@ describe('Endpoint GET "/api/categories"', () => {
       body = await response.json();
     });
 
-    test('Should have response status 401', () => { // Según tu middleware, debería ser 401
+    test('Should have response status 401', () => { 
       expect(response.status).toBe(401);
     });
 

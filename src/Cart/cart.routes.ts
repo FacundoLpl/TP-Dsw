@@ -7,8 +7,7 @@ import {
   remove,
   findUserOrders,
   getTotalCarts,
-  getTotalRevenue,
-  getWeeklySales
+  getTotalRevenue
 } from "./cart.controller.js";
 import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -39,11 +38,10 @@ export const cartRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/Cart'
  */
-cartRouter.get("/", authenticateToken, findAll);
+cartRouter.get("/", authenticateToken, isAdmin, findAll);
 // NUEVAS RUTAS PARA DASHBOARD - solo admin
 cartRouter.get("/total", authenticateToken, isAdmin, getTotalCarts);
 cartRouter.get("/total-revenue", authenticateToken, isAdmin, getTotalRevenue);
-cartRouter.get("/weekly", authenticateToken, isAdmin, getWeeklySales);
 
 /**
  * @swagger

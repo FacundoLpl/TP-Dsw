@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { findAll, findOne, add, update, remove } from "./category.controller.js";
-import { authenticateToken } from "../middlewares/authMiddleware.js";
+import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
 
 export const categoryRouter = Router();
 
@@ -81,7 +81,7 @@ categoryRouter.use(authenticateToken);
  *       400:
  *         description: Error en la petición
  */
-categoryRouter.post("/", add);
+categoryRouter.post("/", authenticateToken, isAdmin, add);
 
 /**
  * @swagger
@@ -110,7 +110,7 @@ categoryRouter.post("/", add);
  *       404:
  *         description: Categoría no encontrada
  */
-categoryRouter.put("/:id", update);
+categoryRouter.put("/:id", authenticateToken, isAdmin, update);
 
 /**
  * @swagger
@@ -133,4 +133,4 @@ categoryRouter.put("/:id", update);
  *       404:
  *         description: Categoría no encontrada
  */
-categoryRouter.delete("/:id", remove);
+categoryRouter.delete("/:id", authenticateToken, isAdmin, remove);
