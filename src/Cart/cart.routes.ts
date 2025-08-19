@@ -38,7 +38,7 @@ export const cartRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/Cart'
  */
-cartRouter.get("/", authenticateToken, isAdmin, findAll);
+cartRouter.get("/", authenticateToken, findAll);
 // NUEVAS RUTAS PARA DASHBOARD - solo admin
 cartRouter.get("/total", authenticateToken, isAdmin, getTotalCarts);
 cartRouter.get("/total-revenue", authenticateToken, isAdmin, getTotalRevenue);
