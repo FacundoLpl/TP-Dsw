@@ -8,7 +8,11 @@ import {
 } from "./order.controller.js";
 import { authenticateToken, isAdmin } from "../middlewares/authMiddleware.js";
 
+//import { changeOrderStatus } from "./order.controller.js"
+
 export const orderRouter = Router();
+
+//orderRouter.put("/orders/:id/status", authenticateToken, isAdmin, changeOrderStatus)
 
 /**
  * @swagger

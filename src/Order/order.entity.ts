@@ -16,7 +16,7 @@ export class Order extends BaseEntity {
 
   @Property({nullable: true })
   productName?: string
-
+ 
   @ManyToOne(() => Product)
   product!: Product
 

@@ -12,15 +12,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNiZTI3N
 ### Coca-Cola
 POST http://localhost:3000/api/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3R1c2VyaWQiLCJ1c2VyVHlwZSI6IkFkbWluIiwiaWF0IjoxNzU1NDcwMDkyLCJleHAiOjE3NTU0NzM2OTJ9.cUzYuHMOTG_3cNQzjguhXq67-m1t4CqU09uLgMgpbHA
 
 {
   "rating": 5,
-  "comment": "This is a test review",
-  "state": "Active",
-  "product": "672d4c554a0fac5888ae18ed",
-  "createdAt": "2023-09-15T12:34:56Z",
-  "updatedAt": "2023-09-15T12:34:56Z"
+  "comment": "This is a test sareviews",
+  "product": "672d4c554a0fac5888ae18ed"
 }
 
 ### Jugo de Naranja
