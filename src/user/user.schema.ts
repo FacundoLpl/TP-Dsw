@@ -5,7 +5,7 @@ export const userSchema = z.object({
   dni: z.string().min(1, "DNI es requerido"),
   firstName: z.string().min(1, "Nombre es requerido"),
   lastName: z.string().min(1, "Apellido es requerido"),
-  userType: z.enum(["Admin", "Client", "Mozo"]),
+  userType: z.enum(["Admin", "Client"]),
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
   address: z.string().optional(),

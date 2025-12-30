@@ -2,7 +2,7 @@ import { orm } from '../shared/db/orm';
 import { MikroORM } from '@mikro-orm/core';
 
 export async function initDb(): Promise<MikroORM> {
-  return orm; // Ya está inicializado en tu orm.ts
+  return orm; // Ya está inicializado 
 }
 
 export async function closeDb(orm: MikroORM) {

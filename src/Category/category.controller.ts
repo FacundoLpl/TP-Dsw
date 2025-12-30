@@ -29,12 +29,12 @@ async function add (req: Request,res: Response) {
         const validationResult = validateCategory(req.body);
         const categoryPrev = await em.findOne(Category, { name: req.body.name });
         if (categoryPrev) {
-          return res.status(409).json({ message: "Ya existe una categoría con ese nombre" }); // ✅ 409 Conflict
+          return res.status(409).json({ message: "Ya existe una categoría con ese nombre" }); 
         }
         if (!validationResult.success)
             return res.status(400).json({
                 message: "Datos de categoría inválidos",
-                errors: validationResult.error.errors, // 👈 Detalla los campos con error
+                errors: validationResult.error.errors, 
               });
         const category = em.create(Category, req.body)
         await em.flush()

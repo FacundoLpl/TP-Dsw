@@ -6,6 +6,7 @@ const reviewSchema = zod.object({
   rating: zod.number().min(1).max(5),
   state: zod
     .enum(['Archived', 'Active'])
+    .optional()
     .default('Active')
     .refine((value: string) => value === 'Active' || value === 'Archived', {
       message: 'State must be either Active or Archived',

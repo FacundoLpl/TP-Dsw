@@ -3,21 +3,12 @@ import jwt from 'jsonwebtoken'
 import { authenticateToken } from '../middlewares/authMiddleware'
 import { roleMiddleware } from '../middlewares/authMiddleware'
 
-
-
-
 // Este archivo testea el middleware de autenticación y autorización.
 // Verifica que:
 // - El token sea requerido y válido.
 // - El token expirado sea rechazado correctamente.
 // - El middleware de roles permita o deniegue acceso según el tipo de usuario.
 // - Si `next()` se llama correctamente cuando el token es válido.
-
-
-
-
-
-
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'

@@ -28,7 +28,7 @@ export const authenticateToken = (req: AuthenticatedRequest, res: Response, next
     }
 
     const decoded = jwt.verify(token, JWT_SECRET)
- console.log("Decoded token:", decoded)  // <--- Aquí
+ console.log("Decoded token:", decoded)  
     if (!decoded || typeof decoded !== "object" || !("id" in decoded) || !("userType" in decoded)) {
       console.log("Token missing required fields")
       return res.status(401).json({ code: "INVALID_TOKEN", message: "Invalid token format" })

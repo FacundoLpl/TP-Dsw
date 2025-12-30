@@ -10,16 +10,15 @@ describe('POST /api/reservations - Validación', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // ✅ necesario si la ruta está protegida
+        'Authorization': `Bearer ${token}` 
       },
       body: JSON.stringify({
         datetime: '2025-06-12T19:00:00Z',
         people: 2
-        // Falta el campo "user"
       })
     })
 
-    expect(response.status).toBe(400) // ahora sí, esperamos error de validación
+    expect(response.status).toBe(400) 
     const body = await response.json()
     expect(body).toHaveProperty('message')
     expect(body.message).toMatch(/user/i)

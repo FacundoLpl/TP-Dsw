@@ -37,7 +37,7 @@ export const reservationRouter = Router();
  *               items:
  *                 $ref: '#/components/schemas/Reservation'
  */
-reservationRouter.get("/", authenticateToken, findAll);
+reservationRouter.get("/", authenticateToken, isAdmin,findAll);
 
 /**
  * @swagger

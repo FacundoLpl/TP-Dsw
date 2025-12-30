@@ -2,13 +2,6 @@ import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
 import config from "dotenv"
 import { MongoDriver } from '@mikro-orm/mongodb';
-import { Order } from '../../Order/order.entity.js';
-import { Reservation } from "../../Reservation/reservation.entity.js";
-import { Cart } from "../../Cart/cart.entity.js";
-import { User } from "../../User/user.entity.js";
-import { Category } from "../../Category/category.entity.js";
-import { ShipmentType } from "../../ShipmentType/shipmentType.entity.js";
-import { Schedule } from "../../Schedule/schedule.entity.js";
 
 
 config.config()
