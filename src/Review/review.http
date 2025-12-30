@@ -1,14 +1,13 @@
 
 POST http://localhost:3000/api/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ2MDE5MDcsImV4cCI6MTc1NDYwNTUwN30.QrURt9WyU_qV4Q4U-sG1EqKh_9UC71As18KleSyhwAc
 
 { 
-"rating": 5,
+"rating": 1,
 "comment" : "This is a test review",
 "state": "Active",
-"product": "672d4e2b4a0fac5888ae18f9",
+"product": "672d4c554a0fac5888ae18ed",
 "createdAt": "2023-09-15T12:34:56Z",
 "updatedAt": "2023-09-15T12:34:56Z"
 }
@@ -16,10 +15,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4N
 ### Coca-Cola
 POST http://localhost:3000/api/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ1MDcxMDksImV4cCI6MTc1NDUxMDcwOX0.FOc5_NXfr6eqEmjoHfLMa5b4IQlW3JB6RIndZJ_368k
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNjMzY4NzM5NGE2YzIxNjkzMGU1NiIsInVzZXJUeXBlIjoiQWRtaW4iLCJpYXQiOjE3NTQ2MDE5MDcsImV4cCI6MTc1NDYwNTUwN30.QrURt9WyU_qV4Q4U-sG1EqKh_9UC71As18KleSyhwAc
 {
-  "rating": 5,
+  "rating": 1,
   "comment": "This is a test review",
   "state": "Active",
   "product": "672d4c554a0fac5888ae18ed",

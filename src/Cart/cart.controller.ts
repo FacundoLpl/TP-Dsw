@@ -165,7 +165,6 @@ export async function addOrder(req: AuthenticatedRequest, res: Response) {
 export async function getCartWithOrders(req: AuthenticatedRequest, res: Response) {
   try {
     const _id = new ObjectId(req.params.id)
-
     // Encuentra el carrito por ID y llena las órdenes, productos y usuario
     const cart = await em.findOneOrFail(
       Cart,

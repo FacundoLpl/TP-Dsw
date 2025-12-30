@@ -1,3 +1,8 @@
+# Usuario de prueba
+
+mail- userdemo@gmail.com
+contraseña- userdemotest
+
 # Propuesta TP DSW
 
 ### Integrantes
@@ -116,13 +121,13 @@ Aprobación Directa
 
 ### Alcance Adicional Voluntario
 
-
-| Req      | Detalle       |
-| :------- | :------------ |
-| Listados | 1. Listado de carritos completados por el usuario, con detalle de fecha, productos, cantidades, tipo de envío, forma de pago, estado, y opción de   cancelar si está dentro del plazo.- |
-| CUU/Epic | 1. Cancelar un carrito<br>2. Envio del carrito-<br>3.Moderación de reviews con la api de OpenAI |
+| Req      | Detalle                                                                                                                                                                               |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Listados | 1. Listado de carritos completados por el usuario, con detalle de fecha, productos, cantidades, tipo de envío, forma de pago, estado, y opción de cancelar si está dentro del plazo.- |
+| CUU/Epic | 1. Cancelar un carrito<br>2. Envio del carrito-<br>3.Moderación de reviews con la api de OpenAI                                                                                       |
 
 ### 3. Instrucciones de instalacion
+
 a. Clona este repositorio en tu máquina local:
 git clone https://github.com/FacundoLpl/TP-Dsw.git
 
@@ -142,9 +147,11 @@ pnpm run start:dev
 La aplicación estará disponible en http://localhost:3000
 
 ### 4. Documentación de la API
+
 Debido a las limitaciones de la cuenta gratuita en Render, puede haber un retraso de unos minutos en la carga de la documentación.
 @subir a render
 
 ### 5. Playlist de vistas del cliente, mozo y admin
+
 Puedes ver las vistas del cliente, mozo y admin en nuestra playlist de YouTube:
 @yutu/btn
