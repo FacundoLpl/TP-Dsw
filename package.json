@@ -6,11 +6,13 @@
   "main": "dist/src/app.js",
   "module": "dist/src/app.js",
   "scripts": {
-    "clean": "rimraf dist",
-    "build": "npm run clean && tsc -p ./tsconfig.json",
-    "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
-    "test": "vitest"
-  },
+  "clean": "rimraf dist",
+  "build": "npm run clean && tsc -p ./tsconfig.json",
+  "start": "node dist/src/app.js",
+  "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
+  "test": "vitest"
+}
+,
   "keywords": [],
   "author": "",
   "license": "ISC",
